@@ -1,1 +1,2712 @@
-undefined
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tamil Creative — Promo Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0f1117;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 14px;
+    }
+
+    /* ─── Shell ─── */
+    .shell-header {
+      background: #0c0f18;
+      border-bottom: 1px solid #1f2937;
+      padding: 16px 24px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .shell-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .shell-top h1 { font-size: 18px; font-weight: 700; color: #fff; }
+    .shell-top p  { font-size: 11px; color: #4b5563; margin-top: 3px; }
+    .shell-top .updated { font-size: 11px; color: #374151; margin-top: 6px; }
+
+    /* ─── Tab bar ─── */
+    .tab-bar {
+      display: flex;
+      gap: 2px;
+    }
+    .tab-btn {
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #6b7280;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      letter-spacing: 0.2px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: #d1d5db; }
+    .tab-btn.active { color: #fff; border-bottom-color: #3b82f6; }
+
+    /* ─── Tab panes ─── */
+    .tab-pane { display: none; padding: 24px; }
+    .tab-pane.active { display: block; }
+
+    /* ─── Section title ─── */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #9ca3af;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    /* ─── Legend ─── */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding: 9px 14px;
+      background: #13171f;
+      border: 1px solid #1f2937;
+      border-radius: 7px;
+      align-items: center;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+    .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .phase-badge {
+      font-size: 9px; font-weight: 700;
+      padding: 1px 5px; border-radius: 3px;
+      letter-spacing: 0.5px; text-transform: uppercase;
+    }
+    .phase-badge.cps  { background:#14532d; color:#4ade80; }
+    .phase-badge.test { background:#1e3a5f; color:#93c5fd; }
+
+    /* ─── Fire badge ─── */
+    .fire-badge {
+      font-size: 14px;
+      line-height: 1;
+      margin-left: 4px;
+      flex-shrink: 0;
+      cursor: default;
+    }
+    .fire-card {
+      border-color: #7c2d12 !important;
+      box-shadow: 0 0 0 1px #7c2d12, 0 0 8px 0 rgba(251,146,60,0.12);
+    }
+
+    /* ─── Fire tooltip ─── */
+    #fire-tooltip {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      max-width: 260px;
+      background: #1a1f2e;
+      border: 1px solid #7c2d12;
+      border-radius: 8px;
+      padding: 10px 13px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      font-size: 12px;
+      line-height: 1.55;
+      color: #d1d5db;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    #fire-tooltip.visible { opacity: 1; }
+    #fire-tooltip .tip-header {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #fb923c;
+      margin-bottom: 5px;
+    }
+
+    /* ─── Info banner ─── */
+    .info-banner {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-left: 3px solid #3b82f6;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-size: 11px;
+      color: #6b7280;
+      margin-bottom: 18px;
+      line-height: 1.6;
+    }
+    .info-banner strong { color: #9ca3af; }
+
+    /* ─── Show section ─── */
+    .show-section { margin-top: 32px; }
+    .show-title {
+      font-size: 15px; font-weight: 700; color: #f3f4f6;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .show-badge {
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; padding: 2px 10px;
+      font-size: 13px; color: #d1d5db;
+    }
+    .show-full-name { font-size: 13px; color: #6b7280; font-weight: 400; }
+    .script-count   { font-size: 12px; color: #4b5563; font-weight: 400; }
+
+    /* ─── Board grid ─── */
+    .board {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+    }
+    .bucket {
+      background: #161b27;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 12px 10px;
+      min-height: 80px;
+    }
+    .bucket-header {
+      display: flex; align-items: center; gap: 7px; margin-bottom: 10px;
+    }
+    .bucket-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .bucket-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+    .bucket-count {
+      margin-left: auto; font-size: 11px;
+      background: #1f2937; border-radius: 10px; padding: 1px 7px; color: #9ca3af;
+    }
+    .bucket.scaling-now  { border-top: 2px solid #22c55e; }
+    .bucket.scaling-next { border-top: 2px solid #3b82f6; }
+    .bucket.observation  { border-top: 2px solid #f59e0b; }
+    .bucket.scaling-now  .bucket-dot  { background:#22c55e; }
+    .bucket.scaling-next .bucket-dot  { background:#3b82f6; }
+    .bucket.observation  .bucket-dot  { background:#f59e0b; }
+    .bucket.scaling-now  .bucket-label { color:#22c55e; }
+    .bucket.scaling-next .bucket-label { color:#3b82f6; }
+    .bucket.observation  .bucket-label { color:#f59e0b; }
+
+    /* ─── Sort bar ─── */
+    .sort-bar {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .sort-bar-label {
+      font-size: 11px; color: #4b5563; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.8px; margin-right: 2px;
+    }
+    .sort-btn {
+      padding: 5px 13px; font-size: 11px; font-weight: 600;
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; color: #6b7280; cursor: pointer;
+      display: flex; align-items: center; gap: 5px;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .sort-btn:hover { background: #252d3d; color: #d1d5db; }
+    .sort-btn.active {
+      background: #1e3a5f; border-color: #3b82f6; color: #93c5fd;
+    }
+    .sort-btn .sort-arrow { font-size: 10px; opacity: 0.7; }
+
+    /* ─── Script card ─── */
+    .script-card {
+      background: #1a2030; border: 1px solid #252d3d;
+      border-radius: 6px; padding: 8px 10px; margin-bottom: 8px;
+    }
+    .script-card:last-child { margin-bottom: 0; }
+    .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:4px; margin-bottom:4px; }
+    .card-left { display:flex; align-items:flex-start; gap:7px; min-width:0; }
+    .rank-badge {
+      font-size: 10px; font-weight: 700; color: #4ade80;
+      background: #052e16; border: 1px solid #166534;
+      border-radius: 4px; padding: 2px 7px;
+      flex-shrink: 0; margin-top: 1px; text-align: center; white-space: nowrap;
+    }
+    .rank-badge .rank-arrow { font-size: 9px; margin-right: 2px; }
+    .script-name { font-size: 12px; font-weight: 600; color: #f3f4f6; line-height: 1.3; }
+    .script-show-tag { font-size:10px; font-weight:600; color:#6b7280; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+    .metrics { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+    .metric { font-size:10px; color:#9ca3af; background:#0f1117; border-radius:3px; padding:2px 6px; white-space:nowrap; }
+    .metric span { color:#e5e7eb; font-weight:600; }
+    .metric.highlight span { color:#4ade80; }
+    .empty-bucket { font-size:11px; color:#374151; text-align:center; padding:16px 0; }
+
+    /* ══════════════════════════════════════
+       TAB 2 — ASSET PRODUCTION PIPELINE
+    ══════════════════════════════════════ */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .pipeline-col {
+      background: #161b27;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 14px 12px;
+      min-height: 120px;
+    }
+    .pipeline-col.delivered { border-top: 2px solid #22c55e; }
+    .pipeline-col.wip       { border-top: 2px solid #f59e0b; }
+    .pipeline-col.hold      { border-top: 2px solid #ef4444; }
+
+    .pipeline-col-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+    }
+    .pipeline-col-header .col-dot { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+    .pipeline-col.delivered .col-dot { background:#22c55e; }
+    .pipeline-col.wip       .col-dot { background:#f59e0b; }
+    .pipeline-col.hold      .col-dot { background:#ef4444; }
+    .pipeline-col-header .col-label {
+      font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px;
+    }
+    .pipeline-col.delivered .col-label { color:#22c55e; }
+    .pipeline-col.wip       .col-label { color:#f59e0b; }
+    .pipeline-col.hold      .col-label { color:#ef4444; }
+    .pipeline-col-header .col-count {
+      margin-left:auto; font-size:11px; background:#1f2937;
+      border-radius:10px; padding:1px 7px; color:#9ca3af;
+    }
+
+    /* Asset card */
+    .asset-card {
+      background: #1a2030; border: 1px solid #252d3d;
+      border-radius: 6px; padding: 10px 11px; margin-bottom: 9px;
+    }
+    .asset-card:last-child { margin-bottom: 0; }
+    .asset-card .ac-show {
+      font-size:10px; font-weight:700; color:#6b7280;
+      text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;
+    }
+    .asset-card .ac-script {
+      font-size:12px; font-weight:600; color:#f3f4f6;
+      line-height:1.3; margin-bottom:6px;
+    }
+    .asset-meta { display:flex; flex-wrap:wrap; gap:4px; }
+    .asset-tag {
+      font-size:10px; background:#0f1117; border-radius:3px;
+      padding:2px 6px; color:#9ca3af; white-space:nowrap;
+    }
+    .asset-tag span { color:#d1d5db; font-weight:600; }
+    .mode-badge {
+      font-size:9px; font-weight:700; padding:2px 6px;
+      border-radius:3px; text-transform:uppercase; letter-spacing:0.4px;
+    }
+    .mode-badge.inhouse  { background:#1e3a5f; color:#93c5fd; }
+    .mode-badge.vendor   { background:#3b1f5e; color:#c4b5fd; }
+    .mode-badge.tbd      { background:#1f2937; color:#6b7280; }
+
+    .dates-row {
+      display:flex; gap:4px; flex-wrap:wrap; margin-top:5px;
+    }
+    .date-chip {
+      font-size:9px; color:#6b7280; background:#111827;
+      border:1px solid #1f2937; border-radius:3px;
+      padding:2px 6px; white-space:nowrap;
+    }
+    .date-chip span { color:#9ca3af; }
+
+    /* ══════════════════════════════════════
+       TAB 3 — INAPP VIDEOS
+    ══════════════════════════════════════ */
+    .inapp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .inapp-card {
+      background: #161b27; border: 1px solid #1f2937;
+      border-radius: 8px; padding: 14px;
+    }
+    .inapp-card-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 8px;
+      margin-bottom: 10px;
+    }
+    .inapp-show   { font-size: 13px; font-weight: 700; color: #f3f4f6; line-height:1.3; }
+    .inapp-vendor { font-size: 11px; color: #6b7280; margin-top: 2px; }
+    .inapp-delivered-badge {
+      text-align: right; white-space: nowrap; flex-shrink: 0;
+    }
+    .inapp-delivered-badge .hrs {
+      font-size: 18px; font-weight: 700; color: #f9fafb;
+    }
+    .inapp-delivered-badge .hrs small { font-size: 11px; color: #6b7280; font-weight: 400; }
+    .inapp-delivered-badge .eps-label {
+      font-size: 10px; color: #6b7280; margin-top: 1px;
+    }
+
+    /* Checklist */
+    .milestone-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .milestone-item {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 12px;
+    }
+    .milestone-item .chk {
+      width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+    }
+    .chk.done    { background: #14532d; color: #4ade80; }
+    .chk.pending { background: #1e3a5f; color: #60a5fa; }
+    .chk.hold    { background: #3b1f1f; color: #f87171; }
+    .chk.na      { background: #1f2937; color: #374151; border: 1px solid #374151; }
+
+    .milestone-item .m-label { color: #9ca3af; }
+    .milestone-item .m-label strong { color: #e5e7eb; font-weight: 600; }
+    .milestone-item .m-eta {
+      margin-left: auto; font-size: 10px; color: #6b7280; white-space: nowrap;
+    }
+    .milestone-item.is-done   .m-label { color: #6b7280; }
+    .milestone-item.is-done   .m-label strong { color: #9ca3af; }
+    .milestone-item.is-hold   .m-eta { color: #f87171; }
+
+    /* ══════════════════════════════════════
+       TAB 4 — SCRIPT CRACKING SUMMARY
+    ══════════════════════════════════════ */
+    .summary-month-block { margin-bottom: 28px; }
+    .summary-month-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #6b7280;
+      margin-bottom: 10px; padding-bottom: 6px;
+      border-bottom: 1px solid #1f2937;
+    }
+    .summary-table {
+      width: 100%; border-collapse: collapse;
+    }
+    .summary-table th {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.7px; color: #6b7280;
+      padding: 7px 12px; text-align: left;
+      background: #13171f; border-bottom: 1px solid #1f2937;
+    }
+    .summary-table td {
+      font-size: 12px; color: #d1d5db;
+      padding: 9px 12px; border-bottom: 1px solid #1a2030;
+      vertical-align: top;
+    }
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table tr:hover td { background: #161b27; }
+    .summary-table td.show-col { font-weight: 600; color: #f3f4f6; }
+    .summary-table td.num-col { text-align: center; color: #9ca3af; }
+    .summary-table td.num-col.has-val { color: #f3f4f6; font-weight: 600; }
+    .cracked-val { color: #4ade80; font-weight: 700; }
+    .genai-val {
+      font-size: 11px; color: #93c5fd;
+      background: #1e3a5f; border-radius: 4px;
+      padding: 2px 7px; display: inline-block; margin: 2px 2px 2px 0;
+    }
+
+    /* ══════════════════════════════════════
+       TAB 5 — CREATIVE SUMMARY
+    ══════════════════════════════════════ */
+    .creative-date {
+      font-size: 11px; color: #4b5563; font-weight: 600;
+      letter-spacing: 0.8px; text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .creative-card {
+      background: #161b27; border: 1px solid #1f2937;
+      border-radius: 8px; padding: 14px 16px;
+    }
+    .creative-card.full-width {
+      grid-column: 1 / -1;
+    }
+    .creative-card .cc-show {
+      font-size: 12px; font-weight: 800; color: #f3f4f6;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 10px; padding-bottom: 8px;
+      border-bottom: 1px solid #1f2937;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .cc-show-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #3b82f6; flex-shrink: 0;
+    }
+    .creative-card p {
+      font-size: 12px; color: #9ca3af; line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .creative-card p:last-child { margin-bottom: 0; }
+    .cc-bullet {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: 12px; color: #d1d5db; line-height: 1.6;
+      margin-bottom: 4px;
+    }
+    .cc-bullet .cc-dot { color: #4b5563; flex-shrink: 0; margin-top: 1px; }
+    .cc-arrow {
+      display: flex; gap: 8px; align-items: flex-start;
+      font-size: 11px; color: #60a5fa; line-height: 1.6;
+      margin-bottom: 4px; padding-left: 12px;
+    }
+    .cc-arrow .arr { flex-shrink: 0; }
+    .cc-subitem {
+      font-size: 11px; color: #6b7280; line-height: 1.6;
+      padding-left: 22px; margin-bottom: 2px;
+    }
+    .cc-highlight {
+      font-size: 11px; font-weight: 600;
+      background: #1e3a5f; color: #93c5fd;
+      border-radius: 3px; padding: 1px 6px;
+      display: inline-block; margin: 2px 2px 2px 0;
+    }
+    .cc-section-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: #4b5563;
+      margin: 10px 0 5px;
+    }
+    .scaling-badge {
+      font-size: 10px; font-weight: 700;
+      background: #14532d; color: #4ade80;
+      border-radius: 3px; padding: 1px 7px;
+      display: inline-block; margin-bottom: 8px;
+    }
+
+    /* ══════════════════════════════════════
+       TAB 6 — TRENDING POWERSTARTS
+    ══════════════════════════════════════ */
+    .ps-intro {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-left: 3px solid #a855f7;
+      border-radius: 5px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+    .ps-intro strong { color: #d1d5db; }
+    .ps-intro .ps-example {
+      font-style: italic;
+      color: #7c3aed;
+      font-size: 11px;
+      margin-top: 5px;
+      display: block;
+    }
+
+    /* Filter bar */
+    .ps-filter-bar {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 20px; flex-wrap: wrap;
+    }
+    .ps-filter-label {
+      font-size: 11px; color: #4b5563; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+    }
+    .ps-filter-btn {
+      padding: 5px 13px; font-size: 11px; font-weight: 600;
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; color: #6b7280; cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .ps-filter-btn:hover { background: #252d3d; color: #d1d5db; }
+    .ps-filter-btn.active { background: #2e1065; border-color: #7c3aed; color: #c4b5fd; }
+
+    /* Grid */
+    .ps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* Card */
+    .ps-card {
+      background: #161b27;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.15s;
+    }
+    .ps-card:hover { border-color: #374151; }
+
+    .ps-card-top {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; gap: 8px;
+    }
+    .ps-incident-num {
+      font-size: 11px; font-weight: 700; color: #4b5563;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .ps-emotion {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.6px;
+      text-transform: uppercase; border-radius: 4px;
+      padding: 3px 8px; flex-shrink: 0;
+    }
+    .ps-emotion.betrayal   { background:#3b1f1f; color:#f87171; }
+    .ps-emotion.desperation{ background:#1c1f0e; color:#bef264; }
+    .ps-emotion.shock      { background:#1e1f3b; color:#818cf8; }
+    .ps-emotion.love       { background:#3b1f2e; color:#f472b6; }
+    .ps-emotion.sacrifice  { background:#1a2f1f; color:#4ade80; }
+    .ps-emotion.greed      { background:#2a1f0a; color:#fbbf24; }
+    .ps-emotion.identity   { background:#0a1f2a; color:#38bdf8; }
+    .ps-emotion.redemption { background:#2a1f3b; color:#c084fc; }
+
+    .ps-headline {
+      font-size: 13px; font-weight: 700; color: #f3f4f6;
+      line-height: 1.4; margin-bottom: 3px;
+    }
+    .ps-what-happened {
+      font-size: 11.5px; color: #9ca3af; line-height: 1.65;
+    }
+
+    .ps-divider {
+      border: none; border-top: 1px solid #1f2937; margin: 0;
+    }
+
+    .ps-angle-label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; color: #a855f7; margin-bottom: 5px;
+    }
+    .ps-angle-text {
+      font-size: 12px; color: #d1d5db; line-height: 1.6;
+    }
+    .ps-angle-text em {
+      color: #c084fc; font-style: normal; font-weight: 600;
+    }
+
+    .ps-shows {
+      display: flex; gap: 6px; flex-wrap: wrap; margin-top: 2px;
+    }
+    .ps-show-tag {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 4px; text-transform: uppercase; letter-spacing: 0.4px;
+    }
+    .ps-show-tag.vvk       { background:#0c1f3b; color:#60a5fa; border:1px solid #1e3a5f; }
+    .ps-show-tag.indrajith { background:#1a0c2e; color:#c084fc; border:1px solid #3b1f5e; }
+    .ps-show-tag.trot      { background:#0c2014; color:#4ade80; border:1px solid #14532d; }
+    .ps-show-tag.any       { background:#1f1f1f; color:#9ca3af; border:1px solid #374151; }
+
+    /* Fire powerstart card */
+    .ps-fire-card {
+      border-color: #581c87 !important;
+      box-shadow: 0 0 0 1px #581c87, 0 0 10px 0 rgba(168,85,247,0.13);
+    }
+    .ps-fire-badge {
+      font-size: 15px;
+      line-height: 1;
+      cursor: default;
+      flex-shrink: 0;
+    }
+
+    .ps-hook-opener {
+      font-size: 11px; font-style: italic; color: #6b7280;
+      border-left: 2px solid #7c3aed; padding-left: 9px;
+      line-height: 1.55;
+      margin-top: 2px;
+    }
+    .ps-hook-opener strong { color: #a78bfa; font-style: normal; }
+
+    @media (max-width: 1100px) { .ps-grid { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 660px)  { .ps-grid { grid-template-columns: 1fr; } }
+
+    /* ══════════════════════════════════════
+       TAB 7 — MICRODRAMA POWERSTARTS
+    ══════════════════════════════════════ */
+    .md-formula-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .md-formula-step {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 12px 14px;
+      position: relative;
+    }
+    .md-formula-step::after {
+      content: '→';
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #374151;
+      font-size: 16px;
+      z-index: 1;
+    }
+    .md-formula-step:last-child::after { display: none; }
+    .md-formula-time {
+      font-size: 10px; font-weight: 800; letter-spacing: 1px;
+      text-transform: uppercase; color: #4b5563;
+      margin-bottom: 5px;
+    }
+    .md-formula-label {
+      font-size: 12px; font-weight: 700; color: #f3f4f6;
+      margin-bottom: 4px;
+    }
+    .md-formula-desc {
+      font-size: 11px; color: #6b7280; line-height: 1.5;
+    }
+    .md-formula-step.f1 { border-top: 2px solid #3b82f6; }
+    .md-formula-step.f2 { border-top: 2px solid #f59e0b; }
+    .md-formula-step.f3 { border-top: 2px solid #ef4444; }
+    .md-formula-step.f4 { border-top: 2px solid #8b5cf6; }
+    .md-formula-step.f1 .md-formula-time { color: #60a5fa; }
+    .md-formula-step.f2 .md-formula-time { color: #fbbf24; }
+    .md-formula-step.f3 .md-formula-time { color: #f87171; }
+    .md-formula-step.f4 .md-formula-time { color: #a78bfa; }
+
+    /* Platform filter */
+    .md-filter-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 8px; flex-wrap: wrap;
+    }
+    .md-filter-label {
+      font-size: 11px; color: #4b5563; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px;
+      min-width: 60px;
+    }
+    .md-filter-btn {
+      padding: 4px 12px; font-size: 11px; font-weight: 600;
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; color: #6b7280; cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .md-filter-btn:hover { background: #252d3d; color: #d1d5db; }
+    .md-filter-btn.active { background: #1a1f2e; border-color: currentColor; }
+    .md-filter-btn.plat-kuku.active    { color: #fb923c; border-color: #9a3412; }
+    .md-filter-btn.plat-quicktv.active { color: #2dd4bf; border-color: #0f766e; }
+    .md-filter-btn.plat-tadka.active   { color: #60a5fa; border-color: #1d4ed8; }
+    .md-filter-btn.plat-flicktv.active { color: #c084fc; border-color: #7e22ce; }
+    .md-filter-btn.plat-reelsaga.active{ color: #f472b6; border-color: #9d174d; }
+    .md-filter-btn.plat-fatafat.active { color: #38bdf8; border-color: #0284c7; }
+    .md-filter-btn.plat-all.active     { color: #e5e7eb; border-color: #4b5563; }
+
+    /* Category filter */
+    .md-cat-btn {
+      padding: 4px 12px; font-size: 11px; font-weight: 600;
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; color: #6b7280; cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .md-cat-btn:hover { background: #252d3d; color: #d1d5db; }
+    .md-cat-btn.active { background: #1a2030; border-color: #4b5563; color: #d1d5db; }
+
+    /* Grid */
+    .md-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    /* Show card */
+    .md-card {
+      background: #161b27;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      padding: 16px;
+      display: flex; flex-direction: column; gap: 11px;
+      transition: border-color 0.15s;
+    }
+    .md-card:hover { border-color: #374151; }
+    .md-fire-card {
+      border-color: #4c1d95 !important;
+      box-shadow: 0 0 0 1px #4c1d95, 0 0 10px 0 rgba(139,92,246,0.14);
+    }
+
+    .md-card-top {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 8px;
+    }
+    .md-plat-badge {
+      font-size: 9px; font-weight: 800; letter-spacing: 0.6px;
+      text-transform: uppercase; border-radius: 4px;
+      padding: 3px 8px; flex-shrink: 0;
+    }
+    .md-plat-badge.kuku    { background:#431407; color:#fb923c; border:1px solid #9a3412; }
+    .md-plat-badge.quicktv { background:#042f2e; color:#2dd4bf; border:1px solid #0f766e; }
+    .md-plat-badge.tadka   { background:#1e3a5f; color:#60a5fa; border:1px solid #1d4ed8; }
+    .md-plat-badge.flicktv { background:#2e1065; color:#c084fc; border:1px solid #7e22ce; }
+    .md-plat-badge.reelsaga{ background:#4a044e; color:#f0abfc; border:1px solid #86198f; }
+    .md-plat-badge.fatafat { background:#0a1a2e; color:#38bdf8; border:1px solid #0284c7; }
+    .md-plat-badge.storytv { background:#0c2a1a; color:#4ade80; border:1px solid #15803d; }
+    .md-filter-btn.plat-storytv        { color:#4ade80; border-color:#166534; }
+    .md-filter-btn.plat-storytv.active { color:#86efac; border-color:#15803d; }
+
+    .md-genre-tag {
+      font-size: 10px; color: #6b7280; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .md-fire-badge {
+      font-size: 15px; cursor: default; flex-shrink: 0;
+    }
+
+    .md-show-title {
+      font-size: 14px; font-weight: 800; color: #f3f4f6;
+      line-height: 1.3;
+    }
+    .md-show-sub {
+      font-size: 11.5px; color: #9ca3af; line-height: 1.6; margin-top: 3px;
+    }
+
+    .md-divider { border: none; border-top: 1px solid #1f2937; margin: 0; }
+
+    .md-section-label {
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; margin-bottom: 5px;
+    }
+    .md-section-label.ps  { color: #f97316; }
+    .md-section-label.why { color: #4b5563; }
+    .md-section-label.steal { color: #10b981; }
+
+    .md-powerstart-text {
+      font-size: 12px; color: #d1d5db; line-height: 1.65;
+    }
+    .md-powerstart-text em { color: #fbbf24; font-style: normal; font-weight: 600; }
+
+    .md-why-text {
+      font-size: 11.5px; color: #9ca3af; line-height: 1.6;
+    }
+
+    .md-hook-chips {
+      display: flex; gap: 5px; flex-wrap: wrap; margin-top: 2px;
+    }
+    .md-hook-chip {
+      font-size: 10px; background: #0f1117; border: 1px solid #252d3d;
+      border-radius: 4px; padding: 2px 7px; color: #6b7280;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1100px) { .md-grid { grid-template-columns: repeat(2,1fr); } .md-formula-bar { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 660px)  { .md-grid { grid-template-columns: 1fr; } .md-formula-bar { grid-template-columns: 1fr; } }
+
+    /* ─── NEW TODAY badge ─── */
+    .new-today-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 8px; font-weight: 900; letter-spacing: 0.9px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+      color: #fff; border-radius: 4px; padding: 3px 7px;
+      flex-shrink: 0; white-space: nowrap;
+      animation: pulse-new 1.8s ease-in-out infinite;
+      box-shadow: 0 0 8px rgba(219,39,119,0.45);
+    }
+    @keyframes pulse-new {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.75; transform: scale(0.97); }
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1200px) {
+      .board { grid-template-columns: repeat(3,1fr); }
+      .pipeline-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 860px) {
+      .board { grid-template-columns: repeat(2,1fr); }
+      .inapp-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .inapp-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .board { grid-template-columns: 1fr; }
+      .pipeline-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ─── Social Media Powerstarts ─── */
+    .sm-week-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px; flex-wrap: wrap; gap: 8px;
+    }
+    .sm-week-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; color: #6b7280;
+    }
+    .sm-week-tag {
+      font-size: 11px; color: #4b5563; background: #1f2937;
+      border: 1px solid #374151; border-radius: 5px; padding: 3px 10px;
+    }
+    .sm-filter-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px; flex-wrap: wrap;
+    }
+    .sm-filter-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: #4b5563; margin-right: 4px; white-space: nowrap;
+    }
+    .sm-filter-btn {
+      padding: 4px 12px; font-size: 11px; font-weight: 600;
+      background: #1f2937; border: 1px solid #374151;
+      border-radius: 5px; color: #6b7280; cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+    .sm-filter-btn:hover { background: #252d3d; color: #d1d5db; }
+    .sm-filter-btn.active { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
+    .sm-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .sm-card {
+      background: #1a2030; border: 1px solid #252d3d;
+      border-radius: 8px; padding: 14px 15px;
+    }
+    .sm-fire-card {
+      border-color: #7c2d12;
+      box-shadow: 0 0 0 1px #7c2d12, 0 0 8px 0 rgba(251,146,60,0.12);
+    }
+    .sm-card-top {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .sm-plat-badge {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; padding: 2px 8px; border-radius: 4px;
+    }
+    .sm-plat-badge.instagram { background: #4c1d95; color: #c4b5fd; }
+    .sm-plat-badge.youtube   { background: #7f1d1d; color: #fca5a5; }
+    .sm-plat-badge.facebook  { background: #1e3a5f; color: #93c5fd; }
+    .sm-plat-badge.all       { background: #1f2937; color: #9ca3af; }
+    .sm-fire-badge {
+      font-size: 14px; cursor: default; margin-left: 4px;
+    }
+    .sm-format-name {
+      font-size: 14px; font-weight: 700; color: #f3f4f6;
+      margin-bottom: 5px; line-height: 1.3;
+    }
+    .sm-why {
+      font-size: 12px; color: #9ca3af; margin-bottom: 10px; line-height: 1.55;
+    }
+    .sm-divider {
+      border: none; border-top: 1px solid #1f2937; margin: 10px 0;
+    }
+    .sm-label {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; margin-bottom: 5px;
+    }
+    .sm-label.hook { color: #f59e0b; }
+    .sm-label.steal { color: #4ade80; }
+    .sm-hook-line {
+      font-size: 12px; color: #d1d5db; font-style: italic;
+      margin-bottom: 10px; line-height: 1.5;
+      background: #111827; border-radius: 5px; padding: 7px 10px;
+      border-left: 2px solid #f59e0b;
+    }
+    .sm-steal-text {
+      font-size: 12px; color: #d1d5db; line-height: 1.55; margin-bottom: 10px;
+    }
+    .sm-shows {
+      display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px;
+    }
+    .sm-show-tag {
+      font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px;
+    }
+    .sm-show-tag.vvk       { background: #14532d; color: #4ade80; }
+    .sm-show-tag.indrajith  { background: #1e3a5f; color: #93c5fd; }
+    .sm-show-tag.trot      { background: #78350f; color: #fcd34d; }
+    .sm-show-tag.pks       { background: #1e1b4b; color: #a5b4fc; }
+    .sm-show-tag.kipi      { background: #134e4a; color: #5eead4; }
+    .sm-show-tag.cult      { background: #4c1d95; color: #c4b5fd; }
+    .sm-show-tag.all       { background: #1f2937; color: #9ca3af; }
+    .sm-emotion-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .sm-emotion-tag.comedy   { background: #78350f; color: #fcd34d; }
+    .sm-emotion-tag.emotion  { background: #1e3a5f; color: #93c5fd; }
+    .sm-emotion-tag.drama    { background: #4c1d95; color: #c4b5fd; }
+    .sm-emotion-tag.all      { background: #1f2937; color: #9ca3af; }
+    @media (max-width: 900px) { .sm-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<!-- ─── Sticky header ─── -->
+<div class="shell-header">
+  <div class="shell-top">
+    <div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="36" height="36" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="22" fill="#E8174B"/>
+          <!-- Speech bubble P shape -->
+          <path d="M22 18 Q22 14 26 14 L74 14 Q78 14 78 18 L78 68 Q78 72 74 72 L52 72 L38 86 L38 72 L26 72 Q22 72 22 68 Z" fill="white"/>
+          <!-- Radio body -->
+          <rect x="34" y="34" width="32" height="20" rx="3" fill="#E8174B"/>
+          <!-- Radio screen -->
+          <rect x="37" y="37" width="14" height="8" rx="1" fill="white"/>
+          <!-- Radio buttons -->
+          <circle cx="57" cy="41" r="3" fill="white"/>
+          <circle cx="64" cy="41" r="3" fill="white"/>
+          <!-- Antenna -->
+          <line x1="44" y1="34" x2="38" y2="24" stroke="#E8174B" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Signal waves -->
+          <path d="M58 32 Q61 30 61 28" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M60 31 Q65 28 65 25" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Knobs row -->
+          <circle cx="37" cy="50" r="2" fill="white"/>
+          <circle cx="43" cy="50" r="2" fill="white"/>
+          <circle cx="49" cy="50" r="2" fill="white"/>
+        </svg>
+        <div>
+          <h1>Tamil Creative — Promo Dashboard</h1>
+          <p>Growth Weekly Update · Tamil</p>
+        </div>
+      </div>
+    </div>
+    <div class="updated" id="last-updated"></div>
+  </div>
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('perf',this)">Performance</button>
+    <button class="tab-btn"        onclick="switchTab('pipe',this)">Asset Pipeline</button>
+    <button class="tab-btn"        onclick="switchTab('inapp',this)">InApp Videos</button>
+    <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
+    <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
+    <button class="tab-btn"        onclick="switchTab('powerstarts',this)">⚡ Trending Powerstarts</button>
+    <button class="tab-btn"        onclick="switchTab('microdramas',this)">🎬 Microdrama Powerstarts</button>
+    <button class="tab-btn"        onclick="switchTab('social',this)">📱 Social Media Powerstarts</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 1 — PERFORMANCE
+══════════════════════════════════════════════ -->
+<div id="tab-perf" class="tab-pane active">
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Scaling Now</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Scaling Next</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Observation</div>
+    <div class="legend-item" style="margin-left:auto;">
+      <span class="phase-badge cps">CPS</span>&nbsp;= Scaling CPI &nbsp;|&nbsp;
+      <span class="phase-badge test">TEST</span>&nbsp;= Test CPI &nbsp;|&nbsp;
+      🔥&nbsp;= Strong Meta &amp; Google scale potential
+    </div>
+  </div>
+
+  <div class="info-banner">
+    <strong>Status logic (edit <code>status</code> field to override):</strong>
+    CPS Scaling data present → <strong>Scaling Now</strong> &nbsp;·&nbsp;
+    Next Step = Gen AI, no CPS yet → <strong>Scaling Next</strong> &nbsp;·&nbsp;
+    CPI Testing only → <strong>Observation</strong>
+  </div>
+
+  <!-- Sort bar -->
+  <div class="sort-bar">
+    <span class="sort-bar-label">Rank by</span>
+    <button class="sort-btn active" id="sort-btn-activation" onclick="setSort('activation',this)">
+      Activation <span class="sort-arrow">↓</span>
+    </button>
+    <button class="sort-btn" id="sort-btn-cpi" onclick="setSort('cpi',this)">
+      CPI <span class="sort-arrow">↑</span>
+    </button>
+    <button class="sort-btn" id="sort-btn-playtime" onclick="setSort('playtime',this)">
+      AVP <span class="sort-arrow">↓</span>
+    </button>
+  </div>
+
+  <div id="perf-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 2 — ASSET PIPELINE
+══════════════════════════════════════════════ -->
+<div id="tab-pipe" class="tab-pane">
+  <div id="pipe-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 3 — INAPP VIDEOS
+══════════════════════════════════════════════ -->
+<div id="tab-inapp" class="tab-pane">
+  <div id="inapp-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 4 — SCRIPT CRACKING SUMMARY
+══════════════════════════════════════════════ -->
+<div id="tab-summary" class="tab-pane">
+  <div id="summary-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 5 — CREATIVE SUMMARY
+══════════════════════════════════════════════ -->
+<div id="tab-creative" class="tab-pane">
+  <div id="creative-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 6 — TRENDING POWERSTARTS
+══════════════════════════════════════════════ -->
+<div id="tab-powerstarts" class="tab-pane">
+  <div id="powerstarts-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 7 — MICRODRAMA POWERSTARTS
+══════════════════════════════════════════════ -->
+<div id="tab-microdramas" class="tab-pane">
+  <div id="microdramas-app"></div>
+</div>
+
+<div id="tab-social" class="tab-pane">
+  <div id="social-app"></div>
+</div>
+
+
+<script>
+// ═══════════════════════════════════════════════
+//   TAB SWITCHING
+// ═══════════════════════════════════════════════
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB 1: PERFORMANCE
+// ═══════════════════════════════════════════════
+const scripts = [
+  // VVK — Scaling Now (CPS data)
+  { show:"VVK", script:"Two Losers Together",         status:"Scaling Now",  cpi:188, activation:42, playtime:52, cps:true,  fire:"42% activation with proven CPS economics. Relatable underdog hook performs consistently across Meta cold audiences. Strong candidate for budget increase." },
+  { show:"VVK", script:"Chosen Dragon",               status:"Scaling Now",  cpi:185, activation:55, playtime:63, cps:true,  fire:"Highest activation (55%) in the entire VVK bucket. Efficient CPI at ₹185 with 63s avg playtime signals deep hook engagement — ideal for Meta broad and Google UAC." },
+  { show:"VVK", script:"Super Dragon + Marma Dragon", status:"Scaling Now",  cpi:250, activation:50, playtime:30, cps:true,  fire:"50% activation despite a premium CPI of ₹250 — audience is willing to pay to engage. Broad fantasy appeal makes this a strong Google UAC candidate." },
+  { show:"VVK", script:"BKR Saviour + Swayamvar",     status:"Scaling Now",  cpi:182, activation:52, playtime:47, cps:true,  fire:"52% activation at ₹182 CPI — best efficiency ratio in VVK CPS tier. Dual-hook structure (action + romance) widens audience reach on Meta." },
+  { show:"VVK", script:"Saviour",                     status:"Scaling Now",  cpi:220, activation:25, playtime:34, cps:true  },
+  { show:"VVK", script:"DKR Base Asset",              status:"Scaling Now",  cpi:189, activation:45, playtime:29, cps:true,  fire:"45% activation with CPS validation at ₹189. Solid mid-funnel performer — reliable for sustained scaling without creative fatigue risk." },
+  { show:"VVK", script:"Nishaan",                     status:"Scaling Now",  cpi:200, activation:25, playtime:26, cps:true  },
+  // VVK — Observation
+  { show:"VVK", script:"Dragon Soul",                 status:"Observation",  cpi:66,  activation:10, playtime:25, cps:false },
+  { show:"VVK", script:"Zombie Dragon",               status:"Observation",  cpi:78,  activation:26, playtime:22, cps:false },
+  { show:"VVK", script:"Sister's Plan",               status:"Observation",  cpi:30,  activation:17, playtime:21, cps:false },
+  { show:"VVK", script:"Dragon Warrior",              status:"Observation",  cpi:53,  activation:12, playtime:26, cps:false },
+  { show:"VVK", script:"Badlands",                    status:"Observation",  cpi:52,  activation:10, playtime:28, cps:false },
+  { show:"VVK", script:"Fallen Empire",               status:"Observation",  cpi:54,  activation:20, playtime:25, cps:false },
+
+  // Indrajith — Scaling Now
+  { show:"Indrajith", script:"Son of Fire",                   status:"Scaling Now",  cpi:121, activation:50, playtime:56, cps:true,  fire:"Best economics in Indrajith — 50% activation at just ₹121 CPI. Low cost + high intent = strong scale headroom on both Meta and Google UAC." },
+  { show:"Indrajith", script:"Rukmini PS + Paison Ka Inaam",  status:"Scaling Now",  cpi:118, activation:31, playtime:28, cps:true  },
+  { show:"Indrajith", script:"TFN – Thaan Opng – Rooted",     status:"Scaling Now",  cpi:151, activation:28, playtime:22, cps:true  },
+  // Indrajith — Observation
+  { show:"Indrajith", script:"Success Abimanyu",              status:"Observation",  cpi:62,  activation:14, playtime:40, cps:false },
+  { show:"Indrajith", script:"A Deadly Curse",                status:"Observation",  cpi:58,  activation:12, playtime:50, cps:false },
+  { show:"Indrajith", script:"PKI Eps 1 – Hyper Long 1.41hr", status:"Observation",  cpi:53,  activation:19, playtime:76, cps:false },
+  { show:"Indrajith", script:"PKI 2 + SOF 30min",             status:"Observation",  cpi:66,  activation:14, playtime:60, cps:false },
+  { show:"Indrajith", script:"PKI + SOF + TFN 50min",         status:"Observation",  cpi:67,  activation:5,  playtime:58, cps:false },
+  { show:"Indrajith", script:"Iravatham 20min",               status:"Observation",  cpi:30,  activation:6,  playtime:51, cps:false },
+  { show:"Indrajith", script:"Book Opn PKI 1 + SOF",          status:"Observation",  cpi:56,  activation:32, playtime:49, cps:false, fire:"32% activation at ₹56 CPI in test phase — outstanding efficiency. If CPS confirms these metrics, this becomes one of the highest ROI creatives in the portfolio." },
+  { show:"Indrajith", script:"Mrg Opn PKI 1 + SOF",           status:"Observation",  cpi:64,  activation:19, playtime:44, cps:false },
+  { show:"Indrajith", script:"TFN Rooted + Eps Hyper Long",   status:"Observation",  cpi:38,  activation:13, playtime:40, cps:false },
+  { show:"Indrajith", script:"PKI + TFN Rooted 19min",        status:"Observation",  cpi:43,  activation:0,  playtime:39, cps:false },
+  { show:"Indrajith", script:"PKI Eps 1&2 Super Long 34min",  status:"Observation",  cpi:54,  activation:18, playtime:36, cps:false },
+  { show:"Indrajith", script:"Rukmini PS + Iravatham 1.41hr", status:"Observation",  cpi:69,  activation:22, playtime:35, cps:false },
+  { show:"Indrajith", script:"PKI Eps 1&2 Lion Opng 35min",   status:"Observation",  cpi:68,  activation:15, playtime:34, cps:false },
+  { show:"Indrajith", script:"Stupid Hero",                   status:"Observation",  cpi:34,  activation:0,  playtime:33, cps:false },
+  { show:"Indrajith", script:"PKI 2 + Dei Verum Opng",        status:"Observation",  cpi:38,  activation:11, playtime:32, cps:false },
+  { show:"Indrajith", script:"PKI 2 + Ilavarasi Mugathil",    status:"Observation",  cpi:52,  activation:15, playtime:26, cps:false },
+  { show:"Indrajith", script:"PKI Trimmed Rukmini PS Short",  status:"Observation",  cpi:50,  activation:20, playtime:26, cps:false },
+  { show:"Indrajith", script:"Another Round",                 status:"Observation",  cpi:30,  activation:24, playtime:39, cps:false, fire:"Ultra-low CPI of ₹30 with 24% activation — even at CPS scale this creative can acquire users cheaply. Huge budget headroom for Google UAC volume campaigns." },
+
+  // MKV — Scaling Now
+  { show:"MKV", script:"Honey Trap",    status:"Scaling Now", cpi:148, activation:18, playtime:25, cps:true  },
+  { show:"MKV", script:"Simma Returns", status:"Scaling Now", cpi:187, activation:22, playtime:36, cps:true  },
+  { show:"MKV", script:"Gold Leaf",     status:"Scaling Now", cpi:247, activation:25, playtime:39, cps:true  },
+
+  // TROT — Scaling Now
+  { show:"TROT", script:"Kick",               status:"Scaling Now",  cpi:85, activation:40, playtime:75, cps:true,  fire:"Best CPI among all CPS scripts across shows (₹85). 40% activation + 75s AVP = users are watching and converting. Top scale candidate for both Meta and Google." },
+  { show:"TROT", script:"Unknown Call",       status:"Scaling Now",  cpi:41, activation:20, playtime:45, cps:true  },
+  // TROT — Scaling Next (Next Step = Gen AI)
+  { show:"TROT", script:"Survesh The Hero",   status:"Scaling Next", cpi:39, activation:18, playtime:79, cps:false, fire:"Highest AVP (79s) in TROT — signals strong content engagement even at test CPI. Once Gen AI version goes live, ₹39 CPI makes this a natural high-volume scaler." },
+  { show:"TROT", script:"Social Experiments", status:"Scaling Next", cpi:27, activation:17, playtime:55, cps:false, fire:"Lowest CPI in the entire dataset at ₹27. Even with modest activation, the economics are exceptional. Prime candidate for Google UAC broad match campaigns." },
+  // TROT — Observation
+  { show:"TROT", script:"Company Drama",      status:"Observation",  cpi:28, activation:10, playtime:71, cps:false },
+  { show:"TROT", script:"Vedhika's POV",      status:"Observation",  cpi:22, activation:12, playtime:43, cps:false },
+  { show:"TROT", script:"Old Man's Plan",     status:"Observation",  cpi:21, activation:13, playtime:50, cps:false },
+  { show:"TROT", script:"Love Action Drama",  status:"Observation",  cpi:53, activation:7,  playtime:54, cps:false },
+  { show:"TROT", script:"Smuggler",           status:"Observation",  cpi:42, activation:11, playtime:29, cps:false },
+  { show:"TROT", script:"Auction",            status:"Observation",  cpi:48, activation:6,  playtime:23, cps:false },
+
+  // PKS — Observation
+  { show:"PKS", script:"Nagal Nutpam – Narration",     status:"Observation", cpi:50,  activation:5,  playtime:27, cps:false },
+  { show:"PKS", script:"Varnamithrar – Opening",       status:"Observation", cpi:96,  activation:0,  playtime:20, cps:false },
+  { show:"PKS", script:"Jadui Chiraag – Alt Opng",     status:"Observation", cpi:83,  activation:0,  playtime:19, cps:false },
+  { show:"PKS", script:"Varnamithrar – Pani Pen Opng", status:"Observation", cpi:51,  activation:7,  playtime:17, cps:false },
+  { show:"PKS", script:"Spark Vikram Opening",         status:"Observation", cpi:114, activation:8,  playtime:16, cps:false },
+  { show:"PKS", script:"Spark Yavanika Opening",       status:"Observation", cpi:108, activation:15, playtime:14, cps:false },
+  { show:"PKS", script:"Jadui Chiraag Long 15min",     status:"Observation", cpi:101, activation:7,  playtime:14, cps:false },
+
+  // KIPI — Observation
+  { show:"KIPI", script:"Mothers Trick",       status:"Observation", cpi:80,  activation:4,  playtime:22, cps:false },
+  { show:"KIPI", script:"Planet B",            status:"Observation", cpi:55,  activation:8,  playtime:10, cps:false },
+  { show:"KIPI", script:"The Titan Game",      status:"Observation", cpi:51,  activation:5,  playtime:13, cps:false },
+  { show:"KIPI", script:"Vibasha's Love",      status:"Observation", cpi:46,  activation:8,  playtime:22, cps:false },
+  { show:"KIPI", script:"Akilan In Danger",    status:"Observation", cpi:57,  activation:12, playtime:12, cps:false },
+  { show:"KIPI", script:"Miruga's Trap",       status:"Observation", cpi:54,  activation:6,  playtime:13, cps:false },
+  { show:"KIPI", script:"Akilan's Secret Lab", status:"Observation", cpi:41,  activation:12, playtime:21, cps:false },
+  { show:"KIPI", script:"Cruel Mirugalochan",  status:"Observation", cpi:64,  activation:11, playtime:12, cps:false },
+  { show:"KIPI", script:"Dollar Vs Mithran",   status:"Observation", cpi:48,  activation:6,  playtime:10, cps:false },
+  { show:"KIPI", script:"Future Man",          status:"Observation", cpi:51,  activation:4,  playtime:8,  cps:false },
+
+  // CULT — Observation
+  { show:"CULT", script:"Grey Egg",            status:"Observation", cpi:55,  activation:13, playtime:28, cps:false },
+  { show:"CULT", script:"Weakest Beast Tamer", status:"Observation", cpi:80,  activation:7,  playtime:9,  cps:false },
+  { show:"CULT", script:"Cult VO - PS1",       status:"Observation", cpi:82,  activation:6,  playtime:12, cps:false },
+  { show:"CULT", script:"Eternal Fly Lord",    status:"Observation", cpi:45,  activation:6,  playtime:15, cps:false },
+];
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB 2: ASSET PRODUCTION PIPELINE
+// ═══════════════════════════════════════════════
+const pipeline = [
+  // status: "Delivered" | "WIP" | "Hold"
+  {
+    show:"TROT",       script:"Kick",                    format:"Gen AI",
+    duration:"12 Mins", mode:"inhouse",  vendor:"Hari",
+    ppmDate:"27 Feb",  startDate:"2 Mar",   eta:"22 Mar",   status:"Delivered",
+    notes:""
+  },
+  {
+    show:"VVK",        script:"Nilavan Rises Full",      format:"Gen AI",
+    duration:"17 Mins", mode:"inhouse",  vendor:"Ranjith",
+    ppmDate:"20 Mar",  startDate:"23 Mar",  eta:"17 Apr",   status:"Delivered",
+    notes:""
+  },
+  {
+    show:"MKV",        script:"Honey Trap",              format:"Gen AI",
+    duration:"20 Mins", mode:"inhouse",  vendor:"Hari & Ranjith",
+    ppmDate:"23 Mar",  startDate:"30 Mar",  eta:"16 Apr",   status:"Delivered",
+    notes:"Base CPI ₹10.69"
+  },
+  {
+    show:"VVK",        script:"Two Losers Together",     format:"Gen AI",
+    duration:"27 Mins", mode:"vendor",   vendor:"KS Files Creatives",
+    ppmDate:"22 Apr",  startDate:"25 Apr",  eta:"15 May",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"VVK",        script:"Chosen Dragon",           format:"Gen AI",
+    duration:"22 Mins", mode:"vendor",   vendor:"11th Hour Production",
+    ppmDate:"27 Apr",  startDate:"28 Apr",  eta:"31 May",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"Indrajith",  script:"Son of Fire",             format:"Gen AI",
+    duration:"35 Mins", mode:"vendor",   vendor:"Blink Studios",
+    ppmDate:"–",       startDate:"WIP",     eta:"WIP",      status:"WIP",
+    notes:""
+  },
+  {
+    show:"Indrajith",  script:"Son of Fire",             format:"Gen AI",
+    duration:"35 Mins", mode:"vendor",   vendor:"AI Tales",
+    ppmDate:"13 Apr",  startDate:"24 Apr",  eta:"31 May",   status:"WIP",
+    notes:"Parallel vendor"
+  },
+  {
+    show:"Indrajith",  script:"PKI (Screen to Script)",  format:"Gen AI",
+    duration:"12 Mins", mode:"inhouse",  vendor:"Vinitha",
+    ppmDate:"8 Apr",   startDate:"9 Apr",   eta:"10 May",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"TROT",       script:"Kick – LA Version",       format:"Live Action",
+    duration:"15 Mins", mode:"vendor",   vendor:"TBD",
+    ppmDate:"WIP",     startDate:"WIP",     eta:"WIP",      status:"WIP",
+    notes:"Vendor not finalized"
+  },
+  {
+    show:"BY / Indrajith", script:"Another Round",          format:"Gen AI",
+    duration:"32 Mins",    mode:"vendor",  vendor:"Vivek M",
+    ppmDate:"6 May",       startDate:"7 May",  eta:"15 Jun",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"CULT",           script:"VO Version",             format:"Gen AI",
+    duration:"10 Mins",    mode:"inhouse", vendor:"Hari & Ranjith",
+    ppmDate:"5 May",       startDate:"6 May",  eta:"15 May",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"PKS / Super Yodha", script:"Varnamithrar Correction", format:"Gen AI",
+    duration:"15 Mins",    mode:"vendor",  vendor:"TBD",
+    ppmDate:"WIP",         startDate:"WIP",    eta:"WIP",      status:"WIP",
+    notes:""
+  },
+  {
+    show:"KIPI / Shoorveer", script:"Akilan Vs Vibahsha + In App", format:"Gen AI",
+    duration:"30 Mins",    mode:"inhouse", vendor:"Ranjith",
+    ppmDate:"–",           startDate:"6 May",  eta:"13 May",   status:"WIP",
+    notes:""
+  },
+  {
+    show:"Guardian King",  script:"Not Yet Finalized",        format:"Gen AI",
+    duration:"TBD",        mode:"vendor",  vendor:"TBD",
+    ppmDate:"WIP",         startDate:"WIP",    eta:"WIP",      status:"WIP",
+    notes:""
+  },
+];
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB 3: INAPP VIDEOS
+// ═══════════════════════════════════════════════
+// Target milestones: 5 hr → 15 hr → 40 hr
+const inappVideos = [
+  {
+    show:"Mahakaaviyam", showKey:"MKV",
+    vendor:"Dinesh",
+    hrsDelivered:5.1, eps:18,
+    eta5:"Done – Apr 3rd Week", eta15:"–",    eta40:"–",
+    status5:"done", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"VVK",          showKey:"VVK",
+    vendor:"Hindi adaptation",
+    hrsDelivered:8, eps:35,
+    eta5:"Apr 2nd Week", eta15:"–",    eta40:"–",
+    status5:"done", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"SY / PKS",     showKey:"PKS",
+    vendor:"Hindi adaptation",
+    hrsDelivered:6, eps:22,
+    eta5:"Apr 2nd Week", eta15:"–",    eta40:"–",
+    status5:"done", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"TROT",         showKey:"TROT",
+    vendor:"Hindi adaptation",
+    hrsDelivered:5, eps:22,
+    eta5:"Apr 2nd Week", eta15:"–",    eta40:"–",
+    status5:"done", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"Indrajith / BY",showKey:"Indrajith",
+    vendor:"Hindi adaptation",
+    hrsDelivered:5, eps:25,
+    eta5:"Apr 4th Week", eta15:"–",    eta40:"–",
+    status5:"pending", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"KIPI / Shoorveer",showKey:"KIPI",
+    vendor:"Promptify",
+    hrsDelivered:4, eps:19,
+    eta5:"May 1st Week", eta15:"–",    eta40:"–",
+    status5:"pending", status15:"na", status40:"na",
+    notes:""
+  },
+  {
+    show:"TROT (Gen AI)",showKey:"TROT",
+    vendor:"Blu3 Art",
+    hrsDelivered:1, eps:4,
+    eta5:"Jun 3rd Week", eta15:"Work on Hold", eta40:"–",
+    status5:"hold", status15:"hold", status40:"na",
+    notes:"Work on hold"
+  },
+  {
+    show:"Cult",         showKey:"CULT",
+    vendor:"Edit Box - Snekha",
+    hrsDelivered:1, eps:null,
+    eta5:"–",  eta15:"–", eta40:"–",
+    status5:"na", status15:"na", status40:"na",
+    notes:"Gen AI Sketch"
+  },
+  {
+    show:"Guardian King",showKey:"GK",
+    vendor:"Edit Box - Snekha",
+    hrsDelivered:1, eps:null,
+    eta5:"–",  eta15:"–", eta40:"–",
+    status5:"na", status15:"na", status40:"na",
+    notes:"Gen AI Sketch"
+  },
+];
+
+// ═══════════════════════════════════════════════
+//   RENDER — TAB 1: PERFORMANCE
+// ═══════════════════════════════════════════════
+const BUCKETS = [
+  { key:"Scaling Now",  cls:"scaling-now"  },
+  { key:"Scaling Next", cls:"scaling-next" },
+  { key:"Observation",  cls:"observation"  },
+];
+const SHOWS = [
+  { key:"VVK",       name:"Vaal Veesum Karikala"  },
+  { key:"Indrajith", name:"BhramYodha"             },
+  { key:"TROT",      name:"Tiger Returns"          },
+  { key:"MKV",       name:"Mahakaaviyam"           },
+  { key:"PKS",       name:"Por Kanda Singam"       },
+  { key:"KIPI",      name:"Shoorveer / KiPi 2500"  },
+  { key:"CULT",      name:"Cult – The Teenage Ruler"},
+];
+
+// ─── Sort state ───────────────────────────────
+let currentSort = 'activation'; // 'activation' | 'cpi' | 'playtime'
+
+const SORT_CONFIG = {
+  activation: { label:'Activation', dir:'↓', fn:(a,b) => b.activation - a.activation || a.cpi - b.cpi },
+  cpi:        { label:'CPI',        dir:'↑', fn:(a,b) => a.cpi - b.cpi || b.activation - a.activation },
+  playtime:   { label:'AVP',        dir:'↓', fn:(a,b) => b.playtime - a.playtime || b.activation - a.activation },
+};
+
+function setSort(key, btn) {
+  currentSort = key;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPerf();
+}
+
+// ─── Helpers ──────────────────────────────────
+function fmtTime(s) {
+  if (s >= 60) { const m=Math.floor(s/60),r=s%60; return r>0?`${m}m ${r}s`:`${m}m`; }
+  return `${s}s`;
+}
+
+function scriptCard(s, rank, showTag) {
+  const badge = s.cps
+    ? '<span class="phase-badge cps">CPS</span>'
+    : '<span class="phase-badge test">TEST</span>';
+
+  const fireBadge = s.fire
+    ? `<span class="fire-badge" data-fire-tip="${s.fire.replace(/"/g,'&quot;')}">🔥</span>`
+    : '';
+
+  // Highlight the active sort metric
+  const actCls  = currentSort === 'activation' ? ' highlight' : '';
+  const cpiCls  = currentSort === 'cpi'        ? ' highlight' : '';
+  const playCls = currentSort === 'playtime'   ? ' highlight' : '';
+
+  return `
+    <div class="script-card${s.fire ? ' fire-card' : ''}">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
+          <div class="script-name">${s.script}</div>
+          ${fireBadge}
+        </div>
+        ${badge}
+      </div>
+      ${showTag ? `<div class="script-show-tag">${s.show}</div>` : ''}
+      <div class="metrics">
+        <div class="metric${cpiCls}">CPI <span>₹${s.cpi}</span></div>
+        <div class="metric${actCls}">Act <span>${s.activation > 0 ? s.activation + '%' : '–'}</span></div>
+        <div class="metric${playCls}">AVP <span>${fmtTime(s.playtime)}</span></div>
+      </div>
+    </div>`;
+}
+
+function sortedItems(items) {
+  return [...items].sort(SORT_CONFIG[currentSort].fn);
+}
+
+function perfBoard(dataSet, showTag) {
+  const cfg = SORT_CONFIG[currentSort];
+  return `<div class="board">${BUCKETS.map(b => {
+    const items = sortedItems(dataSet.filter(s => s.status === b.key));
+    return `<div class="bucket ${b.cls}">
+      <div class="bucket-header">
+        <div class="bucket-dot"></div>
+        <div class="bucket-label">${b.key}</div>
+        <div class="bucket-count">${items.length}</div>
+      </div>
+      ${items.length
+        ? items.map((s, i) => scriptCard(s, i + 1, showTag)).join('')
+        : '<div class="empty-bucket">— none —</div>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderPerf() {
+  const cfg = SORT_CONFIG[currentSort];
+  let html = `<div class="section-title">Master Leaderboard — All Shows · ${scripts.length} scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
+  html += perfBoard(scripts, true);
+  SHOWS.forEach(show => {
+    const ss = scripts.filter(s => s.show === show.key);
+    if (!ss.length) return;
+    html += `<div class="show-section">
+      <div class="show-title">
+        <span class="show-badge">${show.key}</span>
+        <span class="show-full-name">${show.name}</span>
+        <span class="script-count">· ${ss.length} scripts</span>
+      </div>
+      ${perfBoard(ss, false)}
+    </div>`;
+  });
+  document.getElementById('perf-app').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//   RENDER — TAB 2: ASSET PIPELINE
+// ═══════════════════════════════════════════════
+function assetCard(a) {
+  const modeCls = a.mode === 'inhouse' ? 'inhouse' : a.mode === 'vendor' ? 'vendor' : 'tbd';
+  const modeLabel = a.mode === 'inhouse' ? 'In-House' : a.mode === 'vendor' ? 'Vendor' : 'TBD';
+  return `
+    <div class="asset-card">
+      <div class="ac-show">${a.show}</div>
+      <div class="ac-script">${a.script}</div>
+      <div class="asset-meta">
+        <div class="asset-tag">${a.format}</div>
+        <div class="asset-tag"><span>${a.duration}</span></div>
+        <div class="mode-badge ${modeCls}">${modeLabel}</div>
+      </div>
+      <div class="dates-row">
+        <div class="date-chip">PPM <span>${a.ppmDate}</span></div>
+        <div class="date-chip">Start <span>${a.startDate}</span></div>
+        <div class="date-chip">ETA <span>${a.eta}</span></div>
+      </div>
+      ${a.vendor!=='TBD'?`<div class="asset-meta" style="margin-top:5px"><div class="asset-tag">👤 <span>${a.vendor}</span></div>${a.notes?`<div class="asset-tag" style="color:#6b7280">${a.notes}</div>`:''}</div>`:''}
+    </div>`;
+}
+function renderPipeline() {
+  const delivered = pipeline.filter(a=>a.status==='Delivered');
+  const wip       = pipeline.filter(a=>a.status==='WIP');
+  const hold      = pipeline.filter(a=>a.status==='Hold');
+
+  let html = `<div class="section-title">Gen AI Asset Production Pipeline (${pipeline.length} assets)</div>
+  <div class="pipeline-grid">
+    <div class="pipeline-col delivered">
+      <div class="pipeline-col-header">
+        <div class="col-dot"></div>
+        <div class="col-label">Delivered</div>
+        <div class="col-count">${delivered.length}</div>
+      </div>
+      ${delivered.map(a=>assetCard(a)).join('')}
+    </div>
+    <div class="pipeline-col wip">
+      <div class="pipeline-col-header">
+        <div class="col-dot"></div>
+        <div class="col-label">WIP</div>
+        <div class="col-count">${wip.length}</div>
+      </div>
+      ${wip.map(a=>assetCard(a)).join('')}
+    </div>
+    <div class="pipeline-col hold">
+      <div class="pipeline-col-header">
+        <div class="col-dot"></div>
+        <div class="col-label">On Hold</div>
+        <div class="col-count">${hold.length}</div>
+      </div>
+      ${hold.length ? hold.map(a=>assetCard(a)).join('') : '<div class="empty-bucket">— none —</div>'}
+    </div>
+  </div>`;
+  document.getElementById('pipe-app').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//   RENDER — TAB 3: INAPP VIDEOS (checklist)
+// ═══════════════════════════════════════════════
+function milestoneItem(label, hrs, status, eta) {
+  const icons = { done:'✓', pending:'', hold:'⏸', na:'' };
+  const itemCls = status === 'done' ? 'is-done' : status === 'hold' ? 'is-hold' : '';
+  const etaStr  = (eta && eta !== '–') ? eta : '';
+  return `
+    <li class="milestone-item ${itemCls}">
+      <div class="chk ${status}">${icons[status]||''}</div>
+      <div class="m-label"><strong>${hrs}</strong> hrs — ${label}</div>
+      ${etaStr ? `<div class="m-eta">${etaStr}</div>` : ''}
+    </li>`;
+}
+function inappCard(v) {
+  return `
+    <div class="inapp-card">
+      <div class="inapp-card-top">
+        <div>
+          <div class="inapp-show">${v.show}</div>
+          <div class="inapp-vendor">${v.vendor}${v.notes ? ' · ' + v.notes : ''}</div>
+        </div>
+        <div class="inapp-delivered-badge">
+          <div class="hrs">${v.hrsDelivered}<small> hr${v.hrsDelivered !== 1 ? 's' : ''}</small></div>
+          ${v.eps ? `<div class="eps-label">${v.eps} eps</div>` : ''}
+        </div>
+      </div>
+      <ul class="milestone-list">
+        ${milestoneItem('5 hr milestone',  5,  v.status5,  v.eta5)}
+        ${milestoneItem('15 hr milestone', 15, v.status15, v.eta15)}
+        ${milestoneItem('40 hr milestone', 40, v.status40, v.eta40)}
+      </ul>
+    </div>`;
+}
+function renderInapp() {
+  const totalHrs = inappVideos.reduce((s,v) => s + v.hrsDelivered, 0).toFixed(1);
+  const totalEps = inappVideos.reduce((s,v) => s + (v.eps || 0), 0);
+  const doneCount = inappVideos.filter(v => v.status5 === 'done').length;
+  let html = `
+    <div class="section-title">
+      InApp Video Tracker · ${inappVideos.length} shows · ${totalHrs} hrs · ${totalEps} eps delivered · ${doneCount} shows past 5hr milestone
+    </div>
+    <div class="inapp-grid">
+      ${inappVideos.map(v => inappCard(v)).join('')}
+    </div>`;
+  document.getElementById('inapp-app').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB 4: SCRIPT CRACKING SUMMARY
+// ═══════════════════════════════════════════════
+const crackingSummary = [
+  // April
+  { month:"April",    show:"Indrajith",     tested:14, working:3,  cracked:1,                   crackRate:"7.14%",  genai:"Another Round" },
+  { month:"April",    show:"VVK",           tested:13, working:3,  cracked:1,                   crackRate:"7.69%",  genai:"Yet to Confirm" },
+  { month:"April",    show:"CULT",          tested:5,  working:3,  cracked:1,                   crackRate:"20.00%", genai:"Cult VO - PS1" },
+  { month:"April",    show:"Guardian King", tested:6,  working:1,  cracked:0,                   crackRate:"0.00%",  genai:"" },
+  // March
+  { month:"March",    show:"Ki.Pi",         tested:12, working:4,  cracked:2,                   crackRate:"16.67%", genai:"Mother Trick (On Hold)" },
+  { month:"March",    show:"Indrajith",     tested:24, working:4,  cracked:2,                   crackRate:"8.33%",  genai:"Son of Fire, Rukmini PS + PKI V2" },
+  { month:"March",    show:"VVK",           tested:19, working:8,  cracked:2,                   crackRate:"10.53%", genai:"Two Losers Together, Chosen Dragon" },
+  { month:"March",    show:"PKS",           tested:4,  working:3,  cracked:"1 (Yet to Confirm)",crackRate:"25.00%", genai:"" },
+  { month:"March",    show:"TROT",          tested:13, working:7,  cracked:2,                   crackRate:"15.38%", genai:"Kick" },
+  // February
+  { month:"February", show:"Mahakaaviyam",  tested:36, working:3,  cracked:1,                   crackRate:"2.78%",  genai:"Honey Trap" },
+  { month:"February", show:"Ki.Pi",         tested:18, working:6,  cracked:1,                   crackRate:"5.56%",  genai:"" },
+  { month:"February", show:"TROT",          tested:23, working:11, cracked:2,                   crackRate:"8.70%",  genai:"" },
+  { month:"February", show:"MVS",           tested:35, working:11, cracked:3,                   crackRate:"8.57%",  genai:"Nilavan Rises" },
+];
+
+// ═══════════════════════════════════════════════
+//   RENDER — TAB 4: SCRIPT CRACKING SUMMARY
+// ═══════════════════════════════════════════════
+function renderSummary() {
+  const months = [...new Set(crackingSummary.map(r => r.month))];
+
+  const totalTested  = crackingSummary.reduce((s,r) => s + (Number(r.tested)  || 0), 0);
+  const totalWorking = crackingSummary.reduce((s,r) => s + (Number(r.working) || 0), 0);
+  const totalCracked = crackingSummary.reduce((s,r) => s + (Number(r.cracked) || 0), 0);
+
+  let html = `
+    <div class="section-title">
+      Script Cracking Summary &nbsp;·&nbsp; ${totalTested} scripts tested &nbsp;·&nbsp;
+      ${totalWorking} working &nbsp;·&nbsp; ${totalCracked} cracked
+    </div>`;
+
+  months.forEach(month => {
+    const rows = crackingSummary.filter(r => r.month === month);
+    html += `
+      <div class="summary-month-block">
+        <div class="summary-month-label">${month}</div>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Show</th>
+              <th style="text-align:center">Tested</th>
+              <th style="text-align:center">Working</th>
+              <th style="text-align:center">Cracked</th>
+              <th style="text-align:center">Crack Rate</th>
+              <th>Gen AI Scripts</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(r => {
+              const genaiTags = r.genai
+                ? r.genai.split(',').map(g => `<span class="genai-val">${g.trim()}</span>`).join('')
+                : '<span style="color:#374151;font-size:11px;">—</span>';
+              const rateNum = parseFloat(r.crackRate);
+              const rateColor = rateNum >= 15 ? '#4ade80' : rateNum >= 5 ? '#fbbf24' : '#9ca3af';
+              return `
+                <tr>
+                  <td class="show-col">${r.show}</td>
+                  <td class="num-col ${r.tested ? 'has-val' : ''}">${r.tested || '—'}</td>
+                  <td class="num-col ${r.working ? 'has-val' : ''}">${r.working || '—'}</td>
+                  <td class="num-col">${r.cracked ? `<span class="cracked-val">${r.cracked}</span>` : '<span style="color:#374151">—</span>'}</td>
+                  <td class="num-col"><span style="color:${rateColor};font-weight:700;">${r.crackRate || '—'}</span></td>
+                  <td>${genaiTags}</td>
+                </tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  });
+
+  document.getElementById('summary-app').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//   RENDER — TAB 5: CREATIVE SUMMARY
+// ═══════════════════════════════════════════════
+function renderCreative() {
+  const html = `
+    <div class="creative-date">Creative Performance Summary · 29 April 2026</div>
+    <div class="creative-grid">
+
+      <!-- VVK -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#22c55e"></div>VVK</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Uploaded 60+ versions across Saviour, Nishaan, Swayamvar, DKR to improve CPI and support CPS scaling.</span></div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Top-performing assets moved to scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Zombie Dragon" and "Dragon Soul" continue strong performance</span></div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Further versions in development: Q1 hook changes, alternate climax, script rewrites</span></div>
+        <div class="cc-section-label">Next Creative Direction</div>
+        <div class="cc-subitem">· Dragon–Maran bonding arc</div>
+        <div class="cc-subitem">· Academy training & tournament arcs</div>
+        <div class="cc-subitem">· Ananya as spy (Dragon/Lover dynamic)</div>
+      </div>
+
+      <!-- KIPI -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#3b82f6"></div>KIPI</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Successfully adapted Telugu Gen AI visuals → Tamil scripts:</span></div>
+        <div class="cc-subitem">· Aamna Samna, Hunter, Antim War, Akilan vs Vibasha</div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Majority moved to scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Raaz Dosti Ka" underperformed → Pivoting to screen-to-script</span></div>
+        <div class="cc-section-label">7 New Originals via Google Validation</div>
+        <div class="cc-subitem">· Mother's Trick · Akilan's Secret Lab · Dollar vs Mithiran</div>
+        <div class="cc-subitem">· Planet B · Future Man · Miruga's Trap · Vibasha's Love</div>
+      </div>
+
+      <!-- TROT & CULT -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#f59e0b"></div>TROT</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Kick" and "Call 2.0" delivered strong testing performance</span></div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Selected creatives moved to scaling</span></div>
+
+        <div class="cc-show" style="margin-top:14px;"><div class="cc-show-dot" style="background:#8b5cf6"></div>CULT</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Uploaded 4 scripts (3 AI + 1 original) → Scaling decisions pending</span></div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Next week: Upload 5–6 additional AI-based scripts</span></div>
+      </div>
+
+      <!-- Mahakaaviyam -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#ec4899"></div>Mahakaaviyam — Gen AI Pipeline</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Episodes 1–11 → Uploaded</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Episodes 12–15 → Upload in progress</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Episodes 16–18 → Corrections underway (ETA: tomorrow)</span></div>
+        <div class="cc-arrow" style="margin-top:6px;"><span class="arr">→</span><span>Total pipeline completion: ~5 hours Gen AI content</span></div>
+      </div>
+
+      <!-- Indrajith -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#06b6d4"></div>Indrajith</div>
+        <p>Focused on alternate openings, long formats, and layered narratives.</p>
+        <div class="cc-section-label">Key Experiments</div>
+        <div class="cc-subitem">· Success Abimanyu → New alternate opening (hook testing)</div>
+        <div class="cc-subitem">· Iravatham Rukmani Scold Opening → Emotional conflict-led</div>
+        <div class="cc-subitem">· Son of Fire (50 min) → Multi-layer narrative</div>
+        <div class="cc-subitem">· Another Round (No PS) → Simplified storytelling</div>
+        <div class="cc-subitem">· PKI + Episode Dialogue (~1h40m) → Dialogue-heavy format</div>
+        <div class="cc-subitem">· TFN Rooted + PKI Screen-to-Script → Adaptation format</div>
+        <div class="cc-subitem">· Rukmani PS + Multi-character (~1h41m) → Layered storytelling</div>
+        <div class="cc-subitem">· Three Plots PS3 + Shiva Abimanyu (21 min) → Parallel narrative</div>
+        <div class="cc-subitem">· Stupid Hero ALT Opening (Long) → Entry-point experimentation</div>
+      </div>
+
+      <!-- PKS & Guardian King -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#f97316"></div>Por Kanda Singam</div>
+        <p>Focused on openings + caption optimization + corrected narratives.</p>
+        <div class="cc-subitem">· Jadui Chiraag ALT Opening V2 (12 min) → Opening + caption changes</div>
+        <div class="cc-subitem">· Jaathagam Yavanika Opening → New narrative entry</div>
+        <div class="cc-subitem">· Varnamithrar Corrections Samaran Opening (15 min) → Restructured</div>
+
+        <div class="cc-show" style="margin-top:14px;"><div class="cc-show-dot" style="background:#a78bfa"></div>Guardian King</div>
+        <p>Focused on condensed formats + experimental + AI-assisted scripting.</p>
+        <div class="cc-subitem">· Clinically Dead (Episode Crunch AI) → Compressed storytelling</div>
+        <div class="cc-subitem">· Monsters Train → Experimental narrative</div>
+        <div class="cc-subitem">· Earth Guardian / Next Gen → Concept-driven expansion</div>
+        <div class="cc-subitem">· Nano Dimension → AI-assisted script exploration</div>
+      </div>
+
+      <!-- Scaling Updates -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#22c55e"></div>Scaling Updates</div>
+        <div class="scaling-badge">↑ Moved to Scaling</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span><strong style="color:#f3f4f6">Another Round</strong> (Original Promo) → Strong activation + stable metrics</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span><strong style="color:#f3f4f6">Shiva Abimanyu & Success Abimanyu</strong> → Consistent performance → Scaling candidates</span></div>
+      </div>
+
+      <!-- InApp Delivery -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#14b8a6"></div>In-App Delivery Status</div>
+        <div class="cc-section-label">Hindi Gen AI LA Adaptation</div>
+        <div class="cc-subitem">· TROT → 22 Episodes (5 hrs)</div>
+        <div class="cc-subitem">· BY / Indrajith → 25 Episodes (5 hrs)</div>
+        <div class="cc-subitem">· BKR / VVK → 35 Episodes (8 hrs)</div>
+        <div class="cc-subitem">· SY / PKS → 22 Episodes (6 hrs)</div>
+        <div class="cc-subitem">· CULT → 4 Episodes (1 hr)</div>
+        <div class="cc-subitem">· Guardian King → ~1 hr</div>
+        <div class="cc-section-label">Tamil Gen AI LA</div>
+        <div class="cc-subitem">· Shoorveer / KIPI → 13 Episodes (~3 hrs)</div>
+        <div class="cc-subitem">· KIPI (Eps 14–19) → Upload tomorrow (~1 hr)</div>
+        <div class="cc-subitem">· TROT (Ep 1–4) → Upload today (~1 hr)</div>
+        <div class="cc-section-label">Tamil Gen AI Sketch</div>
+        <div class="cc-subitem">· Shoorveer / KIPI: First 25 hrs + Second 25 hrs → Vendor onboarding (ETA: Week 1 June)</div>
+      </div>
+
+      <!-- Creative Direction Next Week -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#f59e0b"></div>Creative Direction — Next Week</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Shift focus from bulk versioning → original concept development</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Continue selective iteration on high-potential assets</span></div>
+        <div class="cc-section-label">Strategic Focus Areas</div>
+        <div class="cc-subitem">· Stronger opening hooks</div>
+        <div class="cc-subitem">· Condensed episodic storytelling</div>
+        <div class="cc-subitem">· Layered narrative structures</div>
+        <div class="cc-subitem">· Expanding AI promo delivery pipeline</div>
+      </div>
+
+    </div>`;
+  document.getElementById('creative-app').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════
+//   TAB 6 — TRENDING POWERSTARTS
+// ═══════════════════════════════════════════════
+const powerstarts = [
+  {
+    id: 1,
+    headline: "Man wheels dead sister into bank to collect her pension",
+    emotion: "desperation",
+    emotionLabel: "Desperation",
+    what: "A man in Brazil wheeled his deceased sister's body into a bank in a wheelchair, propped her up at the counter, and tried to get her to sign loan documents. Security noticed she was dead. He claimed he didn't know she had passed away.",
+    angle: "Open on a man pushing a wheelchair through a busy bank. Close-up on the hand — too cold, too still. The guard's face drops. Cut to black. <em>\"When survival has no limit — what would you do?\"</em>",
+    hookOpener: "\"அவள் இறந்துவிட்டாள்… ஆனால் அவனுக்கு வாழ வேண்டியிருந்தது.\"",
+    shows: ["vvk", "indrajith"],
+    fire: "Don't open on the man — open on the sister's hand. Cold. Pen in her fingers, held by his. The teller smiling at her. Drag the realisation out so the audience clocks it 3 seconds before the guard does. Then cut to a flashback: her laughing, alive. That contrast — warmth to cold — is where the gut-punch lives. No dialogue needed before the black screen."
+  },
+  {
+    id: 2,
+    headline: "Wife mortgages mangalsutra for husband's surgery — he leaves her after recovery",
+    emotion: "betrayal",
+    emotionLabel: "Betrayal",
+    what: "A woman in Chennai sold her mangalsutra and took loans to fund her husband's bypass surgery. Within 6 months of recovering, he divorced her and married someone else, citing incompatibility.",
+    angle: "Open on a hospital waiting room. A woman removes her mangalsutra in slow motion and places it on the counter. Cut to a wedding — her husband with a new bride. <em>\"Some debts are never repaid.\"</em>",
+    hookOpener: "\"அவள் தன் தாலியையே விற்றாள் — அவன் தன் உயிரையா அல்ல, அவளையே விட்டுச் சென்றான்.\"",
+    shows: ["indrajith", "trot"]
+  },
+  {
+    id: 3,
+    headline: "Son puts mother in old-age home, returns when she inherits ₹2 crore",
+    emotion: "greed",
+    emotionLabel: "Greed",
+    what: "A Bengaluru IT professional admitted his mother to a care home after his father's death. Three years later, when his mother's ancestral property was sold for ₹2 crore, he returned with flowers, calling her every day. She left the money to the care home's charity.",
+    angle: "A woman looks at her son's missed calls — 42 in three days. She remembers the day he dropped her bags at the gate and drove away. <em>\"Love that arrives with money — is that love?\"</em>",
+    hookOpener: "\"மூன்று வருஷமா phone எடுக்கலை — இப்போ ₹2 கோடி வந்துச்சு, 42 missed calls.\"",
+    shows: ["vvk", "trot"]
+  },
+  {
+    id: 4,
+    headline: "Village girl secretly funds brother's IIT dream — he's ashamed of her at graduation",
+    emotion: "sacrifice",
+    emotionLabel: "Sacrifice",
+    what: "A domestic worker in Coimbatore sent money to her younger brother for 6 years to fund his IIT coaching and hostel fees. At his IIT-M graduation, he introduced his parents but not her — she was standing in the crowd with a garland.",
+    angle: "She watches through the fence of an IIT campus. Her brother walks across the stage. She smiles and claps — garland in hand. He doesn't look her way. <em>\"She built him. He didn't look back.\"</em>",
+    hookOpener: "\"அவனுக்காக 6 வருஷம் வீடு துடைச்சாள் — அவன் convocation-ல அவளை பார்க்காமல் போனான்.\"",
+    shows: ["trot", "indrajith"]
+  },
+  {
+    id: 5,
+    headline: "Couple separated for 40 years by family pressure reunite at airport — both widowed",
+    emotion: "love",
+    emotionLabel: "Lost Love",
+    what: "A 68-year-old man from Madurai, forcibly married off at 25 due to family pressure, spotted his first love — now widowed — at Chennai airport. She had spent 40 years in the same city. They had lived 12 km apart.",
+    angle: "Airport arrivals gate. An old man freezes. She turns. 40 years collapse into three seconds of silence. <em>\"Fate didn't separate them. People did.\"</em>",
+    hookOpener: "\"40 வருஷம் கழிச்சு, அதே கண்கள், அதே ஊர், அதே airport — ஆனால் வேற வாழ்க்கை.\"",
+    shows: ["vvk", "indrajith", "trot"],
+    fire: "Cut all dialogue. Zero words — just faces, hands, the departure board flipping, an empty chai cup going cold. Score it like a film climax even though nothing has happened yet. Then end the promo on them sitting at the airport cafe — two boarding passes on the table, neither flight taken. They both missed their flights. THAT is the hook. Make the audience feel the 40 years in 40 seconds."
+  },
+  {
+    id: 6,
+    headline: "Man discovers his wife has maintained a second family for 11 years — 2 cities, 2 lives",
+    emotion: "shock",
+    emotionLabel: "Shock",
+    what: "A Mumbai professional discovered his wife of 11 years had a parallel husband and two children in Pune — 3 hours away. She had been commuting weekly under the guise of visiting an ailing parent.",
+    angle: "He finds a school report card in her bag. Different surname. Different city. Different father's name. <em>\"Two cities. Two families. One woman. Zero truth.\"</em>",
+    hookOpener: "\"அவள் ஒவ்வொரு weekend Pune போனாள் — அது அவளுடைய இன்னொரு வீடு.\"",
+    shows: ["vvk", "indrajith"]
+  },
+  {
+    id: 7,
+    headline: "Man presumed dead for 14 years returns — wife remarried, children call another 'Appa'",
+    emotion: "identity",
+    emotionLabel: "Identity",
+    what: "A migrant worker from Tamil Nadu, reported dead after a factory accident in Malaysia, returned home 14 years later. His wife had remarried. His children, now teenagers, had grown up with a stepfather they called their own.",
+    angle: "He stands at the gate of his own house. A child inside shouts — 'Appa, dinner ready!' — to another man. <em>\"He came back alive. But he was already replaced.\"</em>",
+    hookOpener: "\"14 வருஷம் கழிச்சு திரும்பினான் — அவன் பிள்ளைகள் வேற ஒருத்தனை 'அப்பா'ன்னு கூப்பிட்டாங்க.\"",
+    shows: ["indrajith", "trot"],
+    fire: "Don't reveal who he is upfront — open on a man watching a house at night, like a stranger or a thief. Let the audience be unsettled. Then the camera drifts inside to a framed photo on the wall: the same man, 14 years younger, holding a baby. Now the devastation hits twice — once when we understand, and again when the child says 'Appa' to someone else in the next cut. Ambiguity first, identity second."
+  },
+  {
+    id: 8,
+    headline: "Mother who abandoned newborn returns 22 years later — wants to be acknowledged as a mother",
+    emotion: "redemption",
+    emotionLabel: "Redemption",
+    what: "A woman who abandoned her daughter at a hospital in 2002 — fearing family rejection of an illegitimate child — tracked down her daughter in 2024. The daughter is now a software engineer. The mother knocked on her door expecting forgiveness.",
+    angle: "A knock at the door. A stranger. But the eyes — the eyes are the same as the mirror. <em>\"She left her at birth. Now she wants to be called Amma.\"</em>",
+    hookOpener: "\"22 வருஷம் கழிச்சு அந்த door-ஐ தட்டினாள் — 'நான் உன் அம்மா'ன்னு சொல்ல.\"",
+    shows: ["trot", "vvk"]
+  },
+  {
+    id: 9,
+    headline: "Father sells kidney to fund daughter's wedding — she doesn't invite him",
+    emotion: "betrayal",
+    emotionLabel: "Betrayal",
+    what: "A daily wage labourer in Tirupur sold one kidney to raise ₹4 lakh for his daughter's wedding to a man from a higher-income family. The groom's side insisted the father not attend — to maintain appearances. He watched from outside the function hall.",
+    angle: "A man in a lungi watches through glass doors — lights, flowers, his daughter laughing. His left side still stitched. <em>\"He gave her everything. Including his kidney. She gave him nothing. Including a chair.\"</em>",
+    hookOpener: "\"kidney விற்றான் — ஆனால் function hall-ல உட்கார அனுமதியில்லை.\"",
+    shows: ["trot", "indrajith"],
+    fire: "Shoot it entirely from inside the hall looking out — we see him as a small, distorted figure through the glass, the nadaswaram muffled. His daughter dances in full frame, unaware. Then a slow zoom on his left side where the shirt is untucked — the surgical scar. Say nothing. Show nothing else. The audience will fill in every word. This is the kind of visual that breaks comment sections."
+  },
+  {
+    id: 10,
+    headline: "Temple priest performs his own daughter's wedding — to a gangster's reformed son",
+    emotion: "love",
+    emotionLabel: "Love vs Honour",
+    what: "A brahmin temple priest in Kumbakonam discovered his daughter was in love with a young man whose father ran an extortion ring. After 3 months of resistance, when he saw the boy had walked away from his family to work an honest job, the priest conducted the wedding himself.",
+    angle: "The priest's hands tremble as he ties the thali. He raised his eyes to the sky. <em>\"God forgives. Can a father do less?\"</em>",
+    hookOpener: "\"அப்பா பூஜாரி, காதலன் கூலிப்படை ஆளு — அந்த அப்பாவே கல்யாணம் கட்டி வைத்தான்.\"",
+    shows: ["vvk", "trot"]
+  },
+  {
+    id: 11,
+    headline: "Woman fakes her own death to escape abusive marriage — resurfaces 9 years later",
+    emotion: "desperation",
+    emotionLabel: "Desperation",
+    what: "A woman from Erode staged her own drowning death in 2015 to flee a domestic violence situation. She started a new life in another state. She was found 9 years later when her son — believing her dead — was about to donate her kidney in her memory.",
+    angle: "A hospital corridor. A boy about to sign organ donation papers — in his mother's name. A nurse pauses. The photo on the form — she recognizes her. <em>\"She disappeared to survive. He almost donated her back to the world.\"</em>",
+    hookOpener: "\"அவள் கடலில் மரித்துவிட்டாள் என்று நம்பினான் — 9 வருஷம் கழிச்சு அவளே திரும்பி வந்தாள்.\"",
+    shows: ["indrajith", "vvk"],
+    fire: "Play the first 30 seconds as pure medical thriller — sterile hospital, urgent music, a surgeon scrubbing in, a name on a donor tag. Build real suspense around the procedure. Then: a nurse squints at the ID photo on the consent form. Hold on her face for 3 beats. Cut to black. THEN cut to a woman, very much alive, opening a door in another city. The audience never sees the twist coming because they think it's a completely different story. That misdirection is everything."
+  },
+  {
+    id: 12,
+    headline: "Rickshaw driver's son becomes IPS officer — father arrested by son on first duty day",
+    emotion: "identity",
+    emotionLabel: "Identity / Honour",
+    what: "On his very first day of active duty, a newly posted IPS officer in UP was called to a brawl near a market. The man who had to be arrested for public disorder — was his own father, drunk and fighting. He made the arrest. Neither spoke at the station.",
+    angle: "He puts the handcuff on a wrist. He looks up. His father's face. <em>\"The law he swore to uphold — met the man who raised him.\"</em>",
+    hookOpener: "\"முதல் நாள் duty — கைகளில் handcuff போட்டவன் அவனுடைய அப்பா.\"",
+    shows: ["vvk", "indrajith", "trot"],
+    fire: "Open it as a triumph — hero music, slow-motion walk in uniform, locals cheering, proud mother watching. Let it build for 20 full seconds of joy and achievement. Then the call comes in. He arrives at the scene. Close-up on the man being restrained. Then his face. Then his son's face. Music dies. Silence. The click of the handcuff is the only sound. Ride that silence for 5 seconds before the title card. The contrast between the highest pride and the hardest duty — in one continuous take — is what will make this unputdownable."
+  },
+  {
+    id: 13,
+    headline: "YouTuber wife killed by husband one month after announcing pregnancy on her channel",
+    emotion: "betrayal",
+    emotionLabel: "Betrayal",
+    what: "A 20-year-old woman from Telangana ran a family vlog channel with 50,000 subscribers. In March 2026, one month after joyfully announcing her pregnancy on the channel, she was murdered by her husband and in-laws over dowry demands. Her last video was still live — the comment section filled with worried fans.",
+    angle: "Open on a phone screen — her last video playing. She's holding a pregnancy test, laughing. Comments scrolling: '❤️❤️ Congratulations didi!' Cut to: a locked door. Silence. Her phone still glowing on the floor inside. <em>\"The same family that appeared in her videos — took everything else.\"</em>",
+    hookOpener: "\"அவள் channel-ல pregnant என்று சொன்னாள் — ஒரு மாதத்தில் அவளே இல்லை.\"",
+    shows: ["indrajith", "trot"],
+    fire: "Don't show any violence. Open entirely inside her YouTube world — comments, her joy, her glow for 45 seconds. Then cut to her channel page: last video was 23 days ago. Comments have changed to 'Where are you didi?' and 'She passed away.' Black. No narration. Absence is more devastating than anything you can show. This structure — building love then removing the person — is the most emotionally efficient 60-second promo architecture possible."
+  },
+  {
+    id: 14,
+    headline: "Newlywed wife allegedly plans husband's murder before the wedding garlands had dried",
+    emotion: "shock",
+    emotionLabel: "Shock",
+    what: "In Sri Ganganagar, Rajasthan (February 2026), a 23-year-old woman is accused of orchestrating her husband's murder just 3 months after their wedding. Police allege the plan was premeditated — that the wedding and the conspiracy existed simultaneously.",
+    angle: "Open on a wedding. Garlands, sindoor, the whole ceremony. Her voiceover, flat and calm: <em>\"I had already decided — before the haldi, before the pheras, before the garland — it would end here.\"</em> Wedding music plays on. She smiles at the camera.",
+    hookOpener: "\"திருமணத்திற்கு முன்பே முடிவு எடுத்திருந்தாள் — அவன் இன்னும் வாழ்க்கை கனவு காண்கிறான்.\"",
+    shows: ["vvk", "indrajith"],
+    fire: "Run the wedding sequence in reverse — starting from the happiest moment, walking backward in time. Each step back, her voiceover reveals a darker layer of what she was thinking. Visual joy and audio horror moving in opposite directions. End on the moment the alliance was first fixed — her face in that first meeting, completely unreadable. The entire promo is a recontextualisation of a happy image into something sinister. This structure works for any VVK villain-reveal opener."
+  },
+  {
+    id: 15,
+    headline: "Mother arranges ritual killing of her own daughter — to cure her son",
+    emotion: "shock",
+    emotionLabel: "Horror",
+    what: "In Jharkhand's Hazaribag (2026), a teenage girl went missing and was later found dead. Police uncovered that her own mother, convinced by a local tantrik that a human sacrifice would cure her ill son, had arranged the crime. The daughter held her mother's hand walking to the temple — she never returned.",
+    angle: "A girl leaves home holding her mother's hand. She's talking about what she'll pray for. The camera follows their joined hands. Then — the mother's hand lets go. The girl walks ahead. She doesn't look back. <em>\"She never imagined the danger would come from the hand she trusted most.\"</em>",
+    hookOpener: "\"அம்மா கைப்பிடித்து அழைத்துச் சென்றாள் — திரும்பி வந்தவள் மட்டும் ஒருத்தி.\"",
+    shows: ["indrajith", "trot"],
+    fire: "Shoot the first 60 seconds entirely from the daughter's POV — she's happy, talking, trusting. Make the audience love her fast. Then her POV cuts to black. Next shot: the mother, alone, walking back on the same road. No explanation. The hand that lets go is the single image that must be held for 4 full seconds. That moment of the hand releasing — not violence, not aftermath — is the promo."
+  },
+  {
+    id: 16,
+    headline: "Two brothers' wives elope with their lovers on the same night — 11-year-old nephew is the only witness",
+    emotion: "betrayal",
+    emotionLabel: "Betrayal",
+    what: "In Gwalior (2026), two sisters-in-law living in the same joint household eloped with their respective lovers on the same night. An 11-year-old child — nephew to both women — woke up and saw them both leave. Two families. One night. One child standing in a corridor between two empty rooms.",
+    angle: "A child wakes at 2am. Gets up for water. Passes one aunt's room — door open, bed empty. Passes the other — same. Two notes on two pillows. He stands in the corridor, a door on each side. <em>\"He was 11. He understood everything. And nothing would be the same.\"</em>",
+    hookOpener: "\"இரண்டு அறையும் காலியாக இருந்தது — அந்த குழந்தை மட்டும் தனியாக நின்றான்.\"",
+    shows: ["vvk", "trot"]
+  },
+  {
+    id: 17,
+    headline: "Navy officer killed on honeymoon — wife sits beside him in bridal clothes, photo breaks a billion hearts",
+    emotion: "love",
+    emotionLabel: "Love / Loss",
+    what: "In April 2025, Lieutenant Vinay Narwal (26) was shot dead by terrorists in Pahalgam, Kashmir, just six days after his wedding. His wife Himanshi, still in bridal attire, sat beside his body on the grass. The photograph went viral instantly. One year later in April 2026, anniversary coverage reignited the story across every platform — reaching audiences who had never seen it the first time.",
+    angle: "A man and woman walk through a sunlit meadow — she's laughing, he's filming her on his phone. The shot is golden. Personal. Theirs. The next cut is the same frame — she is sitting on the grass alone, in the same clothes. He is not behind the phone anymore. <em>\"Six days after the wedding. He was filming her laugh. Then he was gone.\"</em>",
+    hookOpener: "\"திருமணம் ஆறு நாளே ஆனது — அவள் இன்னும் வண்ணமணி அணிந்திருந்தாள்.\"",
+    shows: ["indrajith", "trot"],
+    fire: "Don't show any violence — ever. Play the entire promo inside the phone footage: shaky, personal, real. Let the audience fall in love with them for 45 seconds. Then: the footage ends. Static. A news ticker at the bottom of the screen. Read it. Cut to her face. No sound. This structure makes the audience feel like they personally lost someone — because for 45 seconds, they did. The absence is the entire film. Tamil promo teams almost never shoot from inside personal footage. That intimacy before loss is the gap to own."
+  },
+  {
+    id: 18,
+    headline: "Father reads son's Amazon offer letter for the first time — his hands won't stop shaking",
+    emotion: "sacrifice",
+    emotionLabel: "Sacrifice",
+    what: "A video from April 2026 shows a daily-wage worker father sitting at a kitchen table, reading his son's Amazon offer letter for the first time. He mouths the words slowly, pausing at the salary figure. His hands tremble. He doesn't look up for twenty seconds. The son posted the video — it passed 10 million views in two days, flooding social media with similar stories of parents who gave everything and never once said it out loud.",
+    angle: "A man in a faded white vest at a bare kitchen table. A printed letter in his hands. He mouths the words silently. Stops at a number. His eyes fill. He doesn't look up. Doesn't speak. <em>\"He worked every day so his son could work at Amazon. He never once said it out loud.\"</em>",
+    hookOpener: "\"அந்த கடிதத்தில் salary பார்த்தான் — 20 வருஷம் கஷ்டப்பட்டதன் அர்த்தம் புரிந்தது.\"",
+    shows: ["trot", "indrajith", "vvk"],
+    fire: "Film it in one continuous take, static camera — just the father's face and the letter. No music for the first 40 seconds. Let the silence do everything. When he finally looks up, add exactly one piano note. That is all the score you need. Tamil promo teams over-rely on background score — a promo with near-zero music and near-total silence is the most disruptive format in the current feed. One held note after 40 seconds of silence will hit harder than any orchestral swell."
+  },
+  {
+    id: 19,
+    headline: "Husband stages his own death — wife discovers he is alive months later, stranded alone in a foreign country",
+    emotion: "betrayal",
+    emotionLabel: "Betrayal",
+    what: "A Russian woman came forward in February 2026 claiming her husband had staged his own death and abandoned her in India, where she had no money, no local contacts, and no valid return visa. She had grieved for months. She discovered the death was manufactured only when a mutual friend messaged her — telling her they had spoken to him alive. He had chosen to disappear rather than leave.",
+    angle: "She's on a video call — a voice telling her he's gone. She collapses. Cut to: months later — her phone rings. A friend's face: 'He's alive. He called me.' Her expression doesn't change immediately. Then, slowly, a different kind of collapse. <em>\"The worst part wasn't the death. It was finding out he chose it.\"</em>",
+    hookOpener: "\"அவன் இறந்துவிட்டான் என்று சொன்னார்கள் — உண்மை இன்னும் கொடுமையாக இருந்தது.\"",
+    shows: ["vvk", "indrajith"]
+  },
+  {
+    id: 20,
+    headline: "Bengaluru founder: two salaries, couldn't afford a flat in India — bought a UK 3BHK on one income",
+    emotion: "desperation",
+    emotionLabel: "Desperation",
+    what: "A Bengaluru entrepreneur's post went viral in May 2026 after she wrote that despite two professional salaries, she and her husband could not afford even a 900 sqft flat in their own city — but she easily purchased a three-bedroom house in the UK on a single income. The post sparked a national debate on housing, belonging, and what it means to be priced out of the place you built your career.",
+    angle: "She unlocks the front door of a house — spacious, quiet, unfamiliar. Her phone shows a Bengaluru property listing: ₹3.2 crore for 900 sqft. She stares at it for a long moment. Puts the phone away. <em>\"She built her career in India. India didn't have space for her.\"</em>",
+    hookOpener: "\"இரண்டு சம்பளம் — இந்தியாவில் வீடு வாங்க போதவில்லை. வெளிநாட்டில் ஒரு சம்பளத்திலேயே வாங்கிவிட்டாள்.\"",
+    shows: ["trot", "vvk"]
+  }
+];
+
+// ─── New-today registry (updated by scheduled task each run) ───────────────
+const newToday = {
+  date: '2026-05-11',
+  powerstartIds: [17, 18, 19, 20],
+  microdramaTitles: ['Never Betray the Woman Who Built You', 'Dadi Detective Agency', 'DM For Destiny']
+};
+const todayStr = new Date().toISOString().slice(0, 10);
+const isNewPS = id    => newToday.date === todayStr && newToday.powerstartIds.includes(id);
+const isNewMD = title => newToday.date === todayStr && newToday.microdramaTitles.includes(title);
+
+let psActiveFilter = 'all';
+
+function renderPowerstarts() {
+  const filtered = psActiveFilter === 'all'
+    ? powerstarts
+    : powerstarts.filter(p => p.emotion === psActiveFilter);
+
+  const emotions = [
+    { key:'all',         label:'All',           emoji:'⚡' },
+    { key:'betrayal',    label:'Betrayal',       emoji:'🗡️' },
+    { key:'desperation', label:'Desperation',    emoji:'🌊' },
+    { key:'shock',       label:'Shock',          emoji:'⚡' },
+    { key:'love',        label:'Love',           emoji:'❤️' },
+    { key:'sacrifice',   label:'Sacrifice',      emoji:'🙏' },
+    { key:'greed',       label:'Greed',          emoji:'💰' },
+    { key:'identity',    label:'Identity',       emoji:'🪞' },
+    { key:'redemption',  label:'Redemption',     emoji:'✨' },
+  ];
+
+  const filterBtns = emotions.map(e =>
+    `<button class="ps-filter-btn${psActiveFilter === e.key ? ' active' : ''}"
+       onclick="setPsFilter('${e.key}',this)">
+       ${e.emoji} ${e.label}
+     </button>`
+  ).join('');
+
+  const showTagHTML = (shows) => shows.map(s => {
+    const labels = { vvk:'VVK', indrajith:'Indrajith', trot:'TROT', any:'Any Show' };
+    return `<span class="ps-show-tag ${s}">${labels[s] || s}</span>`;
+  }).join('');
+
+  const sorted = [...filtered].sort((a, b) => isNewPS(a.id) === isNewPS(b.id) ? 0 : isNewPS(a.id) ? -1 : 1);
+  const cards = sorted.map((p, i) => {
+    const newBadge  = isNewPS(p.id) ? '<span class="new-today-badge">⚡ New Today</span>' : '';
+    const fireBadge = p.fire
+      ? `<span class="ps-fire-badge" data-fire-tip="${p.fire.replace(/"/g,'&quot;')}" data-fire-header="🔥 Push it further">🔥</span>`
+      : '';
+    return `
+    <div class="ps-card${p.fire ? ' ps-fire-card' : ''}" data-emotion="${p.emotion}">
+      <div class="ps-card-top">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="ps-incident-num">#${String(p.id).padStart(2,'0')}</span>
+          ${newBadge}
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          ${fireBadge}
+          <span class="ps-emotion ${p.emotion}">${p.emotionLabel}</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="ps-headline">${p.headline}</div>
+        <div class="ps-what-happened" style="margin-top:7px;">${p.what}</div>
+      </div>
+
+      <hr class="ps-divider"/>
+
+      <div>
+        <div class="ps-angle-label">🎬 Powerstart Angle</div>
+        <div class="ps-angle-text">${p.angle}</div>
+      </div>
+
+      <div class="ps-hook-opener">
+        <strong>Tamil hook line:</strong> ${p.hookOpener}
+      </div>
+
+      <div>
+        <div class="ps-angle-label" style="color:#6b7280;margin-bottom:5px;">Maps to</div>
+        <div class="ps-shows">${showTagHTML(p.shows)}</div>
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  const html = `
+    <div class="ps-intro">
+      <strong>What is a Trending Powerstart?</strong> Real-world incidents so emotionally extreme they stop a thumb mid-scroll.
+      Each one below can be creatively retrofitted as a promo opening hook — the incident doesn't need to match the show's plot exactly,
+      just the <em>feeling</em> it triggers.
+      <span class="ps-example">
+        eg. "A man wheeled his dead sister into a bank to collect her pension" →
+        opens a VVK promo on desperation, survival, and what love forces us to do.
+      </span>
+      <div style="margin-top:8px;font-size:11px;color:#6b7280;">
+        🔥 = Highest creative potential — hover the fire to see exactly how to push it.
+      </div>
+    </div>
+
+    <div class="ps-filter-bar">
+      <span class="ps-filter-label">Filter by Emotion</span>
+      ${filterBtns}
+    </div>
+
+    <div class="ps-grid">
+      ${cards || '<div style="color:#4b5563;font-size:13px;padding:20px;">No incidents match this filter.</div>'}
+    </div>
+  `;
+
+  document.getElementById('powerstarts-app').innerHTML = html;
+}
+
+function setPsFilter(emotion, btn) {
+  psActiveFilter = emotion;
+  renderPowerstarts();
+}
+
+// ═══════════════════════════════════════════════
+//   TAB 7 — MICRODRAMA POWERSTARTS
+// ═══════════════════════════════════════════════
+const microdramas = [
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "Waris Ki Ghar Wapsi",
+    subtitle: "A man leaves his village, rises to become a CEO, and returns in disguise — to find his wife days away from remarrying.",
+    genre: "Identity · Return",
+    category: "return",
+    hooks: ["Disguise reveal", "Dramatic irony", "Love vs time"],
+    powerstart: "Opens on a man in worn clothes standing at a village gate. A wedding band decorates the house he's watching. He doesn't knock. He watches — his wife, dressed for another ceremony. The audience knows who he is. She doesn't. <em>\"He came back. He just didn't know if she'd still want him to.\"</em>",
+    why: "Dramatic irony does the heavy lifting. The audience knows the secret, the character doesn't — that gap creates unbearable tension without a single word of exposition. Escalates in 90 seconds what takes a full film act.",
+    fire: "Don't reveal he's the returning husband in episode 1 at all. Let the audience think he's a stranger with feelings for a woman about to be married. Episode 2: he opens a locket — it's a photo of her with him, 10 years ago. The delayed reveal doubles the emotional payoff and drives binge completion through the first 3 episodes."
+  },
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "The Broken Billionaire",
+    subtitle: "An AI prodigy turns down a ₹5 crore job offer and chooses to serve as a secretary for the woman he's in love with — without ever telling her.",
+    genre: "Sacrifice · Secret",
+    category: "romance",
+    hooks: ["Secret identity", "Class tension", "Slow burn"],
+    powerstart: "Opens on a man fixing a printer in an office. His phone lights up: missed call from a CEO. He rejects it. A woman walks past and says, 'Fix this by 3pm, thanks.' He nods. The next shot: a Forbes article on his screen — it's about him. The viewer's jaw drops. <em>\"The smartest man in the room chose to disappear.\"</em>",
+    why: "Status reversal in under 90 seconds. Audience is set up to feel superior to the 'servant' — then completely humbled. The contrast creates cognitive dissonance that demands resolution: why is he doing this?",
+    fire: "Make episode 1 end before revealing the Forbes connection. Close on the woman dismissing him. Then cut to him walking to his car — a driver holding the door, the man sighing. Audience clocks it. Doesn't confirm it. That half-reveal is more powerful than a full one."
+  },
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "My Groom a Billionaire",
+    subtitle: "A woman abandoned at the altar in front of 200 guests grabs the nearest man — a 'waiter' — and begs him to pretend to be her husband. He agrees. He owns the hotel.",
+    genre: "Romance · Twist",
+    category: "romance",
+    hooks: ["Public humiliation", "Fake relationship", "Hidden identity"],
+    powerstart: "Opens mid-wedding. A man hasn't arrived. 200 people staring. She sees a man with a tray and pulls him aside: 'Please, act like my husband, I'll pay you.' He looks at her. He agrees. Cut to: the hotel's lobby monogram — his surname. He's not a waiter. <em>\"She hired the wrong man. Or maybe the right one.\"</em>",
+    why: "The public humiliation hook makes audiences feel the character's desperation immediately — no backstory needed. The twist lands in episode 1 itself, buying the next 20 episodes of 'how long before she finds out.'",
+    fire: "Play the wedding scene from the guests' perspective first — we see a jilted bride, a random staff member, an awkward moment. Then episode 2 cold open: the 'waiter' in a boardroom, 10 suits around him. Nobody in the boardroom dares speak first. Hard cut to him smoothing his hotel uniform. Parallel editing across both worlds — maximum effect."
+  },
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "Secret Billionaire",
+    subtitle: "A man secretly worth crores hides his wealth and watches his girlfriend choose status over love — then engineers a lesson she'll never forget.",
+    genre: "Revenge · Class",
+    category: "revenge",
+    hooks: ["Class humiliation", "Deception", "Revenge setup"],
+    powerstart: "Opens on a birthday. He brings a handmade gift. She compares it to the watch 'Kartik' sent her — openly, in front of him. He watches. Says nothing. Walks away. Final shot: he gets in an elevator, presses PH — penthouse. <em>\"She picked the show-off. He became the lesson.\"</em>",
+    why: "The class humiliation hook works because every viewer has felt undervalued. It's instantly relatable and sets up the revenge arc with one scene. The elevator button is the entire promise of the series in one image.",
+    fire: "Film the humiliation in one long uncut take — no music, just the ambient sound of the party around them. His face stays neutral the entire time. That restraint is more devastating than any dramatic reaction. Then let the elevator close in silence. The audience fills the silence with their own anger."
+  },
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "The Billionaire's Revenge",
+    subtitle: "A woman who sacrificed everything to save a man with amnesia watches him recover — only for someone from his past to arrive and blow up everything she built.",
+    genre: "Betrayal · Suspense",
+    category: "revenge",
+    hooks: ["Amnesia twist", "Past resurfaces", "Sacrifice vs betrayal"],
+    powerstart: "Opens in a hospital room. She's at his bedside. Voiceover: 'I sold my apartment to pay for this.' He opens his eyes. Smiles. She smiles. Door opens — a shadow fills the frame. He freezes. <em>\"Whatever he forgot, someone else remembered.\"</em>",
+    why: "The shadow-in-the-doorway is one of the oldest thriller hooks for a reason — it holds infinite threat with zero information. Pairs with the sacrifice setup to make the audience furious on her behalf before episode 2 even loads.",
+    fire: "Don't show who's at the door in episode 1 — just his reaction. His face goes from warmth to ice. Cut. Episode 2 starts 3 years earlier. Structural non-linearity forces the audience to binge-order past and present simultaneously. Two episodes, two timelines, one audience that can't stop."
+  },
+  {
+    platform: "tadka",
+    platformLabel: "Tadka (JioHotstar)",
+    title: "Mitti Ka Sher",
+    subtitle: "A village boy publicly humiliated by the local landlord's son claws his way to power and returns to reclaim everything taken from him.",
+    genre: "Revenge · Rise",
+    category: "return",
+    hooks: ["Public humiliation", "Class war", "Underdog return"],
+    powerstart: "Opens on a village square. A boy's hands are tied. He's thrown into the mud. The landlord's son laughs — crowd watching, no one steps in. Boy looks up. Eyes dry. <em>Cut to: 10 years later. A motorcade. Same village square. Same crowd. Different energy.</em> He steps out of the lead car.",
+    why: "The revenge return structure gives the audience instant satisfaction in episode 1 by showing both the wound and the payback in the same 90 seconds. The emotional journey that fills the remaining episodes feels earned from the first frame.",
+    fire: "Between the mud scene and the motorcade, insert exactly 3 seconds of black — no music, no sound. Let the audience sit in the boy's humiliation alone. Then the car door opens. That silence before the payoff amplifies the arrival by 10x. Restraint is the secret weapon in a revenge opener."
+  },
+  {
+    platform: "tadka",
+    platformLabel: "Tadka (JioHotstar)",
+    title: "Rukega Nahin Saala",
+    subtitle: "An anti-hero vigilante repeatedly written off, beaten, jailed, and humiliated — who refuses to stop, episode after episode.",
+    genre: "Defiance · Anti-hero",
+    category: "revenge",
+    hooks: ["Direct camera address", "Anti-hero energy", "Defiance loop"],
+    powerstart: "Opens mid-beating. Three men. He's on the floor. Everyone watching. Nobody stepping in. He slowly gets up. Wipes his mouth. Looks directly into the camera: <em>\"Main rokne wala nahi hun.\"</em> Episode ends. 90 seconds total.",
+    why: "Fourth wall breaks in micro-dramas are rare — and devastatingly effective when used once, in the very first episode. It immediately creates a parasocial pact: he's speaking to the viewer, not the scene. Audiences feel personally recruited into his cause.",
+    fire: "Script the direct-address so it's slightly different each episode — same energy, different context. Episode 1: beaten up. Episode 7: about to win. Episode 15: in prison. Every time he says a version of the same line, the audience gets a Pavlovian hit of defiance. Repetition with escalation is the structural engine."
+  },
+  {
+    platform: "flicktv",
+    platformLabel: "Flick TV",
+    title: "Ek Anjaani Shaadi",
+    subtitle: "Two people who actively dislike each other wake up married after a work event — and have to keep it secret from their rival companies.",
+    genre: "Romance · Comedy",
+    category: "romance",
+    hooks: ["In medias res", "Reverse reveal", "Enemies to lovers"],
+    powerstart: "She wakes up in an unfamiliar room. Pan right: he's waking up next to her. Both freeze. Both scream. Cut to: 14 hours earlier, a corporate party, two strangers arguing over a cab. <em>\"The worst night of their lives. The beginning of everything.\"</em>",
+    why: "In medias res with a reverse reveal — dropping the audience at maximum confusion and then rewinding — turns the structural device itself into a hook. The audience stays for episode 2 just to understand episode 1's opening.",
+    fire: "Don't complete the reverse reveal in episode 1. Pull back to 14 hours earlier and stop at the moment they first met — leave episode 1 on that first friction moment. Now the audience needs both: forward (what happens with the marriage) AND backward (how they got there). You've created two mysteries for the price of one."
+  },
+  {
+    platform: "flicktv",
+    platformLabel: "Flick TV",
+    title: "The Final Boss",
+    subtitle: "A woman publicly fired by her own mentor in front of the entire office makes one phone call as she's escorted out — and dismantles his empire piece by piece.",
+    genre: "Revenge · Corporate",
+    category: "revenge",
+    hooks: ["Public humiliation", "One-call escalation", "Power reversal"],
+    powerstart: "Open: all-hands meeting. The mentor takes the mic. 'We're letting some people go. Including...' Her face. The room. Security at her desk before she can blink. She packs one thing: her phone. In the lobby: one call. <em>\"Hi. It's time.\"</em> Cut to black.",
+    why: "The single phone call cliffhanger is one of the most efficient powerstart devices in the format — it promises retribution without specifying it. The audience has to find out who's on the other end. That question carries the entire series.",
+    fire: "Never show who's on the other end of the call in episode 1. Episode 2: her mentor gets a call from his bank. Accounts frozen. He doesn't know who did it. Episode 3: a board member resigns 'for personal reasons.' The audience knows before the villain does. That dramatic irony sustains binge-watch urgency for 10+ episodes."
+  },
+  {
+    platform: "flicktv",
+    platformLabel: "Flick TV",
+    title: "Happily Never After",
+    subtitle: "A woman narrates her own wedding day — calling it the worst day of her life — while the camera shows what looks like a perfect ceremony.",
+    genre: "Dark Romance · Subversion",
+    category: "dark",
+    hooks: ["Unreliable narrator", "Subverted expectation", "Voiceover contrast"],
+    powerstart: "Picture-perfect wedding visuals. Flowers, smiling guests, a beautiful bride. Voiceover (her voice, calm): <em>\"This is the worst day of my life.\"</em> She smiles at the camera. The groom squeezes her hand. She smiles wider. Cut to black.",
+    why: "The contrast between perfect image and dark voiceover creates immediate cognitive dissonance — the audience's brain fights to reconcile what it sees with what it hears. That unresolved tension is the most addictive form of a hook.",
+    fire: "Keep the voiceover in present tense throughout — as if she's speaking from inside the wedding, not looking back. Never explain why in episode 1. Let the audience build their own theories: forced marriage? secret love? danger? The more explanations the viewer generates, the more invested they become. Don't confirm anything until episode 5."
+  },
+  {
+    platform: "quicktv",
+    platformLabel: "QuickTV",
+    title: "Ghost in the Lift",
+    subtitle: "An office worker trapped in a lift with what he thinks is a ghost realises by episode 3 the 'ghost' is a woman who has been living secretly in the office building for 6 months.",
+    genre: "Thriller · Mystery",
+    category: "dark",
+    hooks: ["Genre misdirection", "Mystery reveal", "Dual perspective"],
+    powerstart: "Late office. Empty building. He enters the lift. Someone else is in it. He screams. She stares at him. Lift doors close. <em>\"She didn't know if he was more scared of her — or she of him.\"</em> Episode ends at 85 seconds.",
+    why: "Genre misdirection — horror setup, human payoff — creates the sharpest kind of episode 2 demand. The audience thinks they're watching a ghost story. Discovering it's a survival story about a person is a twist that recontextualises the entire opener.",
+    fire: "Film episode 1 entirely from his perspective — dark, shaky, horror grammar. Episode 2: same 85 seconds from her perspective — completely different emotional tone, ordinary-lit, her fear of him is equal to his of her. Same scene, two POVs. The structural device alone will drive discussion and sharing."
+  },
+  {
+    platform: "reelsaga",
+    platformLabel: "ReelSaga",
+    title: "Aamchi Crush",
+    subtitle: "A shy Pune boy discovers the girl he's been in love with for 3 years is moving to Mumbai in 7 days — and has to tell her in the worst, most chaotic possible ways.",
+    genre: "Romance · Comedy",
+    category: "romance",
+    hooks: ["Countdown structure", "Relatable comedy", "Escalating failure"],
+    powerstart: "He's holding a handwritten note. She walks out of her building with a moving box. He freezes. She passes him. He starts walking after her. Drops the note. A dog picks it up. He chases the dog. She gets in a cab. He falls. <em>\"7 days left. Zero dignity remaining.\"</em>",
+    why: "The countdown structure (7 days, 6 days...) gives every episode a built-in urgency. Relatable physical comedy in episode 1 builds immediate affection. The audience roots for him because his failures are spectacularly human.",
+    fire: "On Day 0, the final episode — have him not confess. Have her confess first. The entire series has been building the audience's expectation that he'll finally say it. Subverting that — she knew all along — doesn't just land emotionally, it retroactively rewrites every previous episode in the viewer's memory. That's the kind of ending that creates genuine word of mouth."
+  },
+  {
+    platform: "fatafat",
+    platformLabel: "MX Fatafat",
+    title: "Ab Hoga Hisaab",
+    subtitle: "A woman gets a 'not guilty' verdict against her in court — she walks out, pulls out her phone, and records the perpetrator's face. The legal system failed. She's just getting started.",
+    genre: "Revenge · Justice",
+    category: "revenge",
+    hooks: ["Record-as-weapon device", "System fails, individual acts", "Mainstream Bollywood cast"],
+    powerstart: "Courtroom. Verdict: not guilty. The man smirks. She stares forward. No tears. She reaches into her bag slowly, takes out her phone, and points it at his face. He notices. His smile fades. <em>\"The court was done with him. She was just getting started.\"</em>",
+    why: "Amazon MX Fatafat is India's first completely free premium microdrama destination — no paywall, no coins — starring Shaheer Sheikh and Mouni Roy. It signals that mainstream Bollywood talent has entered the format and raises the production bar for everyone. The 'phone as weapon' device resonates because documentation is the one tool every viewer actually has — it's a revenge fantasy that feels achievable.",
+    fire: "The 'record the face' cold open is directly stealable for any TROT or Indrajith promo. End your promo — not on a fight, not on a speech — but on the protagonist silently pressing record. One finger. One button. It's more threatening than any confrontation because it says: I don't need to hurt you. I have something better. Tamil audio drama promos almost never use this device. It's wide open."
+  },
+  {
+    platform: "kuku",
+    platformLabel: "Kuku TV",
+    title: "Indian Institute of Zombies",
+    subtitle: "India's most competitive IIT-JEE coaching centre becomes the site of a zombie outbreak — students who were already dead inside now have to survive being dead outside.",
+    genre: "Horror-Comedy · Satire",
+    category: "dark",
+    hooks: ["Social satire premise", "Genre mash-up", "Shared cultural truth as hook"],
+    powerstart: "A perfectly normal coaching class. Students hunched over desks — pale, unblinking, barely moving. A new student walks in and whispers: 'Is something wrong with them?' The teacher doesn't look up: 'No. They've always been like this.' The student in the back row slowly turns — eyes white. <em>\"The line between studying to death and actual death — turns out, very thin.\"</em>",
+    why: "The social satire hook works because the punchline — coaching students already look like zombies — is a shared Indian cultural truth. Genre mash-up (IIT prep + zombie horror) creates instant virality by bridging two massive audience segments. Notable because this is Kuku TV's first theatrical release, signalling the microdrama format is moving from phone screens to cinemas.",
+    fire: "The satire-as-entry device is massively underused in Tamil audio drama promos. For VVK: open on what looks like an epic fantasy training montage — dramatic music, slow motion — then cut to the 'hero' doing something mundanely absurd. The contrast between epic visual grammar and something ordinary creates immediate engagement. Don't take your own genre seriously in the first 10 seconds. The audience will lean in to find out why."
+  },
+  {
+    platform: "fatafat",
+    platformLabel: "MX Fatafat",
+    title: "Where Is My Child",
+    subtitle: "A woman who gave up her child for adoption 20 years ago — to protect them from poverty — sees her child's face on a news channel. She reaches for the TV remote. She turns it off.",
+    genre: "Sacrifice · Identity",
+    category: "dark",
+    hooks: ["Recognition without reunion", "Restraint as climax", "Silent protagonist"],
+    powerstart: "A woman watching TV alone. A face on the news — young, successful, at a press conference. She leans closer. Her hand trembles. She picks up the remote and turns the TV off. Sits in complete darkness. <em>\"She recognised her immediately. She had 20 years to practise not calling out.\"</em>",
+    why: "Recognition without reunion is one of the most emotionally loaded structures in any drama format — the audience knows what she knows, the child doesn't, and her choice NOT to reach out creates more unbearable tension than any confrontation. The dark TV screen is a perfect visual metaphor: she switched off the one connection she allowed herself.",
+    fire: "The 'turning off' gesture is a direct steal for a TROT promo. Build your entire promo around one act of restraint — something the protagonist chooses not to do, shown in close-up. Sacrifice is always more powerful when it's physical and immediate: a hand that doesn't dial, a door that doesn't open, a TV that goes dark. Tamil audio drama promos rarely show sacrifice through withholding. This is the gap to own."
+  },
+  {
+    platform: "storytv",
+    platformLabel: "Story TV",
+    title: "Never Betray the Woman Who Built You",
+    subtitle: "A woman who sacrificed everything for a man watches him rise — then watches him erase her name from every chapter of his story. She doesn't cry. She starts a folder labelled 'Before.'",
+    genre: "Revenge · Empowerment",
+    category: "revenge",
+    hooks: ["Erased protagonist", "Documentation as weapon", "Calm over rage"],
+    powerstart: "Opens on a woman in the background of a press photo — visible if you look closely. She was in every frame from his struggling years. He gives his success speech on stage. He names mentors, investors, colleagues. He doesn't name her. Her face, watching on a screen at home, gives nothing away. She opens a folder on her laptop. Labelled: 'Before.' <em>\"He built a kingdom on the foundation she was.\"</em>",
+    why: "The viral breakout of early 2026 on Story TV and short-form platforms — this story hit over 200M global views in 6 weeks because the 'erased woman' archetype is universal. Launched by the Eloelo group's Story TV (50M users, 1,000+ titles), it signals that platforms built around women's rage and quiet retribution now have mainstream scale. The 'Before' folder is a single image that promises an entire season of payback without a single act of violence.",
+    fire: "The 'Before' folder is directly usable for a TROT or Indrajith promo. Close your next promo not on a confrontation or a speech — but on a protagonist opening a file named for the person who wronged them. No dialogue needed if the face tells the audience what's coming. Calm + organisation = more threatening than rage in any short-form format. Tamil audio promo teams rarely use quiet assembly as a threat device. This is the visual language to own in 2026."
+  },
+  {
+    platform: "storytv",
+    platformLabel: "Story TV",
+    title: "Dadi Detective Agency",
+    subtitle: "A 72-year-old retired schoolteacher turns her apartment building into a neighbourhood surveillance network — and starts solving the crimes the police keep missing.",
+    genre: "Comedy-Thriller · Underdog",
+    category: "return",
+    hooks: ["Subverted authority", "Unexpected protagonist", "Observation as superpower"],
+    powerstart: "Opens on a police station. A woman, 72, walks in carrying a folder. 'We found your suspect.' The officer laughs. She opens the folder on his desk: printed CCTV stills, phone records, timestamps, a hand-drawn map. He stops laughing. <em>\"She spent 40 years watching children. Turns out, watching is a superpower.\"</em>",
+    why: "Story TV's breakout comedy-thriller of 2026 — a grandmother detective whose weapon is decades of quiet observation rather than any official authority. The hook reversal works because the person society dismisses most completely turns out to be the most dangerous one in the room. The format works for Story TV's Tamil and Hindi audiences equally. 'Watching is a superpower' connects directly to any show whose protagonist survives on intelligence rather than force.",
+    fire: "The folder slam is a direct steal for an Indrajith promo. Your protagonist doesn't need to shout — build your promo around a moment of quiet assembly: documents, connections, photographs pinned on a wall. Let the audience read the protagonist's intelligence before any action happens. Reveals before action > action before reveals. Tamil audio drama audiences reward patience — play to that. The dadi walks slowly. The reveal hits hard. The pacing is the weapon."
+  },
+  {
+    platform: "storytv",
+    platformLabel: "Story TV",
+    title: "DM For Destiny",
+    subtitle: "A woman mistakenly slides into the wrong DM — one letter off — and accidentally starts a conversation that restructures both their lives.",
+    genre: "Romance · Accident",
+    category: "romance",
+    hooks: ["Wrong person, right moment", "Digital intimacy before appearance", "6-minute silence"],
+    powerstart: "She sends a message. Wrong account — one letter off. His notification pings. He almost dismisses it. Then reads it. Then reads it again. Types back: 'I think you meant someone else.' She doesn't reply for 6 minutes. He notices the 6 minutes. <em>\"One letter wrong. Everything else right.\"</em>",
+    why: "Story TV's most shared romance of 2026, with #DMForDestiny trending across Reels and Shorts for three consecutive weeks. The wrong-DM premise needs zero setup — every smartphone user has sent a message to the wrong person and felt that specific dread. The '6 minutes' detail is the hook inside the hook: the fact that he noticed her silence tells the audience everything about where this is going. Digital intimacy — connecting through text before faces — is the modern version of the 40-year airport reunion archetype.",
+    fire: "The '6 minutes' device is directly reusable in any show with a slow-burn love angle. Close a promo on a character staring at their phone — 'typing...' appears, disappears, reappears. Hold on the typing indicator for 4 full seconds. Say nothing about what the message says. That is one of the highest-tension devices in mobile-first content in 2026, and Tamil audio drama promos almost never use it. Make the audience wait. Then cut."
+  }
+];
+
+let mdActivePlat = 'all';
+let mdActiveCat  = 'all';
+
+function renderMicrodramas() {
+  const filtered = microdramas.filter(m => {
+    const platOk = mdActivePlat === 'all' || m.platform === mdActivePlat;
+    const catOk  = mdActiveCat  === 'all' || m.category === mdActiveCat;
+    return platOk && catOk;
+  });
+
+  const platFilters = [
+    { key:'all',     label:'All Platforms', cls:'plat-all' },
+    { key:'kuku',    label:'Kuku TV',       cls:'plat-kuku' },
+    { key:'quicktv', label:'QuickTV',       cls:'plat-quicktv' },
+    { key:'tadka',   label:'Tadka',         cls:'plat-tadka' },
+    { key:'flicktv', label:'Flick TV',      cls:'plat-flicktv' },
+    { key:'reelsaga',label:'ReelSaga',      cls:'plat-reelsaga' },
+    { key:'fatafat', label:'MX Fatafat',    cls:'plat-fatafat' },
+    { key:'storytv', label:'Story TV',      cls:'plat-storytv' },
+  ].map(p => `
+    <button class="md-filter-btn ${p.cls}${mdActivePlat === p.key ? ' active' : ''}"
+      onclick="setMdPlat('${p.key}')">
+      ${p.label}
+    </button>`).join('');
+
+  const catFilters = [
+    { key:'all',     label:'All Categories' },
+    { key:'revenge', label:'Revenge' },
+    { key:'return',  label:'Return / Identity' },
+    { key:'romance', label:'Romance' },
+    { key:'dark',    label:'Dark Twist' },
+  ].map(c => `
+    <button class="md-cat-btn${mdActiveCat === c.key ? ' active' : ''}"
+      onclick="setMdCat('${c.key}')">
+      ${c.label}
+    </button>`).join('');
+
+  const sortedMd = [...filtered].sort((a, b) => isNewMD(a.title) === isNewMD(b.title) ? 0 : isNewMD(a.title) ? -1 : 1);
+  const cards = sortedMd.map(m => {
+    const newBadge  = isNewMD(m.title) ? '<span class="new-today-badge">⚡ New Today</span>' : '';
+    const fireBadge = m.fire
+      ? `<span class="md-fire-badge" data-fire-tip="${m.fire.replace(/"/g,'&quot;')}" data-fire-header="🔥 Steal this for your promo">🔥</span>`
+      : '';
+    const hookChips = m.hooks.map(h => `<span class="md-hook-chip">${h}</span>`).join('');
+    return `
+      <div class="md-card${m.fire ? ' md-fire-card' : ''}">
+        <div class="md-card-top">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="md-plat-badge ${m.platform}">${m.platformLabel}</span>
+            ${newBadge}
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            ${fireBadge}
+            <span class="md-genre-tag">${m.genre}</span>
+          </div>
+        </div>
+
+        <div>
+          <div class="md-show-title">${m.title}</div>
+          <div class="md-show-sub">${m.subtitle}</div>
+        </div>
+
+        <div class="md-hook-chips">${hookChips}</div>
+
+        <hr class="md-divider"/>
+
+        <div>
+          <div class="md-section-label ps">⚡ Powerstart</div>
+          <div class="md-powerstart-text">${m.powerstart}</div>
+        </div>
+
+        <div>
+          <div class="md-section-label why">Why it works</div>
+          <div class="md-why-text">${m.why}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const html = `
+    <div class="info-banner" style="border-left-color:#f97316;">
+      <strong>What are Microdrama Powerstarts?</strong>
+      Analysis of the opening hooks from top-performing shows on Kuku TV, QuickTV, Tadka (JioHotstar), Flick TV &amp; ReelSaga —
+      the actual structural devices that make audiences unable to stop watching.
+      🔥 = Most transferable to our Tamil audio drama promos. Hover for what to steal.
+    </div>
+
+    <!-- Hook Formula -->
+    <div class="section-title">The Microdrama Hook Formula (Industry Standard)</div>
+    <div class="md-formula-bar">
+      <div class="md-formula-step f1">
+        <div class="md-formula-time">0 – 10 sec</div>
+        <div class="md-formula-label">Characters + Conflict</div>
+        <div class="md-formula-desc">Who, where, and what's wrong — established before the audience can blink.</div>
+      </div>
+      <div class="md-formula-step f2">
+        <div class="md-formula-time">50 – 60 sec</div>
+        <div class="md-formula-label">The Hook Moment</div>
+        <div class="md-formula-desc">A slap, a revelation, a humiliation, or a confrontation. Peaks exactly here.</div>
+      </div>
+      <div class="md-formula-step f3">
+        <div class="md-formula-time">75 – 85 sec</div>
+        <div class="md-formula-label">Door Opens, Doesn't Reveal</div>
+        <div class="md-formula-desc">Suspense is built by showing a door opening — without showing what's behind it.</div>
+      </div>
+      <div class="md-formula-step f4">
+        <div class="md-formula-time">85 – 90 sec</div>
+        <div class="md-formula-label">Cliffhanger Cut</div>
+        <div class="md-formula-desc">Hard cut on maximum unresolved tension. No resolution. Forces the next tap.</div>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="md-filter-row">
+      <span class="md-filter-label">Platform</span>
+      ${platFilters}
+    </div>
+    <div class="md-filter-row" style="margin-bottom:0;">
+      <span class="md-filter-label">Category</span>
+      ${catFilters}
+    </div>
+
+    <div class="md-grid">
+      ${cards || '<div style="color:#4b5563;font-size:13px;padding:20px 0;">No shows match this filter.</div>'}
+    </div>
+  `;
+
+  document.getElementById('microdramas-app').innerHTML = html;
+}
+
+function setMdPlat(p) { mdActivePlat = p; renderMicrodramas(); }
+function setMdCat(c)  { mdActiveCat  = c; renderMicrodramas(); }
+
+// ═══════════════════════════════════════════════
+//   SOCIAL MEDIA POWERSTARTS
+// ═══════════════════════════════════════════════
+const socialFormats = [
+  {
+    id: 1,
+    name: "The Deadpan Narrator",
+    platform: "instagram",
+    emotion: "drama",
+    whyViral: "Calm Tamil voiceover over escalating chaos creates cognitive dissonance. Viewers stay to resolve the mismatch — watch-time spikes in the first 8 seconds.",
+    hookLine: "\"Oru normal day-la avan oru decision eduthan. Atha pathi yaarum theriyathu.\"",
+    stealThis: "Flat, documentary VO over your most dramatic scene. No music bed. Let the visuals scream while the narrator stays cold.",
+    shows: ["indrajith", "trot"],
+    emoji: "🎙️"
+  },
+  {
+    id: 2,
+    name: "Silent Face Close-Up",
+    platform: "instagram",
+    emotion: "emotion",
+    whyViral: "A held expression for 10–15 seconds forces the audience to project their own emotion onto the face. Reshares peak because people feel 'this is exactly me.'",
+    hookLine: "\"Avan mela yaarukku enna feel aagudhu nu theriyala — but avan face-la ellame theriyudhu.\"",
+    stealThis: "Crop to eyes and forehead. Silence or ambient sound only. Let 3 seconds pass before any cut. Use as a cold-open to your trailer.",
+    shows: ["vvk", "pks"],
+    emoji: "👁️"
+  },
+  {
+    id: 3,
+    name: "Before Marriage / After Marriage",
+    platform: "facebook",
+    emotion: "comedy",
+    whyViral: "Hard-cut contrast format is natively shareable in Tamil family WhatsApp groups. Middle-class couples tag each other compulsively.",
+    hookLine: "\"Before: 'Nee sonna ellame seyven da.' After: [heavy sigh, cuts to reality].\"",
+    stealThis: "Lift two scenes from your show — a promise and its brutal outcome. No voiceover needed. The edit IS the joke.",
+    shows: ["trot", "indrajith"],
+    emoji: "💍"
+  },
+  {
+    id: 4,
+    name: "Middle Class Pain Moment",
+    platform: "instagram",
+    emotion: "emotion",
+    whyViral: "Zero music, no dialogue — a Tamil father staring at a bill or a phone screen. The silence is the content. Tamil audiences finish the story in their head.",
+    hookLine: "\"Bill vanthu. Amount paathan. Tirumbi vechu vaichhan.\"",
+    stealThis: "Find the most mundane suffering scene in your show. Strip audio. Add a single line of white text at the end.",
+    shows: ["vvk", "pks"],
+    emoji: "📋"
+  },
+  {
+    id: 5,
+    name: "Auto Uncle Philosophy",
+    platform: "instagram",
+    emotion: "comedy",
+    whyViral: "30-second ride where the auto driver accidentally drops profound life wisdom. Tamil commenters flood with 'Bro this happened to me' stories.",
+    hookLine: "\"Meter pottu kitte, 'Life-um appadi thaan sir — ellaarum orey direction-la povom, but fare vera vera.'\"",
+    stealThis: "Any side character in your show with a throwaway line — recut that scene standalone, reframe it as accidental wisdom. Works for ALL shows.",
+    shows: ["vvk", "indrajith", "trot", "pks", "kipi", "cult"],
+    emoji: "🛺"
+  },
+  {
+    id: 6,
+    name: "Amma Scrolling",
+    platform: "youtube",
+    emotion: "comedy",
+    whyViral: "Camera pans to reveal what Amma is actually watching on her phone. The gap between perceived and actual is the punchline. Massive saves from sons and daughters.",
+    hookLine: "\"Amma 'rest edukiren' sonnanga. Camera tirumbudhu...\"",
+    stealThis: "If your show has a mother figure, post a 20-second clip from her POV. Hide what she's reacting to until the last frame.",
+    shows: ["indrajith", "trot"],
+    emoji: "📱"
+  },
+  {
+    id: 7,
+    name: "The Unannounced Return",
+    platform: "instagram",
+    emotion: "drama",
+    whyViral: "Doorbell. Door opens. Face drops. Cut to black. Zero context. The comments section tries to reconstruct the story — algorithmic gold.",
+    hookLine: "\"Doorbell adichan. Thirandhan. Face-la blood freeze aagudhu. Screen black.\"",
+    stealThis: "Use any surprise reveal scene. Cut everything before and after — keep ONLY the door opening and the face. Add: 'Season 2. Only on Pocket FM.'",
+    shows: ["vvk", "indrajith", "trot"],
+    emoji: "🚪"
+  },
+  {
+    id: 8,
+    name: "One Dialogue, Zero Context",
+    platform: "instagram",
+    emotion: "drama",
+    whyViral: "A single raw Tamil line on a black screen — no character, no scene, no music. People share it because it sounds like something their life said to them.",
+    hookLine: "\"'Nee nambina aalu thaan unna vittitu pogiran.' — Black screen. Nothing else.\"",
+    stealThis: "Pull the most gut-punch line of dialogue from any episode. Black screen, white text, no audio except maybe a single breath. Pin the comment with the show name.",
+    shows: ["vvk", "indrajith", "trot", "pks", "kipi", "cult"],
+    emoji: "🖤"
+  },
+  {
+    id: 9,
+    name: "Neenga Yaaru? Same Person, 2 Years Later",
+    platform: "youtube",
+    emotion: "emotion",
+    whyViral: "Documentary-style 'where are they now' without inspirational music. The flatness makes it feel real. Tamil viewers stay for the full arc — high completion rate.",
+    hookLine: "\"2 years ago-la avan oru kashtamana situation-la irundhan. Ippo paaru.\"",
+    stealThis: "Splice your protagonist's lowest and highest episode moments back-to-back. No narration. Let subtitle cards do the work: 'Episode 1 / Episode 47.'",
+    shows: ["indrajith", "kipi"],
+    emoji: "📅"
+  },
+  {
+    id: 10,
+    name: "The Twist Title Card",
+    platform: "facebook",
+    emotion: "comedy",
+    whyViral: "Comedy build for 15 seconds, then a devastating title card flips it into tragedy — or vice versa. Tamil Facebook aunties share and tag their husbands immediately.",
+    hookLine: "\"*Comedy scene plays* ... [Title card appears] 'Avanum theriyathu — idhu last time thaan avanga pesinaanga.'\"",
+    stealThis: "Take a light scene. Add a title card that recontextualises it as something dark or poignant. The tonal whiplash IS the share trigger.",
+    shows: ["vvk", "trot"],
+    emoji: "🃏"
+  }
+];
+
+let smActivePlat = 'all';
+let smActiveEmo  = 'all';
+
+function renderSocialPowerstarts() {
+  const filtered = socialFormats.filter(f =>
+    (smActivePlat === 'all' || f.platform === smActivePlat) &&
+    (smActiveEmo  === 'all' || f.emotion  === smActiveEmo)
+  );
+
+  const platBtns = ['all','instagram','youtube','facebook'].map(p => `
+    <button class="sm-filter-btn${smActivePlat===p?' active':''}"
+      onclick="setSmPlat('${p}')">
+      ${ p==='all'?'🌐 All' : p==='instagram'?'📸 Instagram' : p==='youtube'?'▶️ YouTube':'👥 Facebook' }
+    </button>`).join('');
+
+  const emoBtns = ['all','comedy','emotion','drama'].map(e => `
+    <button class="sm-filter-btn${smActiveEmo===e?' active':''}"
+      onclick="setSmEmo('${e}')">
+      ${ e==='all'?'🎭 All Moods' : e==='comedy'?'😂 Comedy' : e==='emotion'?'💔 Emotion':'🎬 Drama' }
+    </button>`).join('');
+
+  const showLabel = { vvk:'VVK', indrajith:'Indrajith', trot:'TROT', pks:'PKS', kipi:'KIPI', cult:'CULT' };
+  const showColor = { vvk:'vvk', indrajith:'indrajith', trot:'trot', pks:'pks', kipi:'kipi', cult:'cult' };
+  const platLabel = { instagram:'📸 Instagram', youtube:'▶️ YouTube', facebook:'👥 Facebook' };
+
+  const cards = filtered.length === 0
+    ? `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">No formats match these filters.</div>`
+    : filtered.map(f => `
+    <div class="sm-card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <span style="font-size:1.8rem">${f.emoji}</span>
+        <span class="sm-plat-badge ${f.platform}">${platLabel[f.platform]}</span>
+      </div>
+      <div class="sm-format-name">${f.name}</div>
+      <div class="sm-section-label">🔥 Why it goes viral</div>
+      <div class="sm-why">${f.whyViral}</div>
+      <div class="sm-section-label">🗣️ Tamil hook line</div>
+      <div class="sm-hook-line">${f.hookLine}</div>
+      <div class="sm-section-label">💡 Steal this for your promo</div>
+      <div class="sm-steal-text">${f.stealThis}</div>
+      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;">
+        ${f.shows.map(s => `<span class="sm-show-tag ${showColor[s]}">${showLabel[s]}</span>`).join('')}
+        <span class="sm-emotion-tag ${f.emotion}">${f.emotion==='comedy'?'😂 Comedy':f.emotion==='emotion'?'💔 Emotion':'🎬 Drama'}</span>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('social-app').innerHTML = `
+    <div style="margin-bottom:28px;">
+      <h2 style="font-size:1.4rem;font-weight:700;color:var(--accent);margin-bottom:6px;">
+        📱 Social Media Powerstarts
+      </h2>
+      <p style="color:var(--muted);font-size:0.93rem;max-width:680px;line-height:1.6;">
+        Viral reel formats trending across Tamil Nadu — reverse-engineered for Pocket FM promo use.
+        Each format includes why it works, a ready-to-record Tamil hook, and exactly how to steal it.
+      </p>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600;">Platform</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${platBtns}</div>
+    </div>
+    <div style="margin-bottom:24px;">
+      <div style="font-size:0.78rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px;font-weight:600;">Mood / Emotion</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${emoBtns}</div>
+    </div>
+    <div style="font-size:0.83rem;color:var(--muted);margin-bottom:16px;">${filtered.length} format${filtered.length!==1?'s':''} shown</div>
+    <div class="sm-grid">${cards}</div>
+  `;
+}
+
+function setSmPlat(p) { smActivePlat = p; renderSocialPowerstarts(); }
+function setSmEmo(e)  { smActiveEmo  = e; renderSocialPowerstarts(); }
+
+// ═══════════════════════════════════════════════
+//   INIT
+// ═══════════════════════════════════════════════
+renderPerf();
+renderPipeline();
+renderInapp();
+renderSummary();
+renderCreative();
+renderPowerstarts();
+renderMicrodramas();
+renderSocialPowerstarts();
+
+document.getElementById('last-updated').textContent =
+  new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+// ─── Fire tooltip ───────────────────────────────────────────────────────────
+(function() {
+  const tip = document.createElement('div');
+  tip.id = 'fire-tooltip';
+  tip.innerHTML = '<div class="tip-header"></div><div class="tip-body"></div>';
+  document.body.appendChild(tip);
+
+  const OFFSET = 14;
+
+  function show(e) {
+    const el = e.currentTarget;
+    const reason = el.getAttribute('data-fire-tip');
+    const header = el.getAttribute('data-fire-header') || '🔥 Why this will scale';
+    tip.querySelector('.tip-header').textContent = header;
+    tip.querySelector('.tip-body').textContent = reason;
+    tip.classList.add('visible');
+    position(e);
+  }
+
+  function position(e) {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    let x = e.clientX + OFFSET;
+    let y = e.clientY + OFFSET;
+    // flip left if too close to right edge
+    if (x + 275 > vw) x = e.clientX - 275 - OFFSET;
+    // flip up if too close to bottom
+    if (y + 120 > vh) y = e.clientY - 120 - OFFSET;
+    tip.style.left = x + 'px';
+    tip.style.top  = y + 'px';
+  }
+
+  function hide() { tip.classList.remove('visible'); }
+
+  document.addEventListener('mouseover', function(e) {
+    const el = e.target.closest('[data-fire-tip]');
+    if (el) {
+      el.addEventListener('mousemove', position);
+      el.addEventListener('mouseleave', function onLeave() {
+        hide();
+        el.removeEventListener('mousemove', position);
+        el.removeEventListener('mouseleave', onLeave);
+      });
+      show({ currentTarget: el, clientX: e.clientX, clientY: e.clientY });
+    }
+  });
+})();
+</script>
+</body>
+</html>
