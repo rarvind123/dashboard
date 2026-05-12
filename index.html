@@ -97,8 +97,14 @@
       padding: 1px 5px; border-radius: 3px;
       letter-spacing: 0.5px; text-transform: uppercase;
     }
-    .phase-badge.cps  { background:#14532d; color:#4ade80; }
-    .phase-badge.test { background:#1e3a5f; color:#93c5fd; }
+    .phase-badge.cps    { background:#14532d; color:#4ade80; }
+    .phase-badge.test   { background:#1e3a5f; color:#93c5fd; }
+    .phase-badge.genai  { background:#3b1f6e; color:#c4b5fd; }
+    .format-tag {
+      font-size: 9px; font-weight: 600; padding: 1px 5px;
+      border-radius: 3px; letter-spacing: 0.4px;
+      background:#1e293b; color:#94a3b8; margin-left: 4px; flex-shrink: 0;
+    }
 
     /* ─── Fire badge ─── */
     .fire-badge {
@@ -1090,25 +1096,27 @@ function switchTab(id, btn) {
 // ═══════════════════════════════════════════════
 const scripts = [
   // VVK — Scaling Now (CPS data)
-  { show:"VVK", script:"Two Losers Together",         status:"Scaling Now",  cpi:188, activation:42, playtime:52, cps:true,  fire:"42% activation with proven CPS economics. Relatable underdog hook performs consistently across Meta cold audiences. Strong candidate for budget increase." },
-  { show:"VVK", script:"Chosen Dragon",               status:"Scaling Now",  cpi:185, activation:55, playtime:63, cps:true,  fire:"Highest activation (55%) in the entire VVK bucket. Efficient CPI at ₹185 with 63s avg playtime signals deep hook engagement — ideal for Meta broad and Google UAC." },
-  { show:"VVK", script:"Super Dragon + Marma Dragon", status:"Scaling Now",  cpi:250, activation:50, playtime:30, cps:true,  fire:"50% activation despite a premium CPI of ₹250 — audience is willing to pay to engage. Broad fantasy appeal makes this a strong Google UAC candidate." },
-  { show:"VVK", script:"BKR Saviour + Swayamvar",     status:"Scaling Now",  cpi:182, activation:52, playtime:47, cps:true,  fire:"52% activation at ₹182 CPI — best efficiency ratio in VVK CPS tier. Dual-hook structure (action + romance) widens audience reach on Meta." },
-  { show:"VVK", script:"Saviour",                     status:"Scaling Now",  cpi:220, activation:25, playtime:34, cps:true  },
-  { show:"VVK", script:"DKR Base Asset",              status:"Scaling Now",  cpi:189, activation:45, playtime:29, cps:true,  fire:"45% activation with CPS validation at ₹189. Solid mid-funnel performer — reliable for sustained scaling without creative fatigue risk." },
-  { show:"VVK", script:"Nishaan",                     status:"Scaling Now",  cpi:200, activation:25, playtime:26, cps:true  },
+  { show:"VVK", script:"Two Losers Together",         type:"Original",          format:"Sketch",       nextStep:"Gen AI", status:"Scaling Now",  cpi:188, activation:42, playtime:52, cps:true,  fire:"42% activation with proven CPS economics. Relatable underdog hook performs consistently across Meta cold audiences. Strong candidate for budget increase." },
+  { show:"VVK", script:"Chosen Dragon",               type:"Original",          format:"Sketch",       nextStep:"Gen AI", status:"Scaling Now",  cpi:185, activation:55, playtime:63, cps:true,  fire:"Highest activation (55%) in the entire VVK bucket. Efficient CPI at ₹185 with 63s avg playtime signals deep hook engagement — ideal for Meta broad and Google UAC." },
+  { show:"VVK", script:"Super Dragon + Marma Dragon", type:"Original + Adaptation", format:"Gen AI",   nextStep:"",       status:"Scaling Now",  cpi:250, activation:50, playtime:30, cps:true,  fire:"50% activation despite a premium CPI of ₹250 — audience is willing to pay to engage. Broad fantasy appeal makes this a strong Google UAC candidate." },
+  { show:"VVK", script:"BKR Saviour + Swayamvar",     type:"Hindi Adaptation",  format:"Gen AI",       nextStep:"",       status:"Scaling Now",  cpi:182, activation:52, playtime:47, cps:true,  fire:"52% activation at ₹182 CPI — best efficiency ratio in VVK CPS tier. Dual-hook structure (action + romance) widens audience reach on Meta." },
+  { show:"VVK", script:"Saviour",                     type:"Hindi Adaptation",  format:"Gen AI",       nextStep:"",       status:"Scaling Now",  cpi:220, activation:25, playtime:34, cps:true  },
+  { show:"VVK", script:"DKR Base Asset",              type:"Hindi Adaptation",  format:"Gen AI",       nextStep:"",       status:"Scaling Now",  cpi:189, activation:45, playtime:29, cps:true,  fire:"45% activation with CPS validation at ₹189. Solid mid-funnel performer — reliable for sustained scaling without creative fatigue risk." },
+  { show:"VVK", script:"Nishaan",                     type:"Hindi Adaptation",  format:"Gen AI",       nextStep:"",       status:"Scaling Now",  cpi:200, activation:25, playtime:26, cps:true  },
   // VVK — Observation
-  { show:"VVK", script:"Dragon Soul",                 status:"Observation",  cpi:66,  activation:10, playtime:25, cps:false },
-  { show:"VVK", script:"Zombie Dragon",               status:"Observation",  cpi:78,  activation:26, playtime:22, cps:false },
-  { show:"VVK", script:"Sister's Plan",               status:"Observation",  cpi:30,  activation:17, playtime:21, cps:false },
-  { show:"VVK", script:"Dragon Warrior",              status:"Observation",  cpi:53,  activation:12, playtime:26, cps:false },
-  { show:"VVK", script:"Badlands",                    status:"Observation",  cpi:52,  activation:10, playtime:28, cps:false },
-  { show:"VVK", script:"Fallen Empire",               status:"Observation",  cpi:54,  activation:20, playtime:25, cps:false },
+  { show:"VVK", script:"Dragon Soul",                 type:"Original",          format:"Gen AI + Sketch", nextStep:"",   status:"Observation",  cpi:66,  activation:10, playtime:25, cps:false },
+  { show:"VVK", script:"Zombie Dragon",               type:"Original",          format:"Sketch",       nextStep:"",       status:"Observation",  cpi:78,  activation:26, playtime:22, cps:false },
+  { show:"VVK", script:"Sister's Plan",               type:"Original",          format:"Gen AI",       nextStep:"",       status:"Observation",  cpi:30,  activation:17, playtime:21, cps:false },
+  { show:"VVK", script:"Dragon Warrior",              type:"Original",          format:"Sketch",       nextStep:"",       status:"Observation",  cpi:53,  activation:12, playtime:26, cps:false },
+  { show:"VVK", script:"Badlands",                    type:"Original",          format:"Sketch",       nextStep:"",       status:"Observation",  cpi:52,  activation:10, playtime:28, cps:false },
+  { show:"VVK", script:"Fallen Empire",               type:"Original",          format:"Sketch",       nextStep:"",       status:"Observation",  cpi:54,  activation:20, playtime:25, cps:false },
+  { show:"VVK", script:"Prey",                        type:"Original",          format:"Sketch",       nextStep:"",       status:"Observation",  cpi:84,  activation:9,  playtime:12, cps:false },
+  { show:"VVK", script:"Phoenix V3",                  type:"Original",          format:"",             nextStep:"",       status:"Observation",  cpi:82,  activation:3,  playtime:14, cps:false },
 
   // Indrajith — Scaling Now
-  { show:"Indrajith", script:"Son of Fire",                   status:"Scaling Now",  cpi:121, activation:50, playtime:56, cps:true,  fire:"Best economics in Indrajith — 50% activation at just ₹121 CPI. Low cost + high intent = strong scale headroom on both Meta and Google UAC." },
-  { show:"Indrajith", script:"Rukmini PS + Paison Ka Inaam",  status:"Scaling Now",  cpi:118, activation:31, playtime:28, cps:true  },
-  { show:"Indrajith", script:"TFN – Thaan Opng – Rooted",     status:"Scaling Now",  cpi:151, activation:28, playtime:22, cps:true  },
+  { show:"Indrajith", script:"Son of Fire",                   type:"Original",         format:"AI PS - Sketch base", nextStep:"Gen AI", status:"Scaling Now",  cpi:121, activation:50, playtime:56, cps:true,  fire:"Best economics in Indrajith — 50% activation at just ₹121 CPI. Low cost + high intent = strong scale headroom on both Meta and Google UAC." },
+  { show:"Indrajith", script:"Rukmini PS + Paison Ka Inaam",  type:"Hindi Adaptation", format:"Gen AI",               nextStep:"",       status:"Scaling Now",  cpi:118, activation:31, playtime:28, cps:true  },
+  { show:"Indrajith", script:"TFN – Thaan Opng – Rooted",     type:"Original + Adaptation", format:"LA Match",        nextStep:"",       status:"Scaling Now",  cpi:151, activation:28, playtime:22, cps:true  },
   // Indrajith — Observation
   { show:"Indrajith", script:"Success Abimanyu",              status:"Observation",  cpi:62,  activation:14, playtime:40, cps:false },
   { show:"Indrajith", script:"A Deadly Curse",                status:"Observation",  cpi:58,  activation:12, playtime:50, cps:false },
@@ -1135,11 +1143,11 @@ const scripts = [
   { show:"MKV", script:"Gold Leaf",     status:"Scaling Now", cpi:247, activation:25, playtime:39, cps:true  },
 
   // TROT — Scaling Now
-  { show:"TROT", script:"Kick",               status:"Scaling Now",  cpi:85, activation:40, playtime:75, cps:true,  fire:"Best CPI among all CPS scripts across shows (₹85). 40% activation + 75s AVP = users are watching and converting. Top scale candidate for both Meta and Google." },
-  { show:"TROT", script:"Unknown Call",       status:"Scaling Now",  cpi:41, activation:20, playtime:45, cps:true  },
+  { show:"TROT", script:"Kick",               type:"Original",          format:"Sketch",    nextStep:"",       status:"Scaling Now",  cpi:85, activation:40, playtime:75, cps:true,  fire:"Best CPI among all CPS scripts across shows (₹85). 40% activation + 75s AVP = users are watching and converting. Top scale candidate for both Meta and Google." },
+  { show:"TROT", script:"Unknown Call",       type:"Original",          format:"LA Match",  nextStep:"",       status:"Scaling Now",  cpi:41, activation:20, playtime:45, cps:true  },
   // TROT — Scaling Next (Next Step = Gen AI)
-  { show:"TROT", script:"Survesh The Hero",   status:"Scaling Next", cpi:39, activation:18, playtime:79, cps:false, fire:"Highest AVP (79s) in TROT — signals strong content engagement even at test CPI. Once Gen AI version goes live, ₹39 CPI makes this a natural high-volume scaler." },
-  { show:"TROT", script:"Social Experiments", status:"Scaling Next", cpi:27, activation:17, playtime:55, cps:false, fire:"Lowest CPI in the entire dataset at ₹27. Even with modest activation, the economics are exceptional. Prime candidate for Google UAC broad match campaigns." },
+  { show:"TROT", script:"Survesh The Hero",   type:"Original",          format:"Sketch",    nextStep:"Gen AI", status:"Scaling Next", cpi:39, activation:18, playtime:79, cps:false, fire:"Highest AVP (79s) in TROT — signals strong content engagement even at test CPI. Once Gen AI version goes live, ₹39 CPI makes this a natural high-volume scaler." },
+  { show:"TROT", script:"Social Experiments", type:"Original",          format:"Sketch",    nextStep:"Gen AI", status:"Scaling Next", cpi:27, activation:17, playtime:55, cps:false, fire:"Lowest CPI in the entire dataset at ₹27. Even with modest activation, the economics are exceptional. Prime candidate for Google UAC broad match campaigns." },
   // TROT — Observation
   { show:"TROT", script:"Company Drama",      status:"Observation",  cpi:28, activation:10, playtime:71, cps:false },
   { show:"TROT", script:"Vedhika's POV",      status:"Observation",  cpi:22, activation:12, playtime:43, cps:false },
@@ -1169,11 +1177,14 @@ const scripts = [
   { show:"KIPI", script:"Dollar Vs Mithran",   status:"Observation", cpi:48,  activation:6,  playtime:10, cps:false },
   { show:"KIPI", script:"Future Man",          status:"Observation", cpi:51,  activation:4,  playtime:8,  cps:false },
 
-  // CULT — Observation
-  { show:"CULT", script:"Grey Egg",            status:"Observation", cpi:55,  activation:13, playtime:28, cps:false },
-  { show:"CULT", script:"Weakest Beast Tamer", status:"Observation", cpi:80,  activation:7,  playtime:9,  cps:false },
-  { show:"CULT", script:"Cult VO - PS1",       status:"Observation", cpi:82,  activation:6,  playtime:12, cps:false },
-  { show:"CULT", script:"Eternal Fly Lord",    status:"Observation", cpi:45,  activation:6,  playtime:15, cps:false },
+  // CULT — Observation / Scaling Next
+  { show:"CULT", script:"Grey Egg",            type:"Adaptation", format:"Gen AI",  nextStep:"",       status:"Observation",  cpi:55,  activation:13, playtime:28, cps:false },
+  { show:"CULT", script:"Weakest Beast Tamer", type:"Adaptation", format:"Gen AI",  nextStep:"",       status:"Observation",  cpi:80,  activation:7,  playtime:9,  cps:false },
+  { show:"CULT", script:"Cult VO - PS1",       type:"Original",   format:"Sketch",  nextStep:"Gen AI", status:"Observation",  cpi:82,  activation:6,  playtime:12, cps:false },
+  { show:"CULT", script:"Eternal Fly Lord",    type:"Original",   format:"Sketch",  nextStep:"",       status:"Observation",  cpi:45,  activation:6,  playtime:15, cps:false },
+  { show:"CULT", script:"Pradaise",            type:"Original",   format:"Sketch",  nextStep:"",       status:"Observation",  cpi:76,  activation:11, playtime:6,  cps:false },
+  // KIPI — Observation
+  { show:"KIPI", script:"Love Story",          type:"Original",   format:"Sketch",  nextStep:"",       status:"Observation",  cpi:60,  activation:3,  playtime:11, cps:false },
 ];
 
 // ═══════════════════════════════════════════════
@@ -1391,6 +1402,14 @@ function scriptCard(s, rank, showTag) {
     ? '<span class="phase-badge cps">CPS</span>'
     : '<span class="phase-badge test">TEST</span>';
 
+  const genAiBadge = s.nextStep === 'Gen AI'
+    ? '<span class="phase-badge genai">⚡ Gen AI</span>'
+    : '';
+
+  const formatTag = s.format
+    ? `<span class="format-tag">${s.format}</span>`
+    : '';
+
   const fireBadge = s.fire
     ? `<span class="fire-badge" data-fire-tip="${s.fire.replace(/"/g,'&quot;')}">🔥</span>`
     : '';
@@ -1401,21 +1420,24 @@ function scriptCard(s, rank, showTag) {
   const playCls = currentSort === 'playtime'   ? ' highlight' : '';
 
   return `
-    <div class="script-card${s.fire ? ' fire-card' : ''}">
+    <div class="script-card${s.fire ? ' fire-card' : ''}${s.nextStep === 'Gen AI' ? ' genai-queued' : ''}">
       <div class="card-top">
         <div class="card-left">
           <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
           <div class="script-name">${s.script}</div>
           ${fireBadge}
         </div>
-        ${badge}
+        <div style="display:flex;gap:4px;align-items:center;flex-shrink:0;">
+          ${genAiBadge}${badge}
+        </div>
       </div>
-      ${showTag ? `<div class="script-show-tag">${s.show}</div>` : ''}
+      ${showTag ? `<div class="script-show-tag">${s.show}${s.type ? ' · ' + s.type : ''}</div>` : ''}
       <div class="metrics">
         <div class="metric${cpiCls}">CPI <span>₹${s.cpi}</span></div>
         <div class="metric${actCls}">Act <span>${s.activation > 0 ? s.activation + '%' : '–'}</span></div>
         <div class="metric${playCls}">AVP <span>${fmtTime(s.playtime)}</span></div>
       </div>
+      ${formatTag}
     </div>`;
 }
 

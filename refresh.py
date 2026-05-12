@@ -143,53 +143,127 @@ def update_pipeline(html):
 
 
 # ─────────────────────────────────────────────
-#  SCRIPTS METRICS UPDATE
+#  SCRIPTS FULL REBUILD
+#  (index-based parsing handles duplicate column headers)
 # ─────────────────────────────────────────────
 
+# Column indices in "Script cracking status"
+_COL_SHOW       = 0
+_COL_TYPE       = 1
+_COL_SCRIPT     = 2
+_COL_FORMAT     = 3
+_COL_LEAD       = 4
+_COL_NEXT_STEP  = 6
+_COL_TEST_CPI   = 8
+_COL_PLAYTIME   = 9
+_COL_TEST_ACT   = 10
+_COL_CPS_CPI    = 14
+_COL_CPS_ACT    = 15
+
+def fetch_sheet_raw(sheet_name):
+    """Fetch a sheet as raw list-of-lists (handles duplicate column headers)."""
+    url = (
+        f'https://docs.google.com/spreadsheets/d/{SHEET_ID}'
+        f'/gviz/tq?tqx=out:csv&sheet={urllib.parse.quote(sheet_name)}'
+    )
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        text = r.read().decode('utf-8')
+    return list(csv.reader(io.StringIO(text)))
+
+
+def _extract_fire_tips(html):
+    """Pull existing (script_name_upper → fire_text) from the scripts const."""
+    tips = {}
+    block = re.search(r'const scripts = \[([\s\S]*?)\];', html)
+    if not block:
+        return tips
+    for m in re.finditer(
+        r'script:"([^"]+)"[^}]*?fire:"((?:[^"\\]|\\.)*)"',
+        block.group(1),
+    ):
+        tips[m.group(1).strip().upper()] = m.group(2)
+    return tips
+
+
 def update_scripts_metrics(html):
-    print('Fetching Script cracking status...')
+    print('Fetching Script cracking status (full rebuild)...')
     try:
-        rows   = fetch_sheet('Script cracking status')
-        lookup = {}
-        for row in rows:
-            show   = row.get('Show', '').strip()
-            script = row.get('Script Name', '').strip()
+        all_rows = fetch_sheet_raw('Script cracking status')
+
+        # Find header row
+        header_idx = 0
+        for i, row in enumerate(all_rows):
+            if sum(1 for c in row if c.strip()) >= 4:
+                header_idx = i
+                break
+        data_rows = all_rows[header_idx + 1:]
+
+        # Preserve manually written fire tips
+        fire_tips = _extract_fire_tips(html)
+
+        items = []
+        for row in data_rows:
+            row = row + [''] * max(0, 22 - len(row))   # pad short rows
+            show   = row[_COL_SHOW].strip()
+            script = row[_COL_SCRIPT].strip()
             if not show or not script:
                 continue
-            activation_raw = (
-                row.get('Activation %', '') or
-                row.get('Activation', '') or
-                row.get('Activa', '')
-            )
-            lookup[(show.upper(), script.upper())] = {
-                'cpi':        to_int(row.get('CPI', 0)),
-                'activation': to_int(activation_raw),
-                'playtime':   to_secs(row.get('Avg Play Time', '0')),
+
+            stype     = row[_COL_TYPE].strip()
+            fmt       = row[_COL_FORMAT].strip()
+            lead      = row[_COL_LEAD].strip()
+            next_step = row[_COL_NEXT_STEP].strip()
+            is_genai  = bool(re.search(r'gen.?ai', next_step, re.I))
+
+            test_cpi  = to_int(row[_COL_TEST_CPI])
+            playtime  = to_secs(row[_COL_PLAYTIME])
+            test_act  = to_int(row[_COL_TEST_ACT])
+            cps_cpi   = to_int(row[_COL_CPS_CPI])
+            cps_act   = to_int(row[_COL_CPS_ACT])
+
+            if cps_cpi > 0:
+                status = 'Scaling Now'
+                cps    = True
+                cpi    = cps_cpi
+                act    = cps_act
+            elif is_genai:
+                status = 'Scaling Next'
+                cps    = False
+                cpi    = test_cpi
+                act    = test_act
+            else:
+                status = 'Observation'
+                cps    = False
+                cpi    = test_cpi
+                act    = test_act
+
+            item = {
+                'show':       show,
+                'script':     script,
+                'type':       stype,
+                'format':     fmt,
+                'promoLead':  lead,
+                'nextStep':   'Gen AI' if is_genai else '',
+                'status':     status,
+                'cpi':        cpi,
+                'activation': act,
+                'playtime':   playtime,
+                'cps':        cps,
             }
 
-        updated = 0
+            fire = fire_tips.get(script.strip().upper(), '')
+            if fire:
+                item['fire'] = fire
 
-        def patch_item(m):
-            nonlocal updated
-            item   = m.group(0)
-            show_m   = re.search(r'show:\s*"([^"]+)"', item)
-            script_m = re.search(r'script:\s*"([^"]+)"', item)
-            if not show_m or not script_m:
-                return item
-            key = (show_m.group(1).upper(), script_m.group(1).upper())
-            if key not in lookup:
-                return item
-            d    = lookup[key]
-            item = re.sub(r'cpi:\s*\d+',       f'cpi:{d["cpi"]}',        item)
-            item = re.sub(r'activation:\s*\d+', f'activation:{d["activation"]}', item)
-            item = re.sub(r'playtime:\s*\d+',   f'playtime:{d["playtime"]}', item)
-            updated += 1
-            return item
+            items.append(item)
 
-        html = re.sub(r'\{\s*show:[^{}]+\}', patch_item, html)
-        print(f'  Scripts: {updated} items updated (fire tips + status preserved)')
+        html = replace_js_const(html, 'scripts', js_array(items))
+        genai_count = sum(1 for it in items if it.get('nextStep') == 'Gen AI')
+        print(f'  Scripts: {len(items)} items rebuilt · {genai_count} flagged ⚡ Gen AI')
     except Exception as e:
         print(f'  Scripts update FAILED: {e}')
+        import traceback; traceback.print_exc()
     return html
 
 
