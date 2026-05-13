@@ -1047,6 +1047,7 @@
     <button class="tab-btn"        onclick="switchTab('social',this)">📱 Social Media Powerstarts</button>
     <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
     <button class="tab-btn"        onclick="switchTab('test',this)">🧪 Test Intel</button>
+    <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
   </div>
 </div>
 
@@ -1146,6 +1147,10 @@
 
 <div id="tab-test" class="tab-pane">
   <div id="test-app"></div>
+</div>
+
+<div id="tab-scale" class="tab-pane">
+  <div id="scale-app"></div>
 </div>
 
 
@@ -3192,6 +3197,181 @@ function setTestSort(key) {
 }
 
 renderTestIntel();
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB: SCALING INTEL (India Regional)
+// ═══════════════════════════════════════════════
+// Live data fetched 13 May 2026 via Meta MCP. avgPlaytime estimated from thruplRate×8s.
+const scalingAds = [
+  {"id":"120241911202400607","show":"Tiger Returns","script":"Market PS + An Unknown Call","ctr":0.91,"cpi":6229,"activations":68,"spend":423573,"impressions":5890274,"avgPlaytime":100.0},
+  {"id":"120241874129250607","show":"KING","script":"Harish Master Play LA - v4 PS98","ctr":1.14,"cpi":14355,"activations":21,"spend":301458,"impressions":4602081,"avgPlaytime":117.0},
+  {"id":"120242814634790607","show":"Indrajith","script":"Book opn PKI 1+SOF","ctr":9.91,"cpi":1930,"activations":122,"spend":235481,"impressions":2617487,"avgPlaytime":290.0},
+  {"id":"120241874129260607","show":"KING","script":"RISING PS + Harish Promo","ctr":0.95,"cpi":15482,"activations":14,"spend":216743,"impressions":3690123,"avgPlaytime":80.0},
+  {"id":"120241911202300607","show":"Tiger Returns","script":"Mehenga LA Hindi + Scandal 2 Ps","ctr":0.98,"cpi":60528,"activations":3,"spend":181585,"impressions":5135309,"avgPlaytime":93.0},
+  {"id":"120241874129280607","show":"KING","script":"Harish Master Play LA - v4 PS55","ctr":1.24,"cpi":5647,"activations":22,"spend":124233,"impressions":2075275,"avgPlaytime":117.0},
+  {"id":"120241911202450607","show":"Tiger Returns","script":"Mehenga LA Hindi + Marriage Ps","ctr":1.11,"cpi":24953,"activations":4,"spend":99813,"impressions":1634154,"avgPlaytime":74.0},
+  {"id":"120241911202330607","show":"Tiger Returns","script":"Dahaad LA match + hindi opn","ctr":0.99,"cpi":4123,"activations":22,"spend":90704,"impressions":1127453,"avgPlaytime":113.0},
+  {"id":"120242481094690607","show":"Indrajith","script":"Another Round Without PS","ctr":1.24,"cpi":1560,"activations":58,"spend":90478,"impressions":1727671,"avgPlaytime":46.0},
+  {"id":"120240703043440607","show":"Indrajith","script":"Paison Ka Inaam - Rukmini PS","ctr":0.57,"cpi":3142,"activations":27,"spend":84831,"impressions":765335,"avgPlaytime":44.0},
+  {"id":"120242138599730607","show":"Tiger Returns","script":"KICK - ALT EDIT V7","ctr":0.46,"cpi":831,"activations":99,"spend":82310,"impressions":1339142,"avgPlaytime":44.0},
+  {"id":"120241911202270607","show":"Tiger Returns","script":"Dahaad LA 10Mins FT V03","ctr":0.82,"cpi":20129,"activations":4,"spend":80518,"impressions":936351,"avgPlaytime":141.0},
+  {"id":"120243706627740607","show":"Mahakaaviyam","script":"Honey trap Gen AI LA v11","ctr":0.69,"cpi":15989,"activations":5,"spend":79944,"impressions":1019340,"avgPlaytime":26.0},
+  {"id":"120242678898240607","show":"Indrajith","script":"PKI with PS+SOF+TFN-50MINS","ctr":3.29,"cpi":12669,"activations":6,"spend":76012,"impressions":2049601,"avgPlaytime":6.0},
+  {"id":"120241911202420607","show":"Tiger Returns","script":"House maid PS + Unknown Call","ctr":0.80,"cpi":8296,"activations":9,"spend":74664,"impressions":941870,"avgPlaytime":63.0},
+  {"id":"120243202932320607","show":"Indrajith","script":"Paison Ka Inaam - Screen ALT","ctr":0.36,"cpi":3423,"activations":21,"spend":71875,"impressions":1262833,"avgPlaytime":36.0},
+  {"id":"120241874129290607","show":"KING","script":"Harish Master Play LA - v4 PS85","ctr":0.90,"cpi":7169,"activations":10,"spend":71691,"impressions":1041822,"avgPlaytime":106.0},
+  {"id":"120242933059190607","show":"Mahakaaviyam","script":"Honey trap Gen AI LA Full","ctr":0.51,"cpi":7445,"activations":9,"spend":67001,"impressions":821106,"avgPlaytime":85.0},
+  {"id":"120242302884830607","show":"Ki.pi. 2500","script":"Mother's Trick V2","ctr":3.70,"cpi":65464,"activations":1,"spend":65464,"impressions":1745911,"avgPlaytime":4.0},
+  {"id":"120242478489510607","show":"Vaal Veesum","script":"Family PS + VVK FDR 2HR","ctr":0.38,"cpi":7986,"activations":8,"spend":63884,"impressions":1176472,"avgPlaytime":29.0},
+  {"id":"120238902144630607","show":"KING","script":"RISING PS + Harish Promo (ROAS)","ctr":0.45,"cpi":3716,"activations":17,"spend":63168,"impressions":497955,"avgPlaytime":24.0},
+  {"id":"120242332842530607","show":"Vaal Veesum","script":"Super Dragon - Telugu Adpt V1","ctr":2.55,"cpi":4316,"activations":14,"spend":60428,"impressions":1047764,"avgPlaytime":15.0},
+  {"id":"120242140762470607","show":"Cult","script":"Cult V0 + Ps 2","ctr":3.94,"cpi":19838,"activations":3,"spend":59514,"impressions":1204615,"avgPlaytime":7.0},
+  {"id":"120241911202410607","show":"Tiger Returns","script":"Mehenga LA Hindi + 1000Cr Ps","ctr":1.03,"cpi":29338,"activations":2,"spend":58676,"impressions":1135875,"avgPlaytime":78.0},
+  {"id":"120242479855920607","show":"Vaal Veesum","script":"Chosen Dragon + VVK FDR 1HR","ctr":0.46,"cpi":1355,"activations":41,"spend":55568,"impressions":819009,"avgPlaytime":39.0},
+  {"id":"120238875334860607","show":"Por Kanda Singam","script":"success pillar Gen AI LA","ctr":0.44,"cpi":5748,"activations":9,"spend":51729,"impressions":701972,"avgPlaytime":44.0},
+  {"id":"120242924940570607","show":"Cult","script":"Cult V0 + Ps 1","ctr":1.32,"cpi":25036,"activations":2,"spend":50073,"impressions":2040240,"avgPlaytime":3.0},
+];
+
+// ─── Scaling Intel helpers ───────────────────────────────────────────────────
+function scalingScore(a) {
+  const cpiS = Math.min(5000 / Math.max(a.cpi, 0.01) * 100, 100);
+  const ctrS = Math.min(a.ctr / 1.0 * 100, 100);
+  const actS = Math.min(a.activations / 50 * 100, 100);
+  return Math.round(Math.min(cpiS * 0.40 + ctrS * 0.30 + actS * 0.30, 100) * 10) / 10;
+}
+
+const SCALING_SORT = {
+  cpi:         { fn: (a, b) => a.cpi - b.cpi,                  label: 'CPI',         dir: '▲' },
+  ctr:         { fn: (a, b) => b.ctr - a.ctr,                  label: 'CTR',         dir: '▼' },
+  activations: { fn: (a, b) => b.activations - a.activations,  label: 'Activations', dir: '▼' },
+  avgPlaytime: { fn: (a, b) => b.avgPlaytime - a.avgPlaytime,  label: 'Playtime',    dir: '▼' },
+  spend:       { fn: (a, b) => b.spend - a.spend,              label: 'Spend',       dir: '▼' },
+};
+let scalingSortKey  = 'cpi';
+let scalingSortFlip = 1;
+
+const SCALING_BUCKETS = [
+  { cls: 'elite',   label: 'Top Performer', test: s => scalingScore(s) >= 80 },
+  { cls: 'strong',  label: 'Scale Up',      test: s => scalingScore(s) >= 60 && scalingScore(s) < 80 },
+  { cls: 'average', label: 'Monitor',       test: s => scalingScore(s) >= 40 && scalingScore(s) < 60 },
+  { cls: 'weak',    label: 'Review',        test: s => scalingScore(s) < 40 },
+];
+
+function scalingAdCard(a, rank, showTag) {
+  const sc  = scalingScore(a);
+  const cls = sc >= 80 ? 'ses-green' : sc >= 60 ? 'ses-blue' : sc >= 40 ? 'ses-yellow' : 'ses-red';
+  const cpiCls = scalingSortKey === 'cpi'         ? ' highlight' : '';
+  const ctrCls = scalingSortKey === 'ctr'         ? ' highlight' : '';
+  const actCls = scalingSortKey === 'activations' ? ' highlight' : '';
+  const ptCls  = scalingSortKey === 'avgPlaytime' ? ' highlight' : '';
+  const spCls  = scalingSortKey === 'spend'       ? ' highlight' : '';
+  const nm     = a.script.length > 28 ? a.script.slice(0, 28) + '…' : a.script;
+  const cpiDisp = a.cpi >= 1000 ? '₹' + (a.cpi/1000).toFixed(1) + 'k' : '₹' + a.cpi;
+  return `
+    <div class="script-card">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
+          <div class="script-name">${nm}</div>
+        </div>
+        <span class="ses-pill ${cls}">${sc}</span>
+      </div>
+      ${showTag ? `<div class="script-show-tag">${a.show || '—'}</div>` : ''}
+      <div class="metrics">
+        <div class="metric${cpiCls}">CPI <span>${cpiDisp}</span></div>
+        <div class="metric${ctrCls}">CTR <span>${a.ctr}%</span></div>
+        <div class="metric${actCls}">Act <span>${a.activations > 0 ? a.activations : '—'}</span></div>
+        <div class="metric${ptCls}">Playtime <span>${fmtTime(a.avgPlaytime)}</span></div>
+        <div class="metric${spCls}">Spend <span>₹${Math.round(a.spend/1000)}k</span></div>
+      </div>
+    </div>`;
+}
+
+function scalingBoard(dataSet, showTag) {
+  const cfg    = SCALING_SORT[scalingSortKey];
+  const sorted = [...dataSet].sort((a, b) => scalingSortFlip * cfg.fn(a, b));
+  return `<div class="meta-board">${SCALING_BUCKETS.map(b => {
+    const items = sorted.filter(b.test);
+    return `<div class="bucket ${b.cls}">
+      <div class="bucket-header">
+        <div class="bucket-dot"></div>
+        <div class="bucket-label">${b.label}</div>
+        <div class="bucket-count">${items.length}</div>
+      </div>
+      ${items.length
+        ? items.map((s, i) => scalingAdCard(s, i + 1, showTag)).join('')
+        : '<div class="empty-bucket">— none —</div>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderScalingIntel() {
+  const totalSpend   = scalingAds.reduce((s, a) => s + a.spend, 0);
+  const avgCtr       = (scalingAds.reduce((s, a) => s + a.ctr, 0) / scalingAds.length).toFixed(2);
+  const avgCpi       = Math.round(scalingAds.reduce((s, a) => s + a.cpi, 0) / scalingAds.length);
+  const avgPt        = (scalingAds.reduce((s, a) => s + a.avgPlaytime, 0) / scalingAds.length).toFixed(0);
+  const totalActs    = scalingAds.reduce((s, a) => s + a.activations, 0);
+
+  const summaryHtml = `
+    <div class="meta-summary-grid">
+      <div class="meta-stat"><div class="meta-stat-val">₹${(totalSpend/1e5).toFixed(1)}L</div><div class="meta-stat-label">Total Spend (30d)</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${scalingAds.length}</div><div class="meta-stat-label">Active Ads</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${avgCtr}%</div><div class="meta-stat-label">Avg CTR</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">₹${(avgCpi/1000).toFixed(1)}k</div><div class="meta-stat-label">Avg CPI</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${fmtTime(Number(avgPt))}</div><div class="meta-stat-label">Avg Playtime</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${totalActs}</div><div class="meta-stat-label">Total Activations</div></div>
+    </div>
+    <div style="font-size:10px;color:#374151;margin-bottom:20px;">
+      Pocket FM India Regional · Tamil campaigns · 13 Apr – 12 May 2026 &nbsp;·&nbsp;
+      Score = CPI 40% + CTR 30% + Activations 30% &nbsp;·&nbsp;
+      Playtime est. from thruplay rate &nbsp;·&nbsp;
+      <span style="color:#22c55e;">Top Performer ≥80</span> &nbsp;·&nbsp;
+      <span style="color:#93c5fd;">Scale Up ≥60</span> &nbsp;·&nbsp;
+      <span style="color:#fcd34d;">Monitor ≥40</span> &nbsp;·&nbsp;
+      <span style="color:#fca5a5;">Review &lt;40</span>
+    </div>
+  `;
+
+  const cfg    = SCALING_SORT[scalingSortKey];
+  const arrow  = scalingSortFlip === 1 ? cfg.dir : (cfg.dir === '▼' ? '▲' : '▼');
+  const sortBtns = Object.entries(SCALING_SORT).map(([key, c]) => {
+    const active = scalingSortKey === key;
+    const ar     = active ? `<span class="sort-arrow"> ${arrow}</span>` : '';
+    return `<button class="sort-btn${active?' active':''}" onclick="setScalingSort('${key}')">${c.label}${ar}</button>`;
+  }).join('');
+
+  let html = summaryHtml;
+  html += `<div class="sort-bar"><span class="sort-bar-label">Sort by</span>${sortBtns}</div>`;
+  html += `<div class="section-title">Scaling Board — India Regional · ${scalingAds.length} Tamil ads · ranked by ${cfg.label} ${arrow}</div>`;
+  html += scalingBoard(scalingAds, true);
+
+  const showMap = {};
+  for (const a of scalingAds) {
+    const key = a.show || '(untagged)';
+    if (!showMap[key]) showMap[key] = { spend: 0, ads: [] };
+    showMap[key].spend += a.spend;
+    showMap[key].ads.push(a);
+  }
+  Object.entries(showMap).sort((a, b) => b[1].spend - a[1].spend).forEach(([showName, data]) => {
+    html += `<div class="show-section">
+      <div class="show-title">
+        <span class="show-badge">${showName}</span>
+        <span class="script-count">· ${data.ads.length} ads &nbsp;·&nbsp; ₹${(data.spend/1e5).toFixed(1)}L</span>
+      </div>
+      ${scalingBoard(data.ads, false)}
+    </div>`;
+  });
+
+  document.getElementById('scale-app').innerHTML = html;
+}
+
+function setScalingSort(key) {
+  if (scalingSortKey === key) scalingSortFlip *= -1;
+  else { scalingSortKey = key; scalingSortFlip = 1; }
+  renderScalingIntel();
+}
+
+renderScalingIntel();
 
 // ─── Fire tooltip ───────────────────────────────────────────────────────────
 (function() {
