@@ -43,6 +43,7 @@ AD_FIELDS = ','.join([
     'video_p100_watched_actions',
     'video_p75_watched_actions',
     'video_p25_watched_actions',
+    'video_avg_time_watched_actions',
     'cost_per_thruplay',
     'results',
     'cost_per_result',
@@ -144,6 +145,11 @@ def process_ad(e, account_name, benchmarks):
     freq  = pnum(e.get('frequency'))
     acts  = nested_val(e.get('results', {}))
 
+    # Average video playtime (ms → seconds)
+    avg_pt_raw  = e.get('video_avg_time_watched_actions', [])
+    avg_pt_ms   = float(avg_pt_raw[0]['value']) if isinstance(avg_pt_raw, list) and avg_pt_raw else 0.0
+    avg_playtime = round(avg_pt_ms / 1000, 1)
+
     hook_rate   = round(sp3  / imp * 100, 1)
     thru_rate   = round(thru / imp * 100, 1)
     comp_rate   = round(p100 / imp * 100, 2)
@@ -178,6 +184,8 @@ def process_ad(e, account_name, benchmarks):
         'normCpi':        norm_cpi,
         'ses':            ses,
         'fatigue':        freq > 2.5,
+        'avgPlaytime':    avg_playtime,
+        'cpi':            round(pnum(e.get('cost_per_result', {})), 2),
     }
 
 
