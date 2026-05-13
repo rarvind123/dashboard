@@ -1679,10 +1679,10 @@ function sortedItems(items) {
   return [...items].sort(SORT_CONFIG[currentSort].fn);
 }
 
-function perfBoard(dataSet, showTag) {
+function perfBoard(dataSet, showTag, maxPerBucket = Infinity) {
   const cfg = SORT_CONFIG[currentSort];
   return `<div class="board">${BUCKETS.map(b => {
-    const items = sortedItems(dataSet.filter(b.filter));
+    const items = sortedItems(dataSet.filter(b.filter)).slice(0, maxPerBucket);
     return `<div class="bucket ${b.cls}">
       <div class="bucket-header">
         <div class="bucket-dot"></div>
@@ -1698,9 +1698,8 @@ function perfBoard(dataSet, showTag) {
 
 function renderPerf() {
   const cfg = SORT_CONFIG[currentSort];
-  const top10 = sortedItems(scripts).slice(0, 10);
-  let html = `<div class="section-title">Testing Intelligence — Top 10 · ${scripts.length} total scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
-  html += perfBoard(top10, true);
+  let html = `<div class="section-title">Testing Intelligence — Top 10 per tier · ${scripts.length} total scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
+  html += perfBoard(scripts, true, 10);
   SHOWS.forEach(show => {
     const ss = scripts.filter(s => s.show === show.key);
     if (!ss.length) return;
@@ -1710,7 +1709,7 @@ function renderPerf() {
         <span class="show-full-name">${show.name}</span>
         <span class="script-count">· ${ss.length} scripts</span>
       </div>
-      ${perfBoard(ss, false)}
+      ${perfBoard(ss, false, 5)}
     </div>`;
   });
   document.getElementById('perf-app').innerHTML = html;
