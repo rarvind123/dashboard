@@ -970,38 +970,6 @@
       color: #6b7280;
       margin-top: 4px;
     }
-    .meta-section-title {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: #9ca3af;
-      margin: 20px 0 10px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid #1f2937;
-    }
-    .meta-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 12px;
-    }
-    .meta-table th {
-      text-align: left;
-      padding: 8px 10px;
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-      color: #6b7280;
-      border-bottom: 1px solid #1f2937;
-      white-space: nowrap;
-    }
-    .meta-table td {
-      padding: 8px 10px;
-      border-bottom: 1px solid #111827;
-      vertical-align: middle;
-    }
-    .meta-table tr:hover td { background: #131720; }
     .ses-pill {
       display: inline-block;
       padding: 2px 8px;
@@ -1010,28 +978,26 @@
       font-weight: 700;
       min-width: 38px;
       text-align: center;
+      flex-shrink: 0;
     }
     .ses-green  { background: #14532d; color: #4ade80; }
     .ses-blue   { background: #1e3a5f; color: #93c5fd; }
     .ses-yellow { background: #78350f; color: #fcd34d; }
     .ses-red    { background: #7f1d1d; color: #fca5a5; }
-    .meta-lang-tag {
-      font-size: 9px; font-weight: 600; padding: 1px 5px;
-      border-radius: 3px; letter-spacing: 0.4px;
-      background: #1e293b; color: #94a3b8;
-    }
-    .meta-sort-bar {
-      display: flex; gap: 6px; margin-bottom: 12px; align-items: center;
-      flex-wrap: wrap;
-    }
-    .meta-sort-btn {
-      padding: 5px 12px; font-size: 11px; font-weight: 600;
-      border-radius: 5px; border: 1px solid #1f2937;
-      background: #13171f; color: #6b7280; cursor: pointer;
-      transition: all 0.15s;
-    }
-    .meta-sort-btn:hover { color: #d1d5db; }
-    .meta-sort-btn.active { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
+    /* SES tier buckets */
+    .meta-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .bucket.elite   { border-top: 2px solid #22c55e; }
+    .bucket.strong  { border-top: 2px solid #3b82f6; }
+    .bucket.average { border-top: 2px solid #f59e0b; }
+    .bucket.weak    { border-top: 2px solid #ef4444; }
+    .bucket.elite   .bucket-dot   { background: #22c55e; }
+    .bucket.strong  .bucket-dot   { background: #3b82f6; }
+    .bucket.average .bucket-dot   { background: #f59e0b; }
+    .bucket.weak    .bucket-dot   { background: #ef4444; }
+    .bucket.elite   .bucket-label { color: #22c55e; }
+    .bucket.strong  .bucket-label { color: #3b82f6; }
+    .bucket.average .bucket-label { color: #f59e0b; }
+    .bucket.weak    .bucket-label { color: #ef4444; }
   </style>
 </head>
 <body>
@@ -2926,6 +2892,63 @@ function sesClass(v) {
   return v >= 90 ? 'ses-green' : v >= 70 ? 'ses-blue' : v >= 50 ? 'ses-yellow' : 'ses-red';
 }
 
+const META_BUCKETS = [
+  { key: 'elite',   cls: 'elite',   label: 'Elite',   test: s => s.ses >= 90 },
+  { key: 'strong',  cls: 'strong',  label: 'Strong',  test: s => s.ses >= 70 && s.ses < 90 },
+  { key: 'average', cls: 'average', label: 'Average', test: s => s.ses >= 50 && s.ses < 70 },
+  { key: 'weak',    cls: 'weak',    label: 'Weak',    test: s => s.ses < 50 },
+];
+
+function metaAdCard(a, rank, showTag) {
+  const tierCls = a.ses >= 90 ? 'ses-green' : a.ses >= 70 ? 'ses-blue' : a.ses >= 50 ? 'ses-yellow' : 'ses-red';
+  const hookCls  = metaSortKey === 'hookRate'   ? ' highlight' : '';
+  const ctrCls   = metaSortKey === 'ctr'        ? ' highlight' : '';
+  const thruCls  = metaSortKey === 'thruplRate' ? ' highlight' : '';
+  const spendCls = metaSortKey === 'spend'      ? ' highlight' : '';
+  const fatigue  = a.fatigue
+    ? '<span style="font-size:9px;color:#f87171;background:#2d1515;border-radius:3px;padding:1px 5px;">⚠ Fatigue</span>'
+    : '';
+  const nm = a.script.length > 28 ? a.script.slice(0, 28) + '…' : a.script;
+  return `
+    <div class="script-card">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
+          <div class="script-name">${nm}</div>
+        </div>
+        <span class="ses-pill ${tierCls}">${a.ses}</span>
+      </div>
+      ${showTag ? `<div class="script-show-tag">${a.show || '—'}</div>` : ''}
+      <div class="metrics">
+        <div class="metric${hookCls}">Hook <span>${a.hookRate}%</span></div>
+        <div class="metric${ctrCls}">CTR <span>${a.ctr}%</span></div>
+        <div class="metric${thruCls}">Thru <span>${a.thruplRate}%</span></div>
+        <div class="metric${spendCls}">Spend <span>₹${Math.round(a.spend/1000)}k</span></div>
+        ${fatigue}
+      </div>
+    </div>`;
+}
+
+function metaBoard(dataSet, showTag) {
+  const sorted = [...dataSet].sort((a, b) => {
+    const av = a[metaSortKey] ?? 0, bv = b[metaSortKey] ?? 0;
+    return metaSortDir * (bv - av);
+  });
+  return `<div class="meta-board">${META_BUCKETS.map(b => {
+    const items = sorted.filter(b.test);
+    return `<div class="bucket ${b.cls}">
+      <div class="bucket-header">
+        <div class="bucket-dot"></div>
+        <div class="bucket-label">${b.label}</div>
+        <div class="bucket-count">${items.length}</div>
+      </div>
+      ${items.length
+        ? items.map((s, i) => metaAdCard(s, i + 1, showTag)).join('')
+        : '<div class="empty-bucket">— none —</div>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
 function renderMetaIntel() {
   const summaryHtml = `
     <div class="meta-summary-grid">
@@ -2956,103 +2979,49 @@ function renderMetaIntel() {
     </div>
     <div style="font-size:10px;color:#374151;margin-bottom:20px;">
       Last refreshed: ${metaSummary.fetchedAt} &nbsp;·&nbsp; Tamil campaigns (India Regional + South Testing) &nbsp;·&nbsp;
-      <span style="color:#22c55e;">green</span> = above benchmark &nbsp;·&nbsp;
-      <span style="color:#f87171;">red</span> = below benchmark
+      SES: <span style="color:#22c55e;">Elite ≥90</span> &nbsp;·&nbsp;
+      <span style="color:#93c5fd;">Strong ≥70</span> &nbsp;·&nbsp;
+      <span style="color:#fcd34d;">Average ≥50</span> &nbsp;·&nbsp;
+      <span style="color:#fca5a5;">Weak &lt;50</span>
     </div>
   `;
+
+  const sortLabel = { ses:'SES', hookRate:'Hook Rate', spend:'Spend', ctr:'CTR', thruplRate:'Thruplay' }[metaSortKey] || metaSortKey;
+  const sortBtns = [
+    { key:'ses',        label:'SES Score' },
+    { key:'hookRate',   label:'Hook Rate' },
+    { key:'spend',      label:'Spend'     },
+    { key:'ctr',        label:'CTR'       },
+    { key:'thruplRate', label:'Thruplay'  },
+  ].map(b => {
+    const active = metaSortKey === b.key;
+    const arrow  = active ? `<span class="sort-arrow">${metaSortDir === -1 ? ' ↓' : ' ↑'}</span>` : '';
+    return `<button class="sort-btn${active?' active':''}" onclick="setMetaSort('${b.key}')">${b.label}${arrow}</button>`;
+  }).join('');
+
+  let html = summaryHtml;
+  html += `<div class="sort-bar"><span class="sort-bar-label">Sort by</span>${sortBtns}</div>`;
+  html += `<div class="section-title">Master Board — All Tamil Ads · ${metaAds.length} ads · ranked by ${sortLabel} ${metaSortDir === -1 ? '▼' : '▲'}</div>`;
+  html += metaBoard(metaAds, true);
 
   const showMap = {};
   for (const a of metaAds) {
     const key = a.show || '(untagged)';
-    if (!showMap[key]) showMap[key] = { show: key, spend: 0, ads: 0, sesSum: 0, hookSum: 0, ctrSum: 0, fatigued: 0 };
+    if (!showMap[key]) showMap[key] = { spend: 0, ads: [] };
     showMap[key].spend += a.spend;
-    showMap[key].ads += 1;
-    showMap[key].sesSum += a.ses;
-    showMap[key].hookSum += a.hookRate;
-    showMap[key].ctrSum += a.ctr;
-    if (a.fatigue) showMap[key].fatigued += 1;
+    showMap[key].ads.push(a);
   }
-  const shows = Object.values(showMap).sort((a, b) => b.spend - a.spend);
-
-  const leaderHtml = `
-    <div class="meta-section-title">Show Leaderboard</div>
-    <div style="overflow-x:auto;margin-bottom:24px;">
-    <table class="meta-table">
-      <thead><tr>
-        <th>Show</th><th>Ads</th><th>Spend</th>
-        <th>Avg SES</th><th>Avg Hook</th><th>Avg CTR</th><th>Fatigued</th>
-      </tr></thead>
-      <tbody>
-        ${shows.map(s => {
-          const avgSes = Math.round(s.sesSum / s.ads);
-          const avgHook = (s.hookSum / s.ads).toFixed(1);
-          const avgCtr  = (s.ctrSum  / s.ads).toFixed(2);
-          return `<tr>
-            <td style="font-weight:600;color:#e5e7eb;white-space:nowrap;">${s.show}</td>
-            <td style="color:#9ca3af;">${s.ads}</td>
-            <td style="color:#34d399;white-space:nowrap;">₹${(s.spend/1e5).toFixed(1)}L</td>
-            <td><span class="ses-pill ${sesClass(avgSes)}">${avgSes}</span></td>
-            <td style="color:${parseFloat(avgHook)>=metaBenchmarks.hook?'#4ade80':'#f87171'};">${avgHook}%</td>
-            <td style="color:${parseFloat(avgCtr)>=metaBenchmarks.ctr?'#4ade80':'#f87171'};">${avgCtr}%</td>
-            <td style="color:${s.fatigued>0?'#f87171':'#374151'};">${s.fatigued>0?'⚠ '+s.fatigued:'—'}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    </div>
-  `;
-
-  const sortedAds = [...metaAds].sort((a, b) => {
-    const av = a[metaSortKey] ?? 0, bv = b[metaSortKey] ?? 0;
-    return metaSortDir * (bv - av);
+  Object.entries(showMap).sort((a, b) => b[1].spend - a[1].spend).forEach(([showName, data]) => {
+    html += `<div class="show-section">
+      <div class="show-title">
+        <span class="show-badge">${showName}</span>
+        <span class="script-count">· ${data.ads.length} ads &nbsp;·&nbsp; ₹${(data.spend/1e5).toFixed(1)}L</span>
+      </div>
+      ${metaBoard(data.ads, false)}
+    </div>`;
   });
 
-  const sortBtns = [
-    { key:'ses',       label:'SES Score'  },
-    { key:'hookRate',  label:'Hook Rate'  },
-    { key:'spend',     label:'Spend'      },
-    { key:'ctr',       label:'CTR'        },
-    { key:'thruplRate',label:'Thruplay'   },
-  ].map(b =>
-    `<button class="meta-sort-btn${metaSortKey===b.key?' active':''}"
-       onclick="setMetaSort('${b.key}')">${b.label}</button>`
-  ).join('');
-
-  const creativeHtml = `
-    <div class="meta-section-title">Creative Intelligence — All Ads</div>
-    <div class="meta-sort-bar">
-      <span style="font-size:11px;color:#4b5563;margin-right:2px;">Sort by</span>
-      ${sortBtns}
-    </div>
-    <div style="overflow-x:auto;">
-    <table class="meta-table">
-      <thead><tr>
-        <th>Show</th><th>Script</th><th>Lang</th>
-        <th>Spend</th><th>CTR</th><th>Hook%</th><th>Thruplay%</th><th>CPM</th>
-        <th>SES</th><th>Fatigue</th>
-      </tr></thead>
-      <tbody>
-        ${sortedAds.map(a => {
-          const sc = a.script.length > 38 ? a.script.slice(0,38)+'…' : a.script;
-          return `<tr title="${a.script}">
-            <td style="font-weight:600;color:#e5e7eb;white-space:nowrap;">${a.show}</td>
-            <td style="color:#d1d5db;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${sc}</td>
-            <td><span class="meta-lang-tag">${a.language||'—'}</span></td>
-            <td style="color:#34d399;white-space:nowrap;">₹${Math.round(a.spend/1000)}k</td>
-            <td style="color:${a.ctr>=metaBenchmarks.ctr?'#4ade80':'#f87171'};">${a.ctr}%</td>
-            <td style="color:${a.hookRate>=metaBenchmarks.hook?'#4ade80':'#f87171'};">${a.hookRate}%</td>
-            <td style="color:${a.thruplRate>=metaBenchmarks.thruplay?'#4ade80':'#f87171'};">${a.thruplRate}%</td>
-            <td style="color:${a.cpm<=metaBenchmarks.cpm?'#4ade80':'#f87171'};">₹${a.cpm}</td>
-            <td><span class="ses-pill ${sesClass(a.ses)}">${a.ses}</span></td>
-            <td>${a.fatigue?'<span style="color:#f87171;font-size:11px;">⚠ Fatigue</span>':'<span style="color:#374151;font-size:11px;">OK</span>'}</td>
-          </tr>`;
-        }).join('')}
-      </tbody>
-    </table>
-    </div>
-  `;
-
-  document.getElementById('meta-app').innerHTML = summaryHtml + leaderHtml + creativeHtml;
+  document.getElementById('meta-app').innerHTML = html;
 }
 
 function setMetaSort(key) {
