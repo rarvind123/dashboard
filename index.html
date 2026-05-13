@@ -942,6 +942,96 @@
     .sm-emotion-tag.drama    { background: #4c1d95; color: #c4b5fd; }
     .sm-emotion-tag.all      { background: #1f2937; color: #9ca3af; }
     @media (max-width: 900px) { .sm-grid { grid-template-columns: 1fr; } }
+
+    /* ─── Meta Creative Intel ─── */
+    .meta-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .meta-stat {
+      background: #13171f;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .meta-stat-val {
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+    .meta-stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .meta-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #9ca3af;
+      margin: 20px 0 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #1f2937;
+    }
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .meta-table th {
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: #6b7280;
+      border-bottom: 1px solid #1f2937;
+      white-space: nowrap;
+    }
+    .meta-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #111827;
+      vertical-align: middle;
+    }
+    .meta-table tr:hover td { background: #131720; }
+    .ses-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 38px;
+      text-align: center;
+    }
+    .ses-green  { background: #14532d; color: #4ade80; }
+    .ses-blue   { background: #1e3a5f; color: #93c5fd; }
+    .ses-yellow { background: #78350f; color: #fcd34d; }
+    .ses-red    { background: #7f1d1d; color: #fca5a5; }
+    .meta-lang-tag {
+      font-size: 9px; font-weight: 600; padding: 1px 5px;
+      border-radius: 3px; letter-spacing: 0.4px;
+      background: #1e293b; color: #94a3b8;
+    }
+    .meta-sort-bar {
+      display: flex; gap: 6px; margin-bottom: 12px; align-items: center;
+      flex-wrap: wrap;
+    }
+    .meta-sort-btn {
+      padding: 5px 12px; font-size: 11px; font-weight: 600;
+      border-radius: 5px; border: 1px solid #1f2937;
+      background: #13171f; color: #6b7280; cursor: pointer;
+      transition: all 0.15s;
+    }
+    .meta-sort-btn:hover { color: #d1d5db; }
+    .meta-sort-btn.active { background: #1e3a5f; border-color: #3b82f6; color: #93c5fd; }
   </style>
 </head>
 <body>
@@ -989,6 +1079,7 @@
     <button class="tab-btn"        onclick="switchTab('powerstarts',this)">⚡ Trending Powerstarts</button>
     <button class="tab-btn"        onclick="switchTab('microdramas',this)">🎬 Microdrama Powerstarts</button>
     <button class="tab-btn"        onclick="switchTab('social',this)">📱 Social Media Powerstarts</button>
+    <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
   </div>
 </div>
 
@@ -1077,6 +1168,13 @@
 
 <div id="tab-social" class="tab-pane">
   <div id="social-app"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     TAB 9 — META CREATIVE INTEL
+══════════════════════════════════════════════ -->
+<div id="tab-meta" class="tab-pane">
+  <div id="meta-app"></div>
 </div>
 
 
@@ -2602,6 +2700,209 @@ renderSocialPowerstarts();
 
 document.getElementById('last-updated').textContent =
   new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB 9: META CREATIVE INTEL
+// ═══════════════════════════════════════════════
+const metaAds = [
+  {"id":"120241911202400607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Market PS + An Unknown Call","format":"FALSE","lead":"Ramoon","spend":423571,"impressions":5890253,"ctr":0.91,"cpm":71.91,"cpc":7.94,"frequency":2.78,"activations":68,"hookRate":36.4,"thruplRate":12.5,"completionRate":0.58,"actPerMille":0.012,"normCpi":10.99,"ses":100.0,"fatigue":true},
+  {"id":"120241819770850607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"Tiger Returns_Mehenga Returns ADP","format":"LA","lead":"Fast Track","spend":391016,"impressions":5536253,"ctr":1.05,"cpm":70.63,"cpc":6.69,"frequency":2.61,"activations":49,"hookRate":31.4,"thruplRate":10.5,"completionRate":0.66,"actPerMille":0.009,"normCpi":8.03,"ses":100.0,"fatigue":true},
+  {"id":"120241874129250607","account":"India Regional","show":"KING","language":"Tamil","campaignType":"Scaling - CPS","script":"Harish Master Play LA V4 PS98","format":"LA","lead":"LA POD/Dhivya","spend":301444,"impressions":4601815,"ctr":1.14,"cpm":65.51,"cpc":5.75,"frequency":2.35,"activations":21,"hookRate":38.3,"thruplRate":14.6,"completionRate":1.0,"actPerMille":0.005,"normCpi":6.36,"ses":100.0,"fatigue":false},
+  {"id":"120242814634790607","account":"India Regional","show":"Indrajith - The Divine Warrior","language":"Tamil","campaignType":"Scaling - CPS","script":"Book opn PKI 1+SOF","format":"Mix of All","lead":"Vignesh, Kebason","spend":235479,"impressions":2617453,"ctr":9.91,"cpm":89.96,"cpc":0.91,"frequency":2.93,"activations":122,"hookRate":61.3,"thruplRate":36.2,"completionRate":42.0,"actPerMille":0.047,"normCpi":0.12,"ses":100.0,"fatigue":true},
+  {"id":"120241874129260607","account":"India Regional","show":"KING","language":"Tamil","campaignType":"Scaling - CPS","script":"RISING PS + Harish character Promo","format":"LA","lead":"Radha","spend":216730,"impressions":3689856,"ctr":0.95,"cpm":58.74,"cpc":6.18,"frequency":1.8,"activations":14,"hookRate":34.5,"thruplRate":10.0,"completionRate":1.83,"actPerMille":0.004,"normCpi":8.2,"ses":100.0,"fatigue":false},
+  {"id":"120241819852900607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"Missing ( OMP Version 6)","format":"Gen AI LA","lead":"Harish/Sharath","spend":190655,"impressions":1805609,"ctr":1.59,"cpm":105.59,"cpc":6.65,"frequency":2.0,"activations":30,"hookRate":54.4,"thruplRate":21.7,"completionRate":1.25,"actPerMille":0.017,"normCpi":5.27,"ses":100.0,"fatigue":false},
+  {"id":"120241911202300607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Mehenga Restaurant LA + Scandal 2 Ps","format":"LA","lead":"Gauri/LA POD","spend":181560,"impressions":5134437,"ctr":0.98,"cpm":35.36,"cpc":3.59,"frequency":1.74,"activations":3,"hookRate":33.5,"thruplRate":11.6,"completionRate":0.65,"actPerMille":0.001,"normCpi":4.62,"ses":100.0,"fatigue":false},
+  {"id":"120241819770780607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"LA_TROT Gareeb Karodpati FT9","format":"LA","lead":"Radha/Bharath","spend":160411,"impressions":1672763,"ctr":1.11,"cpm":95.9,"cpc":8.66,"frequency":2.45,"activations":28,"hookRate":41.2,"thruplRate":14.3,"completionRate":0.91,"actPerMille":0.017,"normCpi":9.83,"ses":100.0,"fatigue":false},
+  {"id":"120241820985840607","account":"India Regional","show":"Samrat - The Lord of Dragons","language":"Telugu","campaignType":"Scaling - CPS","script":"BKR HINDI ALT OPNG PS (15:25)","format":"Gen AI LA","lead":"Radha","spend":149188,"impressions":2247376,"ctr":0.86,"cpm":66.38,"cpc":7.68,"frequency":2.14,"activations":38,"hookRate":23.0,"thruplRate":7.7,"completionRate":0.25,"actPerMille":0.017,"normCpi":11.25,"ses":89.6,"fatigue":false},
+  {"id":"120241712508030607","account":"India Regional","show":"Samrat - The Lord of Dragons","language":"Telugu","campaignType":"Scaling - CPS","script":"BKR HINDI ALT OPNG PS (15:25) v2","format":"Gen AI LA","lead":"Radha","spend":133757,"impressions":1406729,"ctr":0.69,"cpm":95.08,"cpc":13.86,"frequency":1.87,"activations":29,"hookRate":18.0,"thruplRate":5.9,"completionRate":0.14,"actPerMille":0.021,"normCpi":25.31,"ses":68.2,"fatigue":false},
+  {"id":"120241874129280607","account":"India Regional","show":"KING","language":"Tamil","campaignType":"Scaling - CPS","script":"Harish Master Play LA V4 PS55","format":"LA","lead":"LA POD/Dhivya","spend":124226,"impressions":2075192,"ctr":1.24,"cpm":59.86,"cpc":4.82,"frequency":1.96,"activations":22,"hookRate":33.3,"thruplRate":14.6,"completionRate":0.86,"actPerMille":0.011,"normCpi":4.9,"ses":100.0,"fatigue":false},
+  {"id":"120242616190050607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"After Divorce - Vidakulu + LA","format":"LA","lead":"GAREEBKARODPATI_KIRAN","spend":124176,"impressions":797398,"ctr":0.9,"cpm":155.73,"cpc":17.3,"frequency":1.96,"activations":125,"hookRate":22.5,"thruplRate":6.3,"completionRate":0.2,"actPerMille":0.157,"normCpi":24.22,"ses":64.0,"fatigue":false},
+  {"id":"120242670515160607","account":"India Regional","show":"Samrat - The Lord of Dragons","language":"Telugu","campaignType":"Scaling - CPS","script":"choosen dragon ps-1 (18:13)","format":"FALSE","lead":"Siddharth","spend":113535,"impressions":1967777,"ctr":0.27,"cpm":57.7,"cpc":21.04,"frequency":2.24,"activations":35,"hookRate":10.2,"thruplRate":2.8,"completionRate":0.05,"actPerMille":0.018,"normCpi":98.19,"ses":50.6,"fatigue":false},
+  {"id":"120241911202450607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Mehenga Restaurant LA + Marriage Ps","format":"LA","lead":"Gauri/LA POD","spend":99798,"impressions":1633899,"ctr":1.11,"cpm":61.08,"cpc":5.48,"frequency":1.71,"activations":4,"hookRate":37.2,"thruplRate":9.2,"completionRate":0.74,"actPerMille":0.002,"normCpi":6.22,"ses":100.0,"fatigue":false},
+  {"id":"120241911202330607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Dahaad LA match + hindi opn","format":"LA","lead":"Gauri","spend":90704,"impressions":1127453,"ctr":0.99,"cpm":80.45,"cpc":8.14,"frequency":2.04,"activations":22,"hookRate":38.6,"thruplRate":14.1,"completionRate":0.37,"actPerMille":0.02,"normCpi":10.36,"ses":100.0,"fatigue":false},
+  {"id":"120242481094690607","account":"India Regional","show":"Indrajith - The Divine Warrior","language":"Tamil","campaignType":"Scaling - CPS","script":"Another Round Without PS","format":"Mix of All","lead":"Vignesh","spend":90478,"impressions":1727671,"ctr":1.24,"cpm":52.37,"cpc":4.23,"frequency":1.66,"activations":58,"hookRate":12.8,"thruplRate":5.8,"completionRate":0.06,"actPerMille":0.034,"normCpi":4.3,"ses":86.3,"fatigue":false},
+  {"id":"120243178732250607","account":"India Regional","show":"Yodha","language":"Telugu","campaignType":"Scaling - CPS","script":"Shouryam - (Sahapam - Hybrid) 09:08","format":"LA Match","lead":"Harish/Sharath","spend":85265,"impressions":723207,"ctr":1.22,"cpm":117.9,"cpc":9.65,"frequency":1.75,"activations":17,"hookRate":17.7,"thruplRate":4.5,"completionRate":0.22,"actPerMille":0.024,"normCpi":9.97,"ses":70.9,"fatigue":false},
+  {"id":"120240703043440607","account":"India Regional","show":"Indrajith - The Divine Warrior","language":"Tamil","campaignType":"Scaling - CPS","script":"Paison Ka Inaam - Rukmini PS","format":"Gen AI LA","lead":"Radha/Sushma","spend":84831,"impressions":765335,"ctr":0.57,"cpm":110.84,"cpc":19.36,"frequency":1.57,"activations":27,"hookRate":20.4,"thruplRate":5.5,"completionRate":0.19,"actPerMille":0.035,"normCpi":42.8,"ses":62.7,"fatigue":false},
+  {"id":"120241510716100607","account":"India Regional","show":"Brahmayodha - The Divine Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Babbar PS2 (11:08)","format":"Gen AI LA","lead":"Radha","spend":82649,"impressions":789812,"ctr":1.89,"cpm":104.64,"cpc":5.52,"frequency":2.01,"activations":41,"hookRate":13.7,"thruplRate":4.4,"completionRate":0.08,"actPerMille":0.052,"normCpi":3.68,"ses":85.7,"fatigue":false},
+  {"id":"120242138599730607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"KICK - ALT EDIT V7","format":"Gen AI LA","lead":"Dinesh Kumar","spend":82309,"impressions":1339124,"ctr":0.46,"cpm":61.47,"cpc":13.27,"frequency":2.55,"activations":99,"hookRate":15.0,"thruplRate":5.5,"completionRate":0.25,"actPerMille":0.074,"normCpi":36.35,"ses":66.8,"fatigue":true},
+  {"id":"120243696053460607","account":"India Regional","show":"Supreme Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Gen AI - InApp Version 1 - 13:00 Min","format":"Gen AI LA","lead":"Siddharth","spend":82215,"impressions":1237940,"ctr":0.44,"cpm":66.41,"cpc":15.09,"frequency":1.88,"activations":17,"hookRate":34.7,"thruplRate":8.5,"completionRate":0.16,"actPerMille":0.014,"normCpi":43.21,"ses":93.7,"fatigue":false},
+  {"id":"120241911202270607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Dahaad LA 10Mins FT Version 03","format":"LA","lead":"Gauri","spend":80518,"impressions":936351,"ctr":0.82,"cpm":85.99,"cpc":10.5,"frequency":1.79,"activations":4,"hookRate":40.0,"thruplRate":17.6,"completionRate":0.33,"actPerMille":0.004,"normCpi":16.13,"ses":100.0,"fatigue":false},
+  {"id":"120243706627740607","account":"India Regional","show":"Mahakaaviyam","language":"Tamil","campaignType":"Scaling - CPS","script":"Honey trap Gen AI LA (1-1) 12mins V11","format":"Mix of All","lead":"Radha","spend":79944,"impressions":1019340,"ctr":0.69,"cpm":78.43,"cpc":11.32,"frequency":2.21,"activations":5,"hookRate":15.8,"thruplRate":3.2,"completionRate":0.08,"actPerMille":0.005,"normCpi":20.67,"ses":62.3,"fatigue":false},
+  {"id":"120241819770820607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"Vidaakulu (Triangle Story)","format":"LA","lead":"Suresh","spend":79084,"impressions":827708,"ctr":1.61,"cpm":95.55,"cpc":5.95,"frequency":1.98,"activations":9,"hookRate":41.0,"thruplRate":19.4,"completionRate":0.95,"actPerMille":0.011,"normCpi":4.66,"ses":100.0,"fatigue":false},
+  {"id":"120242678898240607","account":"India Regional","show":"Indrajith - The Divine Warrior","language":"Tamil","campaignType":"Scaling - CPS","script":"PKI with PS+SOF+TFN 50MINS","format":"Mix of All","lead":"Vignesh","spend":76012,"impressions":2049601,"ctr":3.29,"cpm":37.09,"cpc":1.13,"frequency":2.36,"activations":6,"hookRate":4.6,"thruplRate":0.7,"completionRate":0.01,"actPerMille":0.003,"normCpi":0.43,"ses":81.7,"fatigue":false},
+  {"id":"120243184739790607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"Tiger Returns_Mehenga Returns FT","format":"LA","lead":"Radha/Kiran","spend":75033,"impressions":776898,"ctr":0.53,"cpm":96.58,"cpc":18.26,"frequency":1.88,"activations":55,"hookRate":19.1,"thruplRate":5.3,"completionRate":0.17,"actPerMille":0.071,"normCpi":43.41,"ses":63.4,"fatigue":false},
+  {"id":"120241911202420607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"House maid PS + An Unknown Call","format":"FALSE","lead":"Ramoon","spend":74664,"impressions":941862,"ctr":0.8,"cpm":79.27,"cpc":9.9,"frequency":1.78,"activations":9,"hookRate":33.9,"thruplRate":7.9,"completionRate":0.32,"actPerMille":0.01,"normCpi":15.59,"ses":96.6,"fatigue":false},
+  {"id":"120243202932320607","account":"India Regional","show":"Indrajith - The Divine Warrior","language":"Tamil","campaignType":"Scaling - CPS","script":"Paison Ka Inaam - Screen to Script ALT","format":"Gen AI LA","lead":"Radha","spend":71873,"impressions":1262806,"ctr":0.36,"cpm":56.92,"cpc":15.67,"frequency":1.53,"activations":21,"hookRate":16.0,"thruplRate":4.5,"completionRate":0.08,"actPerMille":0.017,"normCpi":54.84,"ses":63.7,"fatigue":false},
+  {"id":"120241874129290607","account":"India Regional","show":"KING","language":"Tamil","campaignType":"Scaling - CPS","script":"Harish Master Play LA V4 PS85","format":"LA","lead":"LA POD/Dhivya","spend":71680,"impressions":1041634,"ctr":0.9,"cpm":68.81,"cpc":7.63,"frequency":2.01,"activations":10,"hookRate":35.1,"thruplRate":13.2,"completionRate":0.47,"actPerMille":0.01,"normCpi":10.68,"ses":100.0,"fatigue":false},
+  {"id":"120241819770860607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"Husband (Mehanga Alt Open + Mafia PS)","format":"LA Match","lead":"Radha/Harish","spend":70400,"impressions":566602,"ctr":1.6,"cpm":124.25,"cpc":7.75,"frequency":1.79,"activations":14,"hookRate":41.0,"thruplRate":13.7,"completionRate":1.59,"actPerMille":0.025,"normCpi":6.1,"ses":100.0,"fatigue":false},
+  {"id":"120240957258540607","account":"India Regional","show":"Brahmayodha - The Divine Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Paiso ka inam-Trimmed (8.30)","format":"Gen AI LA","lead":"Radha","spend":68085,"impressions":416313,"ctr":0.71,"cpm":163.54,"cpc":22.91,"frequency":1.82,"activations":44,"hookRate":30.0,"thruplRate":8.9,"completionRate":0.31,"actPerMille":0.106,"normCpi":40.66,"ses":72.9,"fatigue":false},
+  {"id":"120242933059190607","account":"India Regional","show":"Mahakaaviyam","language":"Tamil","campaignType":"Scaling - CPS","script":"Honey trap Gen AI LA Full Version","format":"Gen AI LA","lead":"Arunachalam","spend":67001,"impressions":821106,"ctr":0.51,"cpm":81.6,"cpc":15.97,"frequency":1.58,"activations":9,"hookRate":28.9,"thruplRate":10.6,"completionRate":0.3,"actPerMille":0.011,"normCpi":39.46,"ses":91.8,"fatigue":false},
+  {"id":"120241911202370607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Mehanga Restaurant + Roshomon Promo + Biding Ps","format":"LA","lead":"Gauri/LA POD","spend":66734,"impressions":770222,"ctr":1.17,"cpm":86.64,"cpc":7.42,"frequency":1.73,"activations":6,"hookRate":33.3,"thruplRate":15.1,"completionRate":2.07,"actPerMille":0.008,"normCpi":7.99,"ses":100.0,"fatigue":false},
+  {"id":"120242302884830607","account":"India Regional","show":"Ki.pi. 2500","language":"Tamil","campaignType":"Scaling - CPS","script":"Mother's Trick V2","format":"AI","lead":"Viviyan","spend":65464,"impressions":1745911,"ctr":3.7,"cpm":37.5,"cpc":1.01,"frequency":2.83,"activations":1,"hookRate":2.7,"thruplRate":0.5,"completionRate":0.0,"actPerMille":0.001,"normCpi":0.34,"ses":79.2,"fatigue":true},
+  {"id":"120214089730360607","account":"India Regional","show":"KING (legacy)","language":"Tamil","campaignType":"Scaling - CPS","script":"LA KING Security JOB Suresh (4.27)","format":"LA","lead":"Bharath","spend":64452,"impressions":680022,"ctr":0.74,"cpm":94.78,"cpc":12.8,"frequency":2.29,"activations":40,"hookRate":20.2,"thruplRate":8.0,"completionRate":0.22,"actPerMille":0.059,"normCpi":21.79,"ses":77.7,"fatigue":false},
+  {"id":"120242478489510607","account":"India Regional","show":"Vaal Veesum Karikala","language":"Tamil","campaignType":"Scaling - CPS","script":"Family PS + VVK FDR 2 HR","format":"Gen AI LA","lead":"Manikandan B","spend":63884,"impressions":1176472,"ctr":0.38,"cpm":54.3,"cpc":14.38,"frequency":1.69,"activations":8,"hookRate":19.0,"thruplRate":3.6,"completionRate":0.05,"actPerMille":0.007,"normCpi":47.68,"ses":65.3,"fatigue":false},
+  {"id":"120240992347470607","account":"India Regional","show":"Dhruva Ad2500","language":"Telugu","campaignType":"Scaling - CPS","script":"Gossip PS + RDK 3in1 - Gen AI LA","format":"Gen AI LA","lead":"Radha","spend":63409,"impressions":557854,"ctr":0.43,"cpm":113.67,"cpc":26.51,"frequency":2.28,"activations":17,"hookRate":12.6,"thruplRate":4.1,"completionRate":0.05,"actPerMille":0.03,"normCpi":77.68,"ses":46.8,"fatigue":false},
+  {"id":"120238902144630607","account":"India Regional","show":"KING","language":"Tamil","campaignType":"Scaling - ROAS","script":"RISING PS + Harish character Promo (ROAS)","format":"LA","lead":"Radha","spend":63168,"impressions":497955,"ctr":0.45,"cpm":126.86,"cpc":28.12,"frequency":2.62,"activations":17,"hookRate":15.7,"thruplRate":3.0,"completionRate":0.3,"actPerMille":0.034,"normCpi":78.74,"ses":44.0,"fatigue":true},
+  {"id":"120241284396630607","account":"India Regional","show":"Brahmayodha - The Divine Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Teen-Fan - Snake Help Opening","format":"Gen AI LA","lead":"Radha","spend":61824,"impressions":916015,"ctr":0.42,"cpm":67.49,"cpc":16.0,"frequency":1.55,"activations":26,"hookRate":18.9,"thruplRate":8.1,"completionRate":0.05,"actPerMille":0.028,"normCpi":48.0,"ses":75.8,"fatigue":false},
+  {"id":"120243186945970607","account":"India Regional","show":"Vishwa Vijetha","language":"Telugu","campaignType":"Scaling - CPS","script":"FPS8 + Simha Swapnam - Shackles GenAI","format":"Gen AI LA","lead":"Radha","spend":60757,"impressions":537217,"ctr":0.69,"cpm":113.1,"cpc":16.29,"frequency":1.62,"activations":30,"hookRate":22.9,"thruplRate":6.1,"completionRate":0.24,"actPerMille":0.056,"normCpi":29.75,"ses":69.3,"fatigue":false},
+  {"id":"120242332842530607","account":"India Regional","show":"Vaal Veesum Karikala","language":"Tamil","campaignType":"Scaling - CPS","script":"Super dragon - Telugu Adaptation V1","format":"Gen AI LA","lead":"Viviyan","spend":60428,"impressions":1047764,"ctr":2.55,"cpm":57.67,"cpc":2.26,"frequency":1.97,"activations":14,"hookRate":6.4,"thruplRate":1.9,"completionRate":0.04,"actPerMille":0.013,"normCpi":1.12,"ses":82.7,"fatigue":false},
+  {"id":"120242140762470607","account":"India Regional","show":"Cult - The Teenage Ruler","language":"Tamil","campaignType":"Scaling - CPS","script":"Cult V0 - Testing + Ps 2","format":"AI","lead":"Pandian/Arvind","spend":59514,"impressions":1204615,"ctr":3.94,"cpm":49.41,"cpc":1.25,"frequency":2.2,"activations":3,"hookRate":3.7,"thruplRate":0.8,"completionRate":0.0,"actPerMille":0.002,"normCpi":0.4,"ses":78.9,"fatigue":false},
+  {"id":"120241911202410607","account":"India Regional","show":"Tiger Returns","language":"Tamil","campaignType":"Scaling - CPS","script":"Mehenga Restaurant LA + 1000 Crore Richman Ps","format":"LA","lead":"Gauri/LA POD","spend":58666,"impressions":1135747,"ctr":1.03,"cpm":51.65,"cpc":5.0,"frequency":1.52,"activations":2,"hookRate":34.4,"thruplRate":9.7,"completionRate":0.89,"actPerMille":0.002,"normCpi":6.12,"ses":100.0,"fatigue":false},
+  {"id":"120241819852770607","account":"India Regional","show":"Tiger Returns","language":"Telugu","campaignType":"Scaling - CPS","script":"UNSEEN - OMP Version 7","format":"LA","lead":"Harish/Sharath","spend":57814,"impressions":629663,"ctr":1.04,"cpm":91.82,"cpc":8.85,"frequency":1.99,"activations":4,"hookRate":35.3,"thruplRate":19.4,"completionRate":0.56,"actPerMille":0.006,"normCpi":10.72,"ses":100.0,"fatigue":false},
+  {"id":"120242479855920607","account":"India Regional","show":"Vaal Veesum Karikala","language":"Tamil","campaignType":"Scaling - CPS","script":"Chosen Dragon PS 1 + VVK FDR 1 HR Base","format":"Gen AI LA","lead":"Manikandan B","spend":55568,"impressions":819009,"ctr":0.46,"cpm":67.85,"cpc":14.74,"frequency":2.3,"activations":41,"hookRate":17.8,"thruplRate":4.9,"completionRate":0.1,"actPerMille":0.05,"normCpi":40.37,"ses":66.4,"fatigue":false},
+  {"id":"120241283437960607","account":"India Regional","show":"Brahmayodha - The Divine Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Paiso Ka Inam - Rukmini Ps (6.44)","format":"FALSE","lead":"Radha","spend":54341,"impressions":513790,"ctr":0.52,"cpm":105.76,"cpc":20.33,"frequency":1.53,"activations":20,"hookRate":22.1,"thruplRate":7.1,"completionRate":0.17,"actPerMille":0.039,"normCpi":49.26,"ses":69.1,"fatigue":false},
+  {"id":"120238875334860607","account":"India Regional","show":"Por Kanda Singam","language":"Tamil","campaignType":"Scaling - CPS","script":"success pillar Gen LA new speed","format":"Gen AI LA","lead":"Sushma","spend":51728,"impressions":701957,"ctr":0.44,"cpm":73.69,"cpc":16.66,"frequency":1.7,"activations":9,"hookRate":14.6,"thruplRate":5.5,"completionRate":0.14,"actPerMille":0.013,"normCpi":47.71,"ses":62.9,"fatigue":false},
+  {"id":"120242939826290607","account":"India Regional","show":"Brahmayodha - The Divine Warrior","language":"Telugu","campaignType":"Scaling - CPS","script":"Soul PS1 Version 2","format":"Gen AI LA","lead":"Siddharth","spend":50905,"impressions":810892,"ctr":1.97,"cpm":62.78,"cpc":3.19,"frequency":2.0,"activations":6,"hookRate":6.8,"thruplRate":2.0,"completionRate":0.02,"actPerMille":0.007,"normCpi":2.04,"ses":82.2,"fatigue":false},
+  {"id":"120242924940570607","account":"India Regional","show":"Cult - The Teenage Ruler","language":"Tamil","campaignType":"Scaling - CPS","script":"Cult V0 - Testing + Ps 1","format":"AI","lead":"Pandian/Arvind","spend":50073,"impressions":2040240,"ctr":1.32,"cpm":24.54,"cpc":1.86,"frequency":2.33,"activations":2,"hookRate":3.1,"thruplRate":0.4,"completionRate":0.0,"actPerMille":0.001,"normCpi":1.78,"ses":65.7,"fatigue":false},
+  {"id":"120240259762960607","account":"India Regional","show":"Yodha","language":"Telugu","campaignType":"Scaling - CPS","script":"Genai-la-deadlinebreaker-kiran-psv4","format":"Gen AI LA","lead":"Radha/Kiran","spend":49894,"impressions":395665,"ctr":0.53,"cpm":126.1,"cpc":23.8,"frequency":6.24,"activations":0,"hookRate":13.5,"thruplRate":2.1,"completionRate":0.01,"actPerMille":0.0,"normCpi":56.58,"ses":41.2,"fatigue":true},
+];
+
+const metaBenchmarks = {"ctr":1.26,"hook":24.73,"thruplay":8.67,"cpm":81.14};
+const metaSummary = {"totalSpend":5316914,"totalAds":50,"avgCtr":1.26,"avgHook":24.73,"avgThruplay":8.67,"avgCpm":81.14,"datePreset":"last_30d","fetchedAt":"13 May 2026, 10:00 AM IST"};
+
+let metaSortKey = 'ses';
+let metaSortDir = -1;
+
+function sesClass(v) {
+  return v >= 90 ? 'ses-green' : v >= 70 ? 'ses-blue' : v >= 50 ? 'ses-yellow' : 'ses-red';
+}
+
+function renderMetaIntel() {
+  const summaryHtml = `
+    <div class="meta-summary-grid">
+      <div class="meta-stat">
+        <div class="meta-stat-val">₹${(metaSummary.totalSpend/1e5).toFixed(1)}L</div>
+        <div class="meta-stat-label">Total Spend (30d)</div>
+      </div>
+      <div class="meta-stat">
+        <div class="meta-stat-val">${metaSummary.totalAds}</div>
+        <div class="meta-stat-label">Active Ads</div>
+      </div>
+      <div class="meta-stat">
+        <div class="meta-stat-val">${metaSummary.avgHook}%</div>
+        <div class="meta-stat-label">Avg Hook Rate</div>
+      </div>
+      <div class="meta-stat">
+        <div class="meta-stat-val">${metaSummary.avgCtr}%</div>
+        <div class="meta-stat-label">Avg CTR</div>
+      </div>
+      <div class="meta-stat">
+        <div class="meta-stat-val">${metaSummary.avgThruplay}%</div>
+        <div class="meta-stat-label">Avg Thruplay</div>
+      </div>
+      <div class="meta-stat">
+        <div class="meta-stat-val">₹${metaSummary.avgCpm}</div>
+        <div class="meta-stat-label">Avg CPM</div>
+      </div>
+    </div>
+    <div style="font-size:10px;color:#374151;margin-bottom:20px;">
+      Last refreshed: ${metaSummary.fetchedAt} &nbsp;·&nbsp; India Regional account &nbsp;·&nbsp;
+      <span style="color:#22c55e;">green</span> = above benchmark &nbsp;·&nbsp;
+      <span style="color:#f87171;">red</span> = below benchmark
+    </div>
+  `;
+
+  const showMap = {};
+  for (const a of metaAds) {
+    const key = a.show || '(untagged)';
+    if (!showMap[key]) showMap[key] = { show: key, spend: 0, ads: 0, sesSum: 0, hookSum: 0, ctrSum: 0, fatigued: 0 };
+    showMap[key].spend += a.spend;
+    showMap[key].ads += 1;
+    showMap[key].sesSum += a.ses;
+    showMap[key].hookSum += a.hookRate;
+    showMap[key].ctrSum += a.ctr;
+    if (a.fatigue) showMap[key].fatigued += 1;
+  }
+  const shows = Object.values(showMap).sort((a, b) => b.spend - a.spend);
+
+  const leaderHtml = `
+    <div class="meta-section-title">Show Leaderboard</div>
+    <div style="overflow-x:auto;margin-bottom:24px;">
+    <table class="meta-table">
+      <thead><tr>
+        <th>Show</th><th>Ads</th><th>Spend</th>
+        <th>Avg SES</th><th>Avg Hook</th><th>Avg CTR</th><th>Fatigued</th>
+      </tr></thead>
+      <tbody>
+        ${shows.map(s => {
+          const avgSes = Math.round(s.sesSum / s.ads);
+          const avgHook = (s.hookSum / s.ads).toFixed(1);
+          const avgCtr  = (s.ctrSum  / s.ads).toFixed(2);
+          return `<tr>
+            <td style="font-weight:600;color:#e5e7eb;white-space:nowrap;">${s.show}</td>
+            <td style="color:#9ca3af;">${s.ads}</td>
+            <td style="color:#34d399;white-space:nowrap;">₹${(s.spend/1e5).toFixed(1)}L</td>
+            <td><span class="ses-pill ${sesClass(avgSes)}">${avgSes}</span></td>
+            <td style="color:${parseFloat(avgHook)>=metaBenchmarks.hook?'#4ade80':'#f87171'};">${avgHook}%</td>
+            <td style="color:${parseFloat(avgCtr)>=metaBenchmarks.ctr?'#4ade80':'#f87171'};">${avgCtr}%</td>
+            <td style="color:${s.fatigued>0?'#f87171':'#374151'};">${s.fatigued>0?'⚠ '+s.fatigued:'—'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  const sortedAds = [...metaAds].sort((a, b) => {
+    const av = a[metaSortKey] ?? 0, bv = b[metaSortKey] ?? 0;
+    return metaSortDir * (bv - av);
+  });
+
+  const sortBtns = [
+    { key:'ses',       label:'SES Score'  },
+    { key:'hookRate',  label:'Hook Rate'  },
+    { key:'spend',     label:'Spend'      },
+    { key:'ctr',       label:'CTR'        },
+    { key:'thruplRate',label:'Thruplay'   },
+  ].map(b =>
+    `<button class="meta-sort-btn${metaSortKey===b.key?' active':''}"
+       onclick="setMetaSort('${b.key}')">${b.label}</button>`
+  ).join('');
+
+  const creativeHtml = `
+    <div class="meta-section-title">Creative Intelligence — All Ads</div>
+    <div class="meta-sort-bar">
+      <span style="font-size:11px;color:#4b5563;margin-right:2px;">Sort by</span>
+      ${sortBtns}
+    </div>
+    <div style="overflow-x:auto;">
+    <table class="meta-table">
+      <thead><tr>
+        <th>Show</th><th>Script</th><th>Lang</th>
+        <th>Spend</th><th>CTR</th><th>Hook%</th><th>Thruplay%</th><th>CPM</th>
+        <th>SES</th><th>Fatigue</th>
+      </tr></thead>
+      <tbody>
+        ${sortedAds.map(a => {
+          const sc = a.script.length > 38 ? a.script.slice(0,38)+'…' : a.script;
+          return `<tr title="${a.script}">
+            <td style="font-weight:600;color:#e5e7eb;white-space:nowrap;">${a.show}</td>
+            <td style="color:#d1d5db;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${sc}</td>
+            <td><span class="meta-lang-tag">${a.language||'—'}</span></td>
+            <td style="color:#34d399;white-space:nowrap;">₹${Math.round(a.spend/1000)}k</td>
+            <td style="color:${a.ctr>=metaBenchmarks.ctr?'#4ade80':'#f87171'};">${a.ctr}%</td>
+            <td style="color:${a.hookRate>=metaBenchmarks.hook?'#4ade80':'#f87171'};">${a.hookRate}%</td>
+            <td style="color:${a.thruplRate>=metaBenchmarks.thruplay?'#4ade80':'#f87171'};">${a.thruplRate}%</td>
+            <td style="color:${a.cpm<=metaBenchmarks.cpm?'#4ade80':'#f87171'};">₹${a.cpm}</td>
+            <td><span class="ses-pill ${sesClass(a.ses)}">${a.ses}</span></td>
+            <td>${a.fatigue?'<span style="color:#f87171;font-size:11px;">⚠ Fatigue</span>':'<span style="color:#374151;font-size:11px;">OK</span>'}</td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+    </div>
+  `;
+
+  document.getElementById('meta-app').innerHTML = summaryHtml + leaderHtml + creativeHtml;
+}
+
+function setMetaSort(key) {
+  if (metaSortKey === key) metaSortDir *= -1;
+  else { metaSortKey = key; metaSortDir = -1; }
+  renderMetaIntel();
+}
+
+renderMetaIntel();
 
 // ─── Fire tooltip ───────────────────────────────────────────────────────────
 (function() {

@@ -5,11 +5,11 @@ Runs automatically via GitHub Actions at 9:00 AM IST.
 
 What this updates:
   - Asset Pipeline tab  → pulls live status/dates from "Asset production pipeline" sheet
-  - Script metrics      → updates CPI, activation, playtime from "Script cracking status" sheet
-                          (fire tips and status labels are preserved from the HTML)
+  - Script metrics      → rebuilds scripts array from "Script cracking status" sheet
   - Trending Powerstarts   → Claude generates 10 fresh entries from real Indian news RSS
   - Microdrama Powerstarts → Claude generates 10 fresh entries from current Indian platforms
   - Social Media Formats   → Claude generates 8 fresh viral Tamil reel formats
+  - Meta Creative Intel → fetches Meta Graph API → computes Hook Rate, Thruplay, SES scores
   - newToday registry   → updated to today's date with all new IDs / titles
   - Timestamp           → last-updated header in the dashboard
 
@@ -17,6 +17,7 @@ Secrets required in GitHub Actions:
   - SHEET_ID            → Google Sheet ID
   - GOOGLE_CREDENTIALS  → Google service account JSON
   - ANTHROPIC_API_KEY   → Anthropic API key (for Claude content generation)
+  - META_ACCESS_TOKEN   → Meta long-lived user/system access token
 """
 
 import urllib.request, urllib.parse, csv, io, re, json, datetime, os
@@ -24,6 +25,7 @@ import xml.etree.ElementTree as ET
 
 SHEET_ID          = os.environ.get('SHEET_ID', '1LA12_fh6jiLY15awit6yi8UEF1iXycZOD84E3yPUG3Y')
 ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+META_ACCESS_TOKEN = os.environ.get('META_ACCESS_TOKEN', '')
 IST               = datetime.timezone(datetime.timedelta(hours=5, minutes=30))
 
 
@@ -577,6 +579,40 @@ def update_newtoday(html, ps_ids, md_titles):
 
 
 # ─────────────────────────────────────────────
+#  META CREATIVE INTEL
+# ─────────────────────────────────────────────
+
+def update_meta_analytics(html):
+    print('Fetching Meta Ads analytics...')
+    if not META_ACCESS_TOKEN:
+        print('  META_ACCESS_TOKEN not set — skipping')
+        return html
+    try:
+        import meta_analytics
+        meta_analytics.META_TOKEN = META_ACCESS_TOKEN
+        ads, benchmarks, summary = meta_analytics.generate_analytics_data('last_30d')
+        if not ads:
+            return html
+
+        html = replace_js_const(html, 'metaAds', js_array(ads))
+
+        bench_js   = json.dumps(benchmarks,  ensure_ascii=False)
+        summary_js = json.dumps(summary,     ensure_ascii=False)
+
+        html = re.sub(r'const metaBenchmarks\s*=\s*\{[^;]*\};',
+                      f'const metaBenchmarks = {bench_js};', html)
+        html = re.sub(r'const metaSummary\s*=\s*\{[^;]*\};',
+                      f'const metaSummary = {summary_js};', html)
+
+        print(f'  Meta: {len(ads)} ads · ₹{summary["totalSpend"]:,.0f} spend · '
+              f'Hook {summary["avgHook"]}% · Thruplay {summary["avgThruplay"]}%')
+    except Exception as e:
+        print(f'  Meta analytics FAILED: {e}')
+        import traceback; traceback.print_exc()
+    return html
+
+
+# ─────────────────────────────────────────────
 #  MAIN
 # ─────────────────────────────────────────────
 
@@ -594,15 +630,19 @@ def main():
     html = update_scripts_metrics(html)
     print()
 
+    # Meta Creative Intel
+    html = update_meta_analytics(html)
+    print()
+
     # AI-generated content sections
     print('Fetching news headlines for powerstarts...')
-    headlines   = fetch_news_headlines()
+    headlines    = fetch_news_headlines()
     print(f'  Total headlines: {len(headlines)}')
     print()
 
-    html, ps_ids   = update_powerstarts(html, headlines)
+    html, ps_ids    = update_powerstarts(html, headlines)
     html, md_titles = update_microdramas(html)
-    html           = update_social_formats(html)
+    html            = update_social_formats(html)
     print()
 
     # Registry + timestamp
