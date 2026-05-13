@@ -1698,8 +1698,9 @@ function perfBoard(dataSet, showTag) {
 
 function renderPerf() {
   const cfg = SORT_CONFIG[currentSort];
-  let html = `<div class="section-title">Testing Intelligence — All Shows · ${scripts.length} scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
-  html += perfBoard(scripts, true);
+  const top10 = sortedItems(scripts).slice(0, 10);
+  let html = `<div class="section-title">Testing Intelligence — Top 10 · ${scripts.length} total scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
+  html += perfBoard(top10, true);
   SHOWS.forEach(show => {
     const ss = scripts.filter(s => s.show === show.key);
     if (!ss.length) return;
