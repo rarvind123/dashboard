@@ -20,10 +20,11 @@ META_TOKEN    = os.environ.get('META_ACCESS_TOKEN', '')
 GRAPH_VERSION = 'v20.0'
 GRAPH_BASE    = f'https://graph.facebook.com/{GRAPH_VERSION}'
 
-# MCP-enabled accounts (India Regional + South Testing)
+# MCP-enabled accounts — account_id → (display_name, language_filter or None)
+# language_filter: if set, only include ads whose parsed language matches (case-insensitive)
 ACCOUNT_MAP = {
-    '1305834253717811': 'India Regional',
-    '377523938686478':  'South Testing',
+    '1305834253717811': ('India Regional', 'Tamil'),
+    '977245951121888':  ('South Testing',  'Tamil'),
 }
 
 # Fallback benchmarks — overwritten daily with live account averages
@@ -248,10 +249,15 @@ def generate_analytics_data(date_preset='last_30d'):
 
     # First pass: fetch raw data
     raw_all = []
-    for acc_id, acc_name in ACCOUNT_MAP.items():
-        print(f'  Fetching {acc_name}...')
+    for acc_id, (acc_name, lang_filter) in ACCOUNT_MAP.items():
+        print(f'  Fetching {acc_name}{" (Tamil only)" if lang_filter else ""}...')
         raw = fetch_ads_graph(acc_id, date_preset)
         print(f'    {len(raw)} raw ads received')
+        # Apply language filter if specified (match against parsed ad name)
+        if lang_filter:
+            raw = [e for e in raw
+                   if lang_filter.lower() in parse_ad_name(e.get('name', ''))['language'].lower()]
+            print(f'    {len(raw)} ads after {lang_filter} filter')
         raw_all.append((acc_name, raw))
 
     if not any(r for _, r in raw_all):
