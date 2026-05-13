@@ -3233,15 +3233,35 @@ const scalingAds = [
 ];
 
 // ─── Scaling Intel helpers ───────────────────────────────────────────────────
+// Real cost-per-install from Meta Ads Manager CSV (13 Apr – 12 May 2026)
+// Source: Amount Spent ÷ Mobile App Installs, show-level aggregate
+const SHOW_CPI = {
+  "Tiger Returns":    86,
+  "KING":             79,
+  "Indrajith":       129,
+  "Vaal Veesum":     204,
+  "Mahakaaviyam":    191,
+  "Cult":            288,
+  "Ki.pi. 2500":     224,
+  "Por Kanda Singam":200,
+  "Royal Varisu":    156,
+  "Agan":            218,
+};
+
+function getShowCpi(a) {
+  return SHOW_CPI[a.show] || null;
+}
+
 function scalingScore(a) {
-  const cpiS = Math.min(5000 / Math.max(a.cpi, 0.01) * 100, 100);
+  const realCpi = getShowCpi(a);
+  const cpiS = realCpi ? Math.min(150 / realCpi * 100, 100) : 0;
   const ctrS = Math.min(a.ctr / 1.0 * 100, 100);
   const actS = Math.min(a.activations / 50 * 100, 100);
   return Math.round(Math.min(cpiS * 0.40 + ctrS * 0.30 + actS * 0.30, 100) * 10) / 10;
 }
 
 const SCALING_SORT = {
-  cpi:         { fn: (a, b) => a.cpi - b.cpi,                  label: 'CPI',         dir: '▲' },
+  cpi:         { fn: (a, b) => (getShowCpi(a)||9999) - (getShowCpi(b)||9999), label: 'CPI', dir: '▲' },
   ctr:         { fn: (a, b) => b.ctr - a.ctr,                  label: 'CTR',         dir: '▼' },
   activations: { fn: (a, b) => b.activations - a.activations,  label: 'Activations', dir: '▼' },
   avgPlaytime: { fn: (a, b) => b.avgPlaytime - a.avgPlaytime,  label: 'Playtime',    dir: '▼' },
@@ -3266,7 +3286,8 @@ function scalingAdCard(a, rank, showTag) {
   const ptCls  = scalingSortKey === 'avgPlaytime' ? ' highlight' : '';
   const spCls  = scalingSortKey === 'spend'       ? ' highlight' : '';
   const nm     = a.script.length > 28 ? a.script.slice(0, 28) + '…' : a.script;
-  const cpiDisp = a.cpi >= 1000 ? '₹' + (a.cpi/1000).toFixed(1) + 'k' : '₹' + a.cpi;
+  const realCpi = getShowCpi(a);
+  const cpiDisp = realCpi ? '₹' + realCpi : '—';
   return `
     <div class="script-card">
       <div class="card-top">
@@ -3308,7 +3329,8 @@ function scalingBoard(dataSet, showTag) {
 function renderScalingIntel() {
   const totalSpend   = scalingAds.reduce((s, a) => s + a.spend, 0);
   const avgCtr       = (scalingAds.reduce((s, a) => s + a.ctr, 0) / scalingAds.length).toFixed(2);
-  const avgCpi       = Math.round(scalingAds.reduce((s, a) => s + a.cpi, 0) / scalingAds.length);
+  const cpiVals      = Object.values(SHOW_CPI);
+  const avgCpi       = Math.round(cpiVals.reduce((s, v) => s + v, 0) / cpiVals.length);
   const avgPt        = (scalingAds.reduce((s, a) => s + a.avgPlaytime, 0) / scalingAds.length).toFixed(0);
   const totalActs    = scalingAds.reduce((s, a) => s + a.activations, 0);
 
@@ -3317,14 +3339,14 @@ function renderScalingIntel() {
       <div class="meta-stat"><div class="meta-stat-val">₹${(totalSpend/1e5).toFixed(1)}L</div><div class="meta-stat-label">Total Spend (30d)</div></div>
       <div class="meta-stat"><div class="meta-stat-val">${scalingAds.length}</div><div class="meta-stat-label">Active Ads</div></div>
       <div class="meta-stat"><div class="meta-stat-val">${avgCtr}%</div><div class="meta-stat-label">Avg CTR</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">₹${(avgCpi/1000).toFixed(1)}k</div><div class="meta-stat-label">Avg CPI</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">₹${avgCpi}</div><div class="meta-stat-label">Avg CPI (install)</div></div>
       <div class="meta-stat"><div class="meta-stat-val">${fmtTime(Number(avgPt))}</div><div class="meta-stat-label">Avg Playtime</div></div>
       <div class="meta-stat"><div class="meta-stat-val">${totalActs}</div><div class="meta-stat-label">Total Activations</div></div>
     </div>
     <div style="font-size:10px;color:#374151;margin-bottom:20px;">
       Pocket FM India Regional · Tamil campaigns · 13 Apr – 12 May 2026 &nbsp;·&nbsp;
       Score = CPI 40% + CTR 30% + Activations 30% &nbsp;·&nbsp;
-      Playtime est. from thruplay rate &nbsp;·&nbsp;
+      CPI = cost per mobile install (from Ads Manager) &nbsp;·&nbsp; Playtime est. from thruplay rate &nbsp;·&nbsp;
       <span style="color:#22c55e;">Top Performer ≥80</span> &nbsp;·&nbsp;
       <span style="color:#93c5fd;">Scale Up ≥60</span> &nbsp;·&nbsp;
       <span style="color:#fcd34d;">Monitor ≥40</span> &nbsp;·&nbsp;
