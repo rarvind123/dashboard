@@ -1074,6 +1074,7 @@
   </div>
   <div class="tab-bar" id="subtabs-scripting">
     <button class="tab-btn active" onclick="switchTab('perf',this)">🧪 Testing Intel</button>
+    <button class="tab-btn"        onclick="switchTab('test',this)">📋 Test Data</button>
     <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
     <button class="tab-btn"        onclick="switchTab('pipe',this)">Asset Pipeline</button>
     <button class="tab-btn"        onclick="switchTab('inapp',this)">InApp Videos</button>
@@ -1182,6 +1183,10 @@
 ══════════════════════════════════════════════ -->
 <div id="tab-meta" class="tab-pane">
   <div id="meta-app"></div>
+</div>
+
+<div id="tab-test" class="tab-pane">
+  <div id="test-app"></div>
 </div>
 
 <div id="tab-scale" class="tab-pane">
@@ -3126,6 +3131,248 @@ function setMetaSort(key) {
 }
 
 renderMetaIntel();
+
+// ═══════════════════════════════════════════════
+//   DATA — TAB: TEST DATA (South Testing)
+//   Source: South Testing Ad-sets 13 Apr 2023 – 12 May 2026
+//   Top 15 per show by activation rate (min 5 installs)
+//   Activation = (activations / installs) × 100
+// ═══════════════════════════════════════════════
+const testAds = [
+  {"id":"indrajith-01","show":"Indrajith","script":"Son of fire Slowed","cpi":31.4,"activation":45.2,"spend":972.0,"installs":31,"impressions":49893},
+  {"id":"indrajith-02","show":"Indrajith","script":"Indrajith Paison Ka Inaam V16","cpi":67.0,"activation":35.7,"spend":939.0,"installs":14,"impressions":39562},
+  {"id":"indrajith-03","show":"Indrajith","script":"Son of fire +Saraayu Alt Ope","cpi":56.5,"activation":34.6,"spend":1468.0,"installs":26,"impressions":41653},
+  {"id":"indrajith-04","show":"Indrajith","script":"PKI - Rukmini PS & Princess PS In App 1:41 Hyper Long","cpi":86.2,"activation":33.3,"spend":1293.0,"installs":15,"impressions":52807},
+  {"id":"indrajith-05","show":"Indrajith","script":"Paison Ka Inaam V3 - GenAi - alternate Visual","cpi":50.0,"activation":32.6,"spend":2149.0,"installs":43,"impressions":81340},
+  {"id":"indrajith-06","show":"Indrajith","script":"Book opn PKI 1+SOF","cpi":56.4,"activation":32.4,"spend":1916.0,"installs":34,"impressions":78533},
+  {"id":"indrajith-07","show":"Indrajith","script":"SOF+ADC-45M","cpi":57.3,"activation":31.8,"spend":1260.0,"installs":22,"impressions":73603},
+  {"id":"indrajith-08","show":"Indrajith","script":"Indrajith Paison Ka Inaam V10","cpi":58.8,"activation":31.2,"spend":941.0,"installs":16,"impressions":28226},
+  {"id":"indrajith-09","show":"Indrajith","script":"History Of Indrajith","cpi":67.1,"activation":30.8,"spend":872.0,"installs":13,"impressions":33942},
+  {"id":"indrajith-10","show":"Indrajith","script":"Another Round Without PS+Caption 2","cpi":73.5,"activation":30.8,"spend":956.0,"installs":13,"impressions":71007},
+  {"id":"indrajith-11","show":"Indrajith","script":"Rukmini PS + PKI trim - Queen caption 6.41 mins","cpi":80.3,"activation":30.8,"spend":1044.0,"installs":13,"impressions":36388},
+  {"id":"indrajith-12","show":"Indrajith","script":"Seven Warriors - thama opng 19.33 mins long","cpi":40.7,"activation":28.6,"spend":285.0,"installs":7,"impressions":27952},
+  {"id":"indrajith-13","show":"Indrajith","script":"Son of fire Slowed Alt opn","cpi":46.3,"activation":28.6,"spend":972.0,"installs":21,"impressions":53865},
+  {"id":"indrajith-14","show":"Indrajith","script":"TFN+Shiva Abimanyu-super long-21.11 Mns","cpi":73.0,"activation":28.6,"spend":511.0,"installs":7,"impressions":36058},
+  {"id":"indrajith-15","show":"Indrajith","script":"SOF+Another Round ALT OPN (31.48)","cpi":100.3,"activation":28.6,"spend":1404.0,"installs":14,"impressions":76547},
+  {"id":"vvk-01","show":"VVK","script":"Family PS + Chosen Dragon (18)","cpi":133.0,"activation":50.0,"spend":1330.0,"installs":10,"impressions":81778},
+  {"id":"vvk-02","show":"VVK","script":"PS +Savior tamil adaptation","cpi":66.2,"activation":46.2,"spend":861.0,"installs":13,"impressions":42047},
+  {"id":"vvk-03","show":"VVK","script":"Chosen Dragon - Visuals change","cpi":33.9,"activation":40.8,"spend":1659.0,"installs":49,"impressions":102793},
+  {"id":"vvk-04","show":"VVK","script":"Chosen Dragon PS 1","cpi":53.3,"activation":38.5,"spend":1385.0,"installs":26,"impressions":70662},
+  {"id":"vvk-05","show":"VVK","script":"challenge Ps + Two Losers - 6 Mins","cpi":79.9,"activation":36.4,"spend":1758.0,"installs":22,"impressions":67132},
+  {"id":"vvk-06","show":"VVK","script":"Chosen Dragon PS 3","cpi":80.5,"activation":35.3,"spend":1369.0,"installs":17,"impressions":52189},
+  {"id":"vvk-07","show":"VVK","script":"Super dragon + Marma dragon V5","cpi":25.4,"activation":35.1,"spend":1955.0,"installs":77,"impressions":72958},
+  {"id":"vvk-08","show":"VVK","script":"Two Losers Together - SN - AI Voice","cpi":77.9,"activation":33.3,"spend":1403.0,"installs":18,"impressions":60735},
+  {"id":"vvk-09","show":"VVK","script":"Chosen Dragon Version 15","cpi":54.5,"activation":32.0,"spend":1364.0,"installs":25,"impressions":96781},
+  {"id":"vvk-10","show":"VVK","script":"Chosen Dragon PS 2","cpi":55.3,"activation":32.0,"spend":1383.0,"installs":25,"impressions":59647},
+  {"id":"vvk-11","show":"VVK","script":"Two Losers Together - Opening 3","cpi":74.0,"activation":31.6,"spend":1406.0,"installs":19,"impressions":70732},
+  {"id":"vvk-12","show":"VVK","script":"Savior tamil adaptation -speed version 1","cpi":46.6,"activation":29.8,"spend":2188.0,"installs":47,"impressions":78324},
+  {"id":"vvk-13","show":"VVK","script":"BKR DKR- BASE ASSET-1 (Single narration) v2","cpi":70.2,"activation":28.6,"spend":983.0,"installs":14,"impressions":52166},
+  {"id":"vvk-14","show":"VVK","script":"Two Losers - Amirtha Ps","cpi":81.4,"activation":27.8,"spend":1465.0,"installs":18,"impressions":61207},
+  {"id":"vvk-15","show":"VVK","script":"Chosen Dragon Version 19","cpi":73.1,"activation":26.3,"spend":1388.0,"installs":19,"impressions":73005},
+  {"id":"tiger-returns-01","show":"Tiger Returns","script":"Kick Extended V3","cpi":117.3,"activation":36.4,"spend":1291.0,"installs":11,"impressions":57124},
+  {"id":"tiger-returns-02","show":"Tiger Returns","script":"Nobody speed","cpi":36.1,"activation":32.5,"spend":1442.0,"installs":40,"impressions":47668},
+  {"id":"tiger-returns-03","show":"Tiger Returns","script":"who is sarva opening Time to Reveal","cpi":30.3,"activation":32.3,"spend":939.0,"installs":31,"impressions":37448},
+  {"id":"tiger-returns-04","show":"Tiger Returns","script":"Trot - Kick - war PS ALT OPENING 3","cpi":52.8,"activation":30.8,"spend":1373.0,"installs":26,"impressions":45489},
+  {"id":"tiger-returns-05","show":"Tiger Returns","script":"The Surprise PS V2","cpi":10.4,"activation":30.2,"spend":1305.0,"installs":126,"impressions":62594},
+  {"id":"tiger-returns-06","show":"Tiger Returns","script":"Trot - Kick - War PS","cpi":71.2,"activation":30.0,"spend":1424.0,"installs":20,"impressions":49341},
+  {"id":"tiger-returns-07","show":"Tiger Returns","script":"KICK - V4 Linear","cpi":32.1,"activation":29.2,"spend":2857.0,"installs":89,"impressions":91545},
+  {"id":"tiger-returns-08","show":"Tiger Returns","script":"Kick Extended V1","cpi":41.9,"activation":29.0,"spend":1298.0,"installs":31,"impressions":52591},
+  {"id":"tiger-returns-09","show":"Tiger Returns","script":"Casual meet opening Time to reveal","cpi":32.1,"activation":28.9,"spend":1220.0,"installs":38,"impressions":52328},
+  {"id":"tiger-returns-10","show":"Tiger Returns","script":"The Surprise PS V1","cpi":17.9,"activation":28.1,"spend":1148.0,"installs":64,"impressions":54009},
+  {"id":"tiger-returns-11","show":"Tiger Returns","script":"KICK - V3","cpi":28.8,"activation":28.0,"spend":2879.0,"installs":100,"impressions":116572},
+  {"id":"tiger-returns-12","show":"Tiger Returns","script":"Freind Opening Time to Reveal","cpi":29.7,"activation":27.3,"spend":1308.0,"installs":44,"impressions":46252},
+  {"id":"tiger-returns-13","show":"Tiger Returns","script":"Trot - TR - Hindi Adaptation","cpi":58.6,"activation":27.3,"spend":1288.0,"installs":22,"impressions":68313},
+  {"id":"tiger-returns-14","show":"Tiger Returns","script":"KICK - V2","cpi":24.4,"activation":27.1,"spend":2880.0,"installs":118,"impressions":99627},
+  {"id":"tiger-returns-15","show":"Tiger Returns","script":"KICK Direct dub V3","cpi":22.7,"activation":27.0,"spend":839.0,"installs":37,"impressions":36426},
+  {"id":"pks-01","show":"PKS","script":"Burning Hand","cpi":21.0,"activation":28.7,"spend":1829.0,"installs":87,"impressions":137298},
+  {"id":"pks-02","show":"PKS","script":"Success Guru In App Fast - 2nd Ep 9 mins","cpi":29.0,"activation":25.0,"spend":811.0,"installs":28,"impressions":54755},
+  {"id":"pks-03","show":"PKS","script":"SPARK V5","cpi":43.6,"activation":23.8,"spend":916.0,"installs":21,"impressions":46265},
+  {"id":"pks-04","show":"PKS","script":"Samaran's Comeback - Elephant PS","cpi":25.9,"activation":22.5,"spend":1037.0,"installs":40,"impressions":63926},
+  {"id":"pks-05","show":"PKS","script":"Ring Mystery- speed version","cpi":29.5,"activation":21.9,"spend":944.0,"installs":32,"impressions":55108},
+  {"id":"pks-06","show":"PKS","script":"SPARK V14","cpi":82.9,"activation":21.7,"spend":1907.0,"installs":23,"impressions":60014},
+  {"id":"pks-07","show":"PKS","script":"Spark Gen AI LA - Cracked Audio - Slave Ps","cpi":52.8,"activation":21.1,"spend":1004.0,"installs":19,"impressions":33570},
+  {"id":"pks-08","show":"PKS","script":"Roaring Tiger 5.47 mns","cpi":20.9,"activation":20.0,"spend":1044.0,"installs":50,"impressions":59554},
+  {"id":"pks-09","show":"PKS","script":"Game of throne V1","cpi":28.2,"activation":20.0,"spend":1269.0,"installs":45,"impressions":68326},
+  {"id":"pks-10","show":"PKS","script":"Spark Gen AI LA - Cracked Audio - Shame Ps","cpi":42.2,"activation":20.0,"spend":1265.0,"installs":30,"impressions":52826},
+  {"id":"pks-11","show":"PKS","script":"Indira Vizha - Speed Version","cpi":18.2,"activation":19.4,"spend":1693.0,"installs":93,"impressions":76847},
+  {"id":"pks-12","show":"PKS","script":"SPARK Fire PS V1","cpi":46.0,"activation":19.4,"spend":1427.0,"installs":31,"impressions":49345},
+  {"id":"pks-13","show":"PKS","script":"Milanji Drink+VKS","cpi":83.6,"activation":18.8,"spend":1338.0,"installs":16,"impressions":61702},
+  {"id":"pks-14","show":"PKS","script":"Parkadal - Samara opening","cpi":89.3,"activation":18.8,"spend":1429.0,"installs":16,"impressions":120473},
+  {"id":"pks-15","show":"PKS","script":"Varunamithrar Treatment - AI motion","cpi":33.0,"activation":18.6,"spend":1419.0,"installs":43,"impressions":75894},
+  {"id":"kipi-01","show":"KIPI","script":"Fate of Akilan + FDR V3","cpi":60.0,"activation":28.0,"spend":1501.0,"installs":25,"impressions":82845},
+  {"id":"kipi-02","show":"KIPI","script":"Desert + FDR","cpi":58.5,"activation":27.3,"spend":1286.0,"installs":22,"impressions":76669},
+  {"id":"kipi-03","show":"KIPI","script":"AKILAN IN DANGER V2","cpi":90.6,"activation":25.0,"spend":1087.0,"installs":12,"impressions":38872},
+  {"id":"kipi-04","show":"KIPI","script":"PS Akilan & amana gen ai visual match v2","cpi":36.7,"activation":24.0,"spend":918.0,"installs":25,"impressions":42705},
+  {"id":"kipi-05","show":"KIPI","script":"AKILAN IN DANGER V6","cpi":50.5,"activation":23.8,"spend":1059.0,"installs":21,"impressions":59570},
+  {"id":"kipi-06","show":"KIPI","script":"Akilan & amana gen ai visual match","cpi":54.2,"activation":23.5,"spend":922.0,"installs":17,"impressions":47892},
+  {"id":"kipi-07","show":"KIPI","script":"Antim War - Malayam Gen Match","cpi":38.6,"activation":22.2,"spend":1041.0,"installs":27,"impressions":70011},
+  {"id":"kipi-08","show":"KIPI","script":"Akilan vs vibasha + Hunting ps + 1-3 Epi - FDR","cpi":94.9,"activation":21.4,"spend":1329.0,"installs":14,"impressions":59417},
+  {"id":"kipi-09","show":"KIPI","script":"Akilan's Secret Lab + Lost PS","cpi":28.4,"activation":21.3,"spend":1335.0,"installs":47,"impressions":147577},
+  {"id":"kipi-10","show":"KIPI","script":"SUPER HERO DOLLAR - ALT EDIT","cpi":31.5,"activation":21.2,"spend":1038.0,"installs":33,"impressions":66054},
+  {"id":"kipi-11","show":"KIPI","script":"Fate of Akilan + FDR V2","cpi":80.8,"activation":21.1,"spend":1536.0,"installs":19,"impressions":83587},
+  {"id":"kipi-12","show":"KIPI","script":"Akilan vs Vibasha + Aamna Saamna gen ai match","cpi":39.3,"activation":20.8,"spend":942.0,"installs":24,"impressions":25708},
+  {"id":"kipi-13","show":"KIPI","script":"Akilan Vs Vibasha New Gen AI Match V2","cpi":88.3,"activation":20.0,"spend":883.0,"installs":10,"impressions":61805},
+  {"id":"kipi-14","show":"KIPI","script":"AKILAN IN DANGER FT VERSION 03","cpi":51.6,"activation":18.8,"spend":826.0,"installs":16,"impressions":40628},
+  {"id":"kipi-15","show":"KIPI","script":"Vasiya Marunthu + FDR","cpi":63.0,"activation":18.8,"spend":1009.0,"installs":16,"impressions":67587},
+  {"id":"mkv-01","show":"MKV","script":"Akoran Aadhini","cpi":71.3,"activation":33.3,"spend":1926.0,"installs":27,"impressions":110385},
+  {"id":"mkv-02","show":"MKV","script":"success simman single Narration rework","cpi":48.0,"activation":23.8,"spend":1008.0,"installs":21,"impressions":38041},
+  {"id":"mkv-03","show":"MKV","script":"Cold War + Akoran","cpi":47.6,"activation":23.1,"spend":1857.0,"installs":39,"impressions":75709},
+  {"id":"mkv-04","show":"MKV","script":"Shackles Adaptation Gen AI Alt Opening V12","cpi":47.2,"activation":22.2,"spend":849.0,"installs":18,"impressions":47964},
+  {"id":"mkv-05","show":"MKV","script":"Shackles Adaptation Gen AI Alt Opening 10Mins V05","cpi":103.6,"activation":22.2,"spend":1865.0,"installs":18,"impressions":72892},
+  {"id":"mkv-06","show":"MKV","script":"Crunch PS+Hanuman+Akoran","cpi":90.3,"activation":21.4,"spend":1265.0,"installs":14,"impressions":59359},
+  {"id":"mkv-07","show":"MKV","script":"MK EP 1 Revised - TRAP OPENING","cpi":85.8,"activation":21.1,"spend":1630.0,"installs":19,"impressions":40474},
+  {"id":"mkv-08","show":"MKV","script":"BLIND FOLD - PS 2","cpi":57.4,"activation":20.0,"spend":861.0,"installs":15,"impressions":55647},
+  {"id":"mkv-09","show":"MKV","script":"Akoran's Twist Speed","cpi":55.9,"activation":18.8,"spend":894.0,"installs":16,"impressions":47160},
+  {"id":"mkv-10","show":"MKV","script":"Akoran Amma Trim","cpi":65.9,"activation":18.2,"spend":1449.0,"installs":22,"impressions":88765},
+  {"id":"mkv-11","show":"MKV","script":"Third Promise - Discourage PS","cpi":83.5,"activation":18.2,"spend":918.0,"installs":11,"impressions":42276},
+  {"id":"mkv-12","show":"MKV","script":"Cold War POV V2","cpi":55.1,"activation":17.6,"spend":936.0,"installs":17,"impressions":26508},
+  {"id":"mkv-13","show":"MKV","script":"Shackles Adaptation Gen AI Alt Opening V4","cpi":53.7,"activation":16.7,"spend":1290.0,"installs":24,"impressions":63232},
+  {"id":"mkv-14","show":"MKV","script":"Akoran Panai","cpi":53.7,"activation":16.7,"spend":1933.0,"installs":36,"impressions":139811},
+  {"id":"mkv-15","show":"MKV","script":"Aathini's Search - CW - eye opng","cpi":57.6,"activation":16.7,"spend":1382.0,"installs":24,"impressions":44539},
+  {"id":"cult-01","show":"CULT","script":"Cult V1 - Tamer AI Script - Master Opening","cpi":62.1,"activation":14.3,"spend":869.0,"installs":14,"impressions":56008},
+  {"id":"cult-02","show":"CULT","script":"A Spore Fly - V2 - 10.20 mins","cpi":42.5,"activation":13.6,"spend":934.0,"installs":22,"impressions":92829},
+  {"id":"cult-03","show":"CULT","script":"Grey Egg AI Script V2 - 11 mins","cpi":60.5,"activation":13.3,"spend":1815.0,"installs":30,"impressions":97702},
+  {"id":"cult-04","show":"CULT","script":"CULT V1 Tamer - AI Script - Emotional","cpi":55.6,"activation":11.5,"spend":1446.0,"installs":26,"impressions":206346},
+  {"id":"cult-05","show":"CULT","script":"Grey Egg AI Script V3 - 11 mins","cpi":51.9,"activation":11.1,"spend":1867.0,"installs":36,"impressions":128219},
+  {"id":"cult-06","show":"CULT","script":"Paradise V2 - 14:58 mins Long","cpi":69.3,"activation":11.1,"spend":1872.0,"installs":27,"impressions":151617},
+  {"id":"cult-07","show":"CULT","script":"Eternal fly lord + Power ps 12 mins","cpi":83.7,"activation":10.7,"spend":2342.0,"installs":28,"impressions":184194},
+  {"id":"cult-08","show":"CULT","script":"Grey Egg AI Script V5 - 11 mins","cpi":86.4,"activation":9.5,"spend":1815.0,"installs":21,"impressions":93427},
+  {"id":"cult-09","show":"CULT","script":"Grey Egg V2 - 10:30 mins","cpi":116.0,"activation":8.3,"spend":1392.0,"installs":12,"impressions":106948},
+  {"id":"cult-10","show":"CULT","script":"Secret of golden fly AI + v5","cpi":104.0,"activation":7.7,"spend":1352.0,"installs":13,"impressions":135804},
+  {"id":"cult-11","show":"CULT","script":"CULT V1 Tamer - AI Script - Action","cpi":51.2,"activation":7.1,"spend":1434.0,"installs":28,"impressions":229884},
+  {"id":"cult-12","show":"CULT","script":"Grey Egg V5 - 10:10 mins","cpi":84.8,"activation":6.2,"spend":1358.0,"installs":16,"impressions":130988},
+  {"id":"cult-13","show":"CULT","script":"Eternal fly lord - 11:37 mins Long","cpi":45.5,"activation":5.9,"spend":2323.0,"installs":51,"impressions":167288},
+  {"id":"cult-14","show":"CULT","script":"Grey Egg AI Script V1 - 11 mins","cpi":52.6,"activation":5.7,"spend":1841.0,"installs":35,"impressions":127163},
+  {"id":"cult-15","show":"CULT","script":"Cult V0 - Rework PS 3","cpi":69.4,"activation":5.6,"spend":1249.0,"installs":18,"impressions":82690},
+  {"id":"royal-varisu-01","show":"Royal Varisu","script":"Secret King alternate opening","cpi":21.5,"activation":19.1,"spend":1013.0,"installs":47,"impressions":44942},
+  {"id":"royal-varisu-02","show":"Royal Varisu","script":"The Heir","cpi":26.1,"activation":15.1,"spend":1383.0,"installs":53,"impressions":51383},
+  {"id":"royal-varisu-03","show":"Royal Varisu","script":"Stolen car - alternate opening","cpi":15.4,"activation":12.1,"spend":1915.0,"installs":124,"impressions":81853},
+  {"id":"royal-varisu-04","show":"Royal Varisu","script":"Antique Shop","cpi":27.6,"activation":12.0,"spend":1379.0,"installs":50,"impressions":81497},
+  {"id":"royal-varisu-05","show":"Royal Varisu","script":"Birthday Party - Text Opening","cpi":14.7,"activation":11.6,"spend":2158.0,"installs":147,"impressions":78005},
+  {"id":"royal-varisu-06","show":"Royal Varisu","script":"Gift Extended new video V4","cpi":16.3,"activation":11.3,"spend":1013.0,"installs":62,"impressions":57022},
+  {"id":"royal-varisu-07","show":"Royal Varisu","script":"Expectation VS Reality 10 min v3","cpi":26.9,"activation":10.9,"spend":1481.0,"installs":55,"impressions":45679},
+  {"id":"royal-varisu-08","show":"Royal Varisu","script":"My Design","cpi":19.0,"activation":9.9,"spend":1347.0,"installs":71,"impressions":58544},
+  {"id":"royal-varisu-09","show":"Royal Varisu","script":"Gift + Gossip PS 2","cpi":18.3,"activation":9.5,"spend":1739.0,"installs":95,"impressions":84915},
+  {"id":"royal-varisu-10","show":"Royal Varisu","script":"Stolen Car - rework version 1","cpi":13.4,"activation":9.3,"spend":2456.0,"installs":183,"impressions":128448},
+  {"id":"royal-varisu-11","show":"Royal Varisu","script":"Mystery man v2","cpi":20.2,"activation":8.7,"spend":1393.0,"installs":69,"impressions":49814},
+  {"id":"royal-varisu-12","show":"Royal Varisu","script":"Expectation VS Reality 10 min v4","cpi":14.6,"activation":8.5,"spend":2415.0,"installs":165,"impressions":97591},
+  {"id":"royal-varisu-13","show":"Royal Varisu","script":"Mystery man","cpi":16.7,"activation":8.3,"spend":1399.0,"installs":84,"impressions":49310},
+  {"id":"royal-varisu-14","show":"Royal Varisu","script":"Gift extended - without PS + Trim","cpi":13.0,"activation":8.2,"spend":1747.0,"installs":134,"impressions":81007},
+  {"id":"royal-varisu-15","show":"Royal Varisu","script":"Gift Extended - Security Opening 03","cpi":18.7,"activation":8.1,"spend":1381.0,"installs":74,"impressions":67043},
+  {"id":"king-01","show":"KING","script":"Vijay PS + King Rest House LA V1","cpi":46.0,"activation":13.2,"spend":1750.0,"installs":38,"impressions":100649},
+  {"id":"king-02","show":"KING","script":"Unknown Call V3 08:09 Mins","cpi":31.8,"activation":11.4,"spend":1113.0,"installs":35,"impressions":79428},
+  {"id":"king-03","show":"KING","script":"Vijay PS + King Rest House v2","cpi":46.3,"activation":10.5,"spend":1760.0,"installs":38,"impressions":60639},
+  {"id":"king-04","show":"KING","script":"King long Compression + Resthouse 53 min","cpi":69.9,"activation":10.5,"spend":1328.0,"installs":19,"impressions":115142},
+  {"id":"king-05","show":"KING","script":"Rest House Gen AI LA 10 Mins Version","cpi":9.4,"activation":10.3,"spend":1911.0,"installs":204,"impressions":91280},
+  {"id":"king-06","show":"KING","script":"Unknown Call V4 07:59 mins","cpi":27.7,"activation":10.0,"spend":1108.0,"installs":40,"impressions":63740},
+  {"id":"king-07","show":"KING","script":"Rest House Gen AI LA Full version 2","cpi":9.9,"activation":9.8,"spend":1306.0,"installs":132,"impressions":65862},
+  {"id":"king-08","show":"KING","script":"Vijay PS + Harish Master Play V2","cpi":56.1,"activation":9.7,"spend":1739.0,"installs":31,"impressions":68539},
+  {"id":"king-09","show":"KING","script":"King long compression + Vijay PS + Rest house 54 min","cpi":62.8,"activation":9.5,"spend":1319.0,"installs":21,"impressions":83826},
+  {"id":"king-10","show":"KING","script":"Vijay PS + Dark Secret v2","cpi":54.3,"activation":9.1,"spend":1791.0,"installs":33,"impressions":86071},
+  {"id":"king-11","show":"KING","script":"Vijay PS + King Rest House LA V2","cpi":43.3,"activation":7.3,"spend":1776.0,"installs":41,"impressions":92264},
+  {"id":"king-12","show":"KING","script":"Vijay PS + Harish Master Play","cpi":44.3,"activation":7.3,"spend":1815.0,"installs":41,"impressions":85224},
+  {"id":"king-13","show":"KING","script":"Harish Comeback speed (13)","cpi":79.3,"activation":5.9,"spend":1348.0,"installs":17,"impressions":87293},
+  {"id":"king-14","show":"KING","script":"Hidden Billionaire MD PS+Resthouse","cpi":46.4,"activation":5.3,"spend":881.0,"installs":19,"impressions":42426},
+  {"id":"king-15","show":"KING","script":"King Long Compression + Vijay PS + Master play 57 min","cpi":65.8,"activation":5.0,"spend":1317.0,"installs":20,"impressions":89086}
+];
+
+const TEST_SORT = {
+  activation: { fn: (a,b) => b.activation - a.activation, label:'Activation', dir:'▼' },
+  cpi:        { fn: (a,b) => a.cpi - b.cpi,               label:'CPI',        dir:'▲' },
+  installs:   { fn: (a,b) => b.installs - a.installs,     label:'Installs',   dir:'▼' },
+};
+let testSortKey = 'activation';
+let testSortFlip = 1;
+
+function testAdCard(a, rank) {
+  const actCls = testSortKey === 'activation' ? ' highlight' : '';
+  const cpiCls = testSortKey === 'cpi'        ? ' highlight' : '';
+  const instCls = testSortKey === 'installs'  ? ' highlight' : '';
+  const actColor = a.activation >= 30 ? '#22c55e' : a.activation >= 20 ? '#3b82f6' : a.activation >= 10 ? '#f59e0b' : '#ef4444';
+  return `
+    <div class="script-card">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
+          <div class="script-name">${a.script}</div>
+        </div>
+        <span class="ses-pill" style="background:${actColor}20;color:${actColor};border:1px solid ${actColor}40">${a.activation}%</span>
+      </div>
+      <div class="script-show-tag">${a.show}</div>
+      <div class="metrics">
+        <div class="metric${cpiCls}">CPI <span>₹${a.cpi}</span></div>
+        <div class="metric${actCls}">Activation <span>${a.activation}%</span></div>
+        <div class="metric${instCls}">Installs <span>${a.installs}</span></div>
+        <div class="metric">Spend <span>₹${(a.spend/1000).toFixed(1)}k</span></div>
+      </div>
+    </div>`;
+}
+
+function renderTestIntel() {
+  const totalSpend   = testAds.reduce((s,a) => s+a.spend, 0);
+  const totalInstalls = testAds.reduce((s,a) => s+a.installs, 0);
+  const avgCpi       = Math.round(totalSpend / totalInstalls);
+  const avgAct       = (testAds.reduce((s,a) => s+a.activation,0)/testAds.length).toFixed(1);
+
+  const cfg   = TEST_SORT[testSortKey];
+  const arrow = testSortFlip === 1 ? cfg.dir : (cfg.dir==='▼'?'▲':'▼');
+  const sortBtns = Object.entries(TEST_SORT).map(([key,c]) => {
+    const active = testSortKey === key;
+    const ar = active ? `<span class="sort-arrow"> ${arrow}</span>` : '';
+    return `<button class="sort-btn${active?' active':''}" onclick="setTestSort('${key}')">${c.label}${ar}</button>`;
+  }).join('');
+
+  const sorted = [...testAds].sort((a,b) => testSortFlip * cfg.fn(a,b));
+
+  let html = `
+    <div class="meta-summary-grid">
+      <div class="meta-stat"><div class="meta-stat-val">₹${(totalSpend/1e5).toFixed(1)}L</div><div class="meta-stat-label">Total Test Spend</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${testAds.length}</div><div class="meta-stat-label">Scripts Tested</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">₹${avgCpi}</div><div class="meta-stat-label">Blended CPI</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${avgAct}%</div><div class="meta-stat-label">Avg Activation</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${totalInstalls.toLocaleString()}</div><div class="meta-stat-label">Total Installs</div></div>
+    </div>
+    <div style="font-size:10px;color:#6b7280;margin-bottom:16px;">
+      South Testing account · Tamil creatives · 13 Apr 2023 – 12 May 2026 · Top 15 per show by activation rate · Min 5 installs &nbsp;·&nbsp;
+      <span style="color:#22c55e;">≥30% activation</span> &nbsp;·&nbsp;
+      <span style="color:#3b82f6;">≥20%</span> &nbsp;·&nbsp;
+      <span style="color:#f59e0b;">≥10%</span> &nbsp;·&nbsp;
+      <span style="color:#ef4444;">&lt;10%</span>
+    </div>
+    <div class="sort-bar"><span class="sort-bar-label">Sort by</span>${sortBtns}</div>
+    <div class="section-title">All Shows — ${testAds.length} scripts · ranked by ${cfg.label} ${arrow}</div>
+    <div class="board" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+      ${sorted.slice(0,20).map((a,i) => testAdCard(a, i+1)).join('')}
+    </div>`;
+
+  const showMap = {};
+  for (const a of testAds) {
+    if (!showMap[a.show]) showMap[a.show] = [];
+    showMap[a.show].push(a);
+  }
+  Object.entries(showMap).forEach(([show, ads]) => {
+    const ss = [...ads].sort((a,b) => testSortFlip * cfg.fn(a,b));
+    html += `<div class="show-section">
+      <div class="show-title">
+        <span class="show-badge">${show}</span>
+        <span class="script-count">· ${ads.length} scripts</span>
+      </div>
+      <div class="board" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+        ${ss.map((a,i) => testAdCard(a, i+1)).join('')}
+      </div>
+    </div>`;
+  });
+
+  document.getElementById('test-app').innerHTML = html;
+}
+
+function setTestSort(key) {
+  if (testSortKey === key) testSortFlip *= -1;
+  else { testSortKey = key; testSortFlip = 1; }
+  renderTestIntel();
+}
+
+renderTestIntel();
 
 // ═══════════════════════════════════════════════
 //   DATA — TAB: SCALING INTEL (India Regional)
