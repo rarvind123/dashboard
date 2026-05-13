@@ -226,15 +226,18 @@
       margin-left: auto; font-size: 11px;
       background: #1f2937; border-radius: 10px; padding: 1px 7px; color: #9ca3af;
     }
-    .bucket.scaling-now  { border-top: 2px solid #22c55e; }
-    .bucket.scaling-next { border-top: 2px solid #3b82f6; }
-    .bucket.observation  { border-top: 2px solid #f59e0b; }
-    .bucket.scaling-now  .bucket-dot  { background:#22c55e; }
-    .bucket.scaling-next .bucket-dot  { background:#3b82f6; }
-    .bucket.observation  .bucket-dot  { background:#f59e0b; }
-    .bucket.scaling-now  .bucket-label { color:#22c55e; }
-    .bucket.scaling-next .bucket-label { color:#3b82f6; }
-    .bucket.observation  .bucket-label { color:#f59e0b; }
+    .bucket.top-performer { border-top: 2px solid #fbbf24; }
+    .bucket.scale-up      { border-top: 2px solid #22c55e; }
+    .bucket.monitor       { border-top: 2px solid #3b82f6; }
+    .bucket.review        { border-top: 2px solid #f59e0b; }
+    .bucket.top-performer .bucket-dot  { background:#fbbf24; }
+    .bucket.scale-up      .bucket-dot  { background:#22c55e; }
+    .bucket.monitor       .bucket-dot  { background:#3b82f6; }
+    .bucket.review        .bucket-dot  { background:#f59e0b; }
+    .bucket.top-performer .bucket-label { color:#fbbf24; }
+    .bucket.scale-up      .bucket-label { color:#22c55e; }
+    .bucket.monitor       .bucket-label { color:#3b82f6; }
+    .bucket.review        .bucket-label { color:#f59e0b; }
 
     /* ─── Sort bar ─── */
     .sort-bar {
@@ -1070,14 +1073,13 @@
     <button class="master-tab"        onclick="switchMaster('powerstarters',this)">⚡ Powerstarters</button>
   </div>
   <div class="tab-bar" id="subtabs-scripting">
-    <button class="tab-btn active" onclick="switchTab('perf',this)">Performance</button>
+    <button class="tab-btn active" onclick="switchTab('perf',this)">🧪 Testing Intel</button>
+    <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
     <button class="tab-btn"        onclick="switchTab('pipe',this)">Asset Pipeline</button>
     <button class="tab-btn"        onclick="switchTab('inapp',this)">InApp Videos</button>
     <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
     <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
     <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
-    <button class="tab-btn"        onclick="switchTab('test',this)">🧪 Test Intel</button>
-    <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
   </div>
   <div class="tab-bar" id="subtabs-powerstarters" style="display:none">
     <button class="tab-btn" onclick="switchTab('powerstarts',this)">⚡ Trending</button>
@@ -1087,15 +1089,16 @@
 </div>
 
 <!-- ══════════════════════════════════════════════
-     TAB 1 — PERFORMANCE
+     TAB 1 — TESTING INTELLIGENCE
 ══════════════════════════════════════════════ -->
 <div id="tab-perf" class="tab-pane active">
 
   <!-- Legend -->
   <div class="legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Scaling Now</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Scaling Next</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Observation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div>Top Performer</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>Scale Up</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Monitor</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Review</div>
     <div class="legend-item" style="margin-left:auto;">
       <span class="phase-badge cps">CPS</span>&nbsp;= Scaling CPI &nbsp;|&nbsp;
       <span class="phase-badge test">TEST</span>&nbsp;= Test CPI &nbsp;|&nbsp;
@@ -1104,10 +1107,11 @@
   </div>
 
   <div class="info-banner">
-    <strong>Status logic (edit <code>status</code> field to override):</strong>
-    CPS Scaling data present → <strong>Scaling Now</strong> &nbsp;·&nbsp;
-    Next Step = Gen AI, no CPS yet → <strong>Scaling Next</strong> &nbsp;·&nbsp;
-    CPI Testing only → <strong>Observation</strong>
+    <strong>Tier logic:</strong>
+    Scaling Now + 🔥 → <strong>Top Performer</strong> &nbsp;·&nbsp;
+    Scaling Now (no fire) → <strong>Scale Up</strong> &nbsp;·&nbsp;
+    Scaling Next → <strong>Monitor</strong> &nbsp;·&nbsp;
+    Observation / Testing → <strong>Review</strong>
   </div>
 
   <!-- Sort bar -->
@@ -1178,10 +1182,6 @@
 ══════════════════════════════════════════════ -->
 <div id="tab-meta" class="tab-pane">
   <div id="meta-app"></div>
-</div>
-
-<div id="tab-test" class="tab-pane">
-  <div id="test-app"></div>
 </div>
 
 <div id="tab-scale" class="tab-pane">
@@ -1594,9 +1594,10 @@ const inappVideos = [
 //   RENDER — TAB 1: PERFORMANCE
 // ═══════════════════════════════════════════════
 const BUCKETS = [
-  { key:"Scaling Now",  cls:"scaling-now"  },
-  { key:"Scaling Next", cls:"scaling-next" },
-  { key:"Observation",  cls:"observation"  },
+  { key:"Top Performer", cls:"top-performer", filter: s => s.status === "Scaling Now"  && !!s.fire },
+  { key:"Scale Up",      cls:"scale-up",      filter: s => s.status === "Scaling Now"  && !s.fire  },
+  { key:"Monitor",       cls:"monitor",       filter: s => s.status === "Scaling Next"             },
+  { key:"Review",        cls:"review",        filter: s => s.status === "Observation"              },
 ];
 const SHOWS = [
   { key:"VVK",       name:"Vaal Veesum Karikala"  },
@@ -1681,7 +1682,7 @@ function sortedItems(items) {
 function perfBoard(dataSet, showTag) {
   const cfg = SORT_CONFIG[currentSort];
   return `<div class="board">${BUCKETS.map(b => {
-    const items = sortedItems(dataSet.filter(s => s.status === b.key));
+    const items = sortedItems(dataSet.filter(b.filter));
     return `<div class="bucket ${b.cls}">
       <div class="bucket-header">
         <div class="bucket-dot"></div>
@@ -1697,7 +1698,7 @@ function perfBoard(dataSet, showTag) {
 
 function renderPerf() {
   const cfg = SORT_CONFIG[currentSort];
-  let html = `<div class="section-title">Master Leaderboard — All Shows · ${scripts.length} scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
+  let html = `<div class="section-title">Testing Intelligence — All Shows · ${scripts.length} scripts · ranked by ${cfg.label} ${cfg.dir}</div>`;
   html += perfBoard(scripts, true);
   SHOWS.forEach(show => {
     const ss = scripts.filter(s => s.show === show.key);
@@ -3125,162 +3126,6 @@ function setMetaSort(key) {
 }
 
 renderMetaIntel();
-
-// ═══════════════════════════════════════════════
-//   DATA — TAB: TEST INTEL (South Testing)
-// ═══════════════════════════════════════════════
-const testAds = [
-  {"id":"t001","show":"Mounam",         "script":"Direct Fear Hook",           "ctr":2.1,"cpi":17.5,"avgPlaytime":14.2,"activations":9, "spend":24750,"impressions":356000,"cpm":69.5},
-  {"id":"t002","show":"Mounam",         "script":"Suspense Cliffhanger V2",    "ctr":1.8,"cpi":21.0,"avgPlaytime":11.8,"activations":6, "spend":18200,"impressions":280000,"cpm":65.0},
-  {"id":"t003","show":"Mounam",         "script":"Character Intro Lead",       "ctr":0.9,"cpi":45.0,"avgPlaytime":7.5, "activations":3, "spend":14300,"impressions":195000,"cpm":73.3},
-  {"id":"t004","show":"KING",           "script":"Action Montage Cut",         "ctr":2.4,"cpi":15.2,"avgPlaytime":16.1,"activations":11,"spend":31200,"impressions":420000,"cpm":74.3},
-  {"id":"t005","show":"KING",           "script":"Rival Confrontation Opener", "ctr":1.6,"cpi":25.8,"avgPlaytime":10.4,"activations":5, "spend":19500,"impressions":290000,"cpm":67.2},
-  {"id":"t006","show":"KING",           "script":"Music-Driven Teaser",        "ctr":1.1,"cpi":38.0,"avgPlaytime":8.9, "activations":4, "spend":15200,"impressions":210000,"cpm":72.4},
-  {"id":"t007","show":"Tiger Returns",  "script":"Chase Scene Hook v3",        "ctr":1.9,"cpi":22.5,"avgPlaytime":13.0,"activations":7, "spend":22800,"impressions":310000,"cpm":73.5},
-  {"id":"t008","show":"Tiger Returns",  "script":"Villain Reveal Slow-Mo",     "ctr":0.7,"cpi":55.0,"avgPlaytime":6.2, "activations":2, "spend":11000,"impressions":185000,"cpm":59.5},
-  {"id":"t009","show":"Naan Mudhalvan", "script":"Political Drama Opener",     "ctr":2.8,"cpi":13.5,"avgPlaytime":17.5,"activations":13,"spend":38500,"impressions":510000,"cpm":75.5},
-  {"id":"t010","show":"Naan Mudhalvan", "script":"Mass Dialogue Hook",         "ctr":2.2,"cpi":19.0,"avgPlaytime":12.6,"activations":8, "spend":26400,"impressions":360000,"cpm":73.3},
-  {"id":"t011","show":"Naan Mudhalvan", "script":"Emotional Backstory Cut",    "ctr":1.3,"cpi":31.5,"avgPlaytime":9.8, "activations":4, "spend":16800,"impressions":240000,"cpm":70.0},
-  {"id":"t012","show":"Naan Mudhalvan", "script":"Comedy Relief Teaser",       "ctr":0.6,"cpi":62.0,"avgPlaytime":5.5, "activations":2, "spend":9900, "impressions":170000,"cpm":58.2},
-  {"id":"t013","show":"Mounam",         "script":"Static Thumbnail Variant",   "ctr":0.4,"cpi":85.0,"avgPlaytime":4.2, "activations":1, "spend":8500, "impressions":148000,"cpm":57.4},
-  {"id":"t014","show":"KING",           "script":"Text-Only Hook v1",          "ctr":0.3,"cpi":95.0,"avgPlaytime":3.8, "activations":0, "spend":6200, "impressions":134000,"cpm":46.3},
-];
-
-// ─── Test Intel helpers ──────────────────────────────────────────────────────
-function testScore(a) {
-  const ctrS = Math.min(a.ctr / 1.5 * 100, 100);
-  const cpiS = Math.min(25 / Math.max(a.cpi, 0.01) * 100, 100);
-  const ptS  = Math.min(a.avgPlaytime / 12 * 100, 100);
-  return Math.round(Math.min(ctrS * 0.35 + cpiS * 0.35 + ptS * 0.30, 100) * 10) / 10;
-}
-
-const TEST_SORT = {
-  cpi:         { fn: (a, b) => a.cpi - b.cpi,                  label: 'CPI',         dir: '▲' },
-  ctr:         { fn: (a, b) => b.ctr - a.ctr,                  label: 'CTR',         dir: '▼' },
-  avgPlaytime: { fn: (a, b) => b.avgPlaytime - a.avgPlaytime,  label: 'Playtime',    dir: '▼' },
-  activations: { fn: (a, b) => b.activations - a.activations,  label: 'Activations', dir: '▼' },
-};
-let testSortKey  = 'ctr';
-let testSortFlip = 1;
-
-const TEST_BUCKETS = [
-  { cls: 'elite',   label: 'Scale Ready', test: s => testScore(s) >= 85 },
-  { cls: 'strong',  label: 'Promising',   test: s => testScore(s) >= 60 && testScore(s) < 85 },
-  { cls: 'average', label: 'Learning',    test: s => testScore(s) >= 30 && testScore(s) < 60 },
-  { cls: 'weak',    label: 'Weak',        test: s => testScore(s) < 30 },
-];
-
-function testAdCard(a, rank, showTag) {
-  const sc  = testScore(a);
-  const cls = sc >= 85 ? 'ses-green' : sc >= 60 ? 'ses-blue' : sc >= 30 ? 'ses-yellow' : 'ses-red';
-  const cpiCls = testSortKey === 'cpi'         ? ' highlight' : '';
-  const ctrCls = testSortKey === 'ctr'         ? ' highlight' : '';
-  const ptCls  = testSortKey === 'avgPlaytime' ? ' highlight' : '';
-  const actCls = testSortKey === 'activations' ? ' highlight' : '';
-  const nm     = a.script.length > 28 ? a.script.slice(0, 28) + '…' : a.script;
-  return `
-    <div class="script-card">
-      <div class="card-top">
-        <div class="card-left">
-          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
-          <div class="script-name">${nm}</div>
-        </div>
-        <span class="ses-pill ${cls}">${sc}</span>
-      </div>
-      ${showTag ? `<div class="script-show-tag">${a.show || '—'}</div>` : ''}
-      <div class="metrics">
-        <div class="metric${cpiCls}">CPI <span>₹${a.cpi}</span></div>
-        <div class="metric${ctrCls}">CTR <span>${a.ctr}%</span></div>
-        <div class="metric${ptCls}">Playtime <span>${fmtTime(a.avgPlaytime)}</span></div>
-        <div class="metric${actCls}">Act <span>${a.activations > 0 ? a.activations : '—'}</span></div>
-      </div>
-    </div>`;
-}
-
-function testBoard(dataSet, showTag) {
-  const cfg    = TEST_SORT[testSortKey];
-  const sorted = [...dataSet].sort((a, b) => testSortFlip * cfg.fn(a, b));
-  return `<div class="meta-board">${TEST_BUCKETS.map(b => {
-    const items = sorted.filter(b.test);
-    return `<div class="bucket ${b.cls}">
-      <div class="bucket-header">
-        <div class="bucket-dot"></div>
-        <div class="bucket-label">${b.label}</div>
-        <div class="bucket-count">${items.length}</div>
-      </div>
-      ${items.length
-        ? items.map((s, i) => testAdCard(s, i + 1, showTag)).join('')
-        : '<div class="empty-bucket">— none —</div>'}
-    </div>`;
-  }).join('')}</div>`;
-}
-
-function renderTestIntel() {
-  const totalSpend = testAds.reduce((s, a) => s + a.spend, 0);
-  const avgCtr  = (testAds.reduce((s, a) => s + a.ctr, 0) / testAds.length).toFixed(2);
-  const avgCpi  = Math.round(testAds.reduce((s, a) => s + a.cpi, 0) / testAds.length);
-  const avgPt   = (testAds.reduce((s, a) => s + a.avgPlaytime, 0) / testAds.length).toFixed(1);
-  const totalActs = testAds.reduce((s, a) => s + a.activations, 0);
-
-  const summaryHtml = `
-    <div class="meta-summary-grid">
-      <div class="meta-stat"><div class="meta-stat-val">₹${(totalSpend/1e5).toFixed(1)}L</div><div class="meta-stat-label">Total Test Spend</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">${testAds.length}</div><div class="meta-stat-label">Active Tests</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">${avgCtr}%</div><div class="meta-stat-label">Avg CTR</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">₹${avgCpi}</div><div class="meta-stat-label">Avg CPI</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">${avgPt}s</div><div class="meta-stat-label">Avg Playtime</div></div>
-      <div class="meta-stat"><div class="meta-stat-val">${totalActs}</div><div class="meta-stat-label">Total Activations</div></div>
-    </div>
-    <div style="font-size:10px;color:#374151;margin-bottom:20px;">
-      Pocket FM South Testing · Tamil creatives · last 30 days &nbsp;·&nbsp;
-      Score = CTR 35% + CPI efficiency 35% + Playtime 30% &nbsp;·&nbsp;
-      <span style="color:#22c55e;">Scale Ready ≥85</span> &nbsp;·&nbsp;
-      <span style="color:#93c5fd;">Promising ≥60</span> &nbsp;·&nbsp;
-      <span style="color:#fcd34d;">Learning ≥30</span> &nbsp;·&nbsp;
-      <span style="color:#fca5a5;">Weak &lt;30</span>
-    </div>
-  `;
-
-  const cfg    = TEST_SORT[testSortKey];
-  const arrow  = testSortFlip === 1 ? cfg.dir : (cfg.dir === '▼' ? '▲' : '▼');
-  const sortBtns = Object.entries(TEST_SORT).map(([key, c]) => {
-    const active = testSortKey === key;
-    const ar     = active ? `<span class="sort-arrow"> ${arrow}</span>` : '';
-    return `<button class="sort-btn${active?' active':''}" onclick="setTestSort('${key}')">${c.label}${ar}</button>`;
-  }).join('');
-
-  let html = summaryHtml;
-  html += `<div class="sort-bar"><span class="sort-bar-label">Sort by</span>${sortBtns}</div>`;
-  html += `<div class="section-title">Testing Board — South Testing Account · ${testAds.length} ads · ranked by ${cfg.label} ${arrow}</div>`;
-  html += testBoard(testAds, true);
-
-  const showMap = {};
-  for (const a of testAds) {
-    const key = a.show || '(untagged)';
-    if (!showMap[key]) showMap[key] = { spend: 0, ads: [] };
-    showMap[key].spend += a.spend;
-    showMap[key].ads.push(a);
-  }
-  Object.entries(showMap).sort((a, b) => b[1].spend - a[1].spend).forEach(([showName, data]) => {
-    html += `<div class="show-section">
-      <div class="show-title">
-        <span class="show-badge">${showName}</span>
-        <span class="script-count">· ${data.ads.length} tests &nbsp;·&nbsp; ₹${(data.spend/1e5).toFixed(1)}L</span>
-      </div>
-      ${testBoard(data.ads, false)}
-    </div>`;
-  });
-
-  document.getElementById('test-app').innerHTML = html;
-}
-
-function setTestSort(key) {
-  if (testSortKey === key) testSortFlip *= -1;
-  else { testSortKey = key; testSortFlip = 1; }
-  renderTestIntel();
-}
-
-renderTestIntel();
 
 // ═══════════════════════════════════════════════
 //   DATA — TAB: SCALING INTEL (India Regional)
