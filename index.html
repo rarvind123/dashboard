@@ -35,14 +35,43 @@
     .shell-top p  { font-size: 11px; color: #4b5563; margin-top: 3px; }
     .shell-top .updated { font-size: 11px; color: #374151; margin-top: 6px; }
 
-    /* ─── Tab bar ─── */
+    /* ─── Master tabs ─── */
+    .master-tab-bar {
+      display: flex;
+      gap: 4px;
+      padding: 0 24px;
+      background: #0d1117;
+      border-bottom: 1px solid #1f2937;
+    }
+    .master-tab {
+      padding: 11px 22px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #6b7280;
+      background: transparent;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .master-tab:hover { color: #d1d5db; }
+    .master-tab.active { color: #fff; border-bottom-color: #3b82f6; }
+
+    /* ─── Sub tab bar ─── */
     .tab-bar {
       display: flex;
       gap: 2px;
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+      padding: 0 24px;
+      overflow-x: auto;
     }
     .tab-btn {
-      padding: 9px 18px;
-      font-size: 13px;
+      padding: 8px 16px;
+      font-size: 12px;
       font-weight: 600;
       color: #6b7280;
       background: transparent;
@@ -54,7 +83,7 @@
       white-space: nowrap;
     }
     .tab-btn:hover { color: #d1d5db; }
-    .tab-btn.active { color: #fff; border-bottom-color: #3b82f6; }
+    .tab-btn.active { color: #fff; border-bottom-color: #60a5fa; }
 
     /* ─── Tab panes ─── */
     .tab-pane { display: none; padding: 24px; }
@@ -1036,18 +1065,24 @@
     </div>
     <div class="updated" id="last-updated"></div>
   </div>
-  <div class="tab-bar">
+  <div class="master-tab-bar">
+    <button class="master-tab active" onclick="switchMaster('scripting',this)">✍ Scripting</button>
+    <button class="master-tab"        onclick="switchMaster('powerstarters',this)">⚡ Powerstarters</button>
+  </div>
+  <div class="tab-bar" id="subtabs-scripting">
     <button class="tab-btn active" onclick="switchTab('perf',this)">Performance</button>
     <button class="tab-btn"        onclick="switchTab('pipe',this)">Asset Pipeline</button>
     <button class="tab-btn"        onclick="switchTab('inapp',this)">InApp Videos</button>
     <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
     <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
-    <button class="tab-btn"        onclick="switchTab('powerstarts',this)">⚡ Trending Powerstarts</button>
-    <button class="tab-btn"        onclick="switchTab('microdramas',this)">🎬 Microdrama Powerstarts</button>
-    <button class="tab-btn"        onclick="switchTab('social',this)">📱 Social Media Powerstarts</button>
     <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
     <button class="tab-btn"        onclick="switchTab('test',this)">🧪 Test Intel</button>
     <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
+  </div>
+  <div class="tab-bar" id="subtabs-powerstarters" style="display:none">
+    <button class="tab-btn" onclick="switchTab('powerstarts',this)">⚡ Trending</button>
+    <button class="tab-btn" onclick="switchTab('microdramas',this)">🎬 Microdrama</button>
+    <button class="tab-btn" onclick="switchTab('social',this)">📱 Social Media</button>
   </div>
 </div>
 
@@ -1158,6 +1193,20 @@
 // ═══════════════════════════════════════════════
 //   TAB SWITCHING
 // ═══════════════════════════════════════════════
+function switchMaster(group, btn) {
+  document.querySelectorAll('.master-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const scriptingBar = document.getElementById('subtabs-scripting');
+  const powerBar     = document.getElementById('subtabs-powerstarters');
+  scriptingBar.style.display = group === 'scripting'     ? 'flex' : 'none';
+  powerBar.style.display     = group === 'powerstarters' ? 'flex' : 'none';
+  if (group === 'scripting') {
+    switchTab('perf', scriptingBar.querySelector('.tab-btn'));
+  } else {
+    switchTab('powerstarts', powerBar.querySelector('.tab-btn'));
+  }
+}
+
 function switchTab(id, btn) {
   document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
