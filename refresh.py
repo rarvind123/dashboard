@@ -318,32 +318,35 @@ def fetch_news_headlines():
 # ─────────────────────────────────────────────
 
 def call_claude(system_prompt, user_prompt, max_tokens=4096):
-    """Call Claude Haiku via direct HTTP — no SDK dependency."""
+    """Call Claude via OpenRouter (OpenAI-compatible) — no SDK dependency."""
     if not ANTHROPIC_API_KEY:
         print('  ANTHROPIC_API_KEY not set — skipping AI generation')
         return None
     payload = json.dumps({
-        'model':      'claude-haiku-4-5-20251001',
+        'model':      'anthropic/claude-haiku-4-5-20251001',
         'max_tokens': max_tokens,
-        'system':     system_prompt,
-        'messages':   [{'role': 'user', 'content': user_prompt}],
+        'messages':   [
+            {'role': 'system', 'content': system_prompt},
+            {'role': 'user',   'content': user_prompt},
+        ],
     }).encode()
     req = urllib.request.Request(
-        'https://api.anthropic.com/v1/messages',
+        'https://openrouter.ai/api/v1/chat/completions',
         data=payload,
         headers={
-            'x-api-key':         ANTHROPIC_API_KEY,
-            'anthropic-version': '2023-06-01',
-            'content-type':      'application/json',
+            'Authorization': f'Bearer {ANTHROPIC_API_KEY}',
+            'Content-Type':  'application/json',
+            'HTTP-Referer':  'https://rarvind123.github.io/dashboard/',
+            'X-Title':       'Pocket FM Tamil Dashboard',
         },
     )
     try:
         with urllib.request.urlopen(req, timeout=90) as r:
-            return json.loads(r.read())['content'][0]['text']
+            return json.loads(r.read())['choices'][0]['message']['content']
     except urllib.error.HTTPError as e:
-        print(f'  Claude HTTP {e.code}: {e.read().decode()[:300]}')
+        print(f'  OpenRouter HTTP {e.code}: {e.read().decode()[:300]}')
     except Exception as e:
-        print(f'  Claude error: {e}')
+        print(f'  OpenRouter error: {e}')
     return None
 
 
