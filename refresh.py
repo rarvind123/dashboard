@@ -426,7 +426,7 @@ def update_powerstarts(html, headlines):
 Recent Indian news headlines (past 7 days):
 {hl}
 
-Generate 10 trending powerstart entries.
+Generate 7 trending powerstart entries.
 Rules:
 - Adapt the most emotionally extreme stories from the headlines above
 - If headlines lack variety or emotional depth, supplement with your knowledge of real Indian news / viral incidents from this week
@@ -438,7 +438,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=5500)
+    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=4500)
     data = extract_json(raw)
 
     if not data or not isinstance(data, list):
@@ -488,7 +488,7 @@ def update_microdramas(html):
 
     user_prompt = f"""Today is {today}.
 
-Generate 10 microdrama powerstart entries covering shows currently trending on Indian microdrama platforms.
+Generate 7 microdrama powerstart entries covering shows currently trending on Indian microdrama platforms.
 
 Rules:
 - Cover at least 5 different platforms across the 10 entries
@@ -500,7 +500,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=5500)
+    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=4500)
     data   = extract_json(raw)
 
     if not data or not isinstance(data, list):
