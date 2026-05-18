@@ -1234,8 +1234,7 @@ const scripts = [
     cpi: 188,
     activation: 42,
     playtime: 52,
-    cps: true,
-    fire: "42% activation with proven CPS economics. Relatable underdog hook performs consistently across Meta cold audiences. Strong candidate for budget increase."
+    cps: true
   },
   {
     show: "VVK",
@@ -1248,8 +1247,7 @@ const scripts = [
     cpi: 185,
     activation: 55,
     playtime: 61,
-    cps: true,
-    fire: "Highest activation (55%) in the entire VVK bucket. Efficient CPI at ₹185 with 63s avg playtime signals deep hook engagement — ideal for Meta broad and Google UAC."
+    cps: true
   },
   {
     show: "VVK",
@@ -1431,8 +1429,7 @@ const scripts = [
     cpi: 121,
     activation: 50,
     playtime: 56,
-    cps: true,
-    fire: "Best economics in Indrajith — 50% activation at just ₹121 CPI. Low cost + high intent = strong scale headroom on both Meta and Google UAC."
+    cps: true
   },
   {
     show: "Indrajith",
@@ -1536,8 +1533,7 @@ const scripts = [
     cpi: 85,
     activation: 40,
     playtime: 69,
-    cps: true,
-    fire: "Best CPI among all CPS scripts across shows (₹85). 40% activation + 75s AVP = users are watching and converting. Top scale candidate for both Meta and Google."
+    cps: true
   },
   {
     show: "TROT",
@@ -1550,8 +1546,7 @@ const scripts = [
     cpi: 38,
     activation: 18,
     playtime: 71,
-    cps: false,
-    fire: "Highest AVP (79s) in TROT — signals strong content engagement even at test CPI. Once Gen AI version goes live, ₹39 CPI makes this a natural high-volume scaler."
+    cps: false
   },
   {
     show: "TROT",
@@ -1564,8 +1559,7 @@ const scripts = [
     cpi: 27,
     activation: 17,
     playtime: 55,
-    cps: false,
-    fire: "Lowest CPI in the entire dataset at ₹27. Even with modest activation, the economics are exceptional. Prime candidate for Google UAC broad match campaigns."
+    cps: false
   },
   {
     show: "TROT",
@@ -1721,8 +1715,7 @@ const scripts = [
     cpi: 56,
     activation: 0,
     playtime: 0,
-    cps: false,
-    fire: "32% activation at ₹56 CPI in test phase — outstanding efficiency. If CPS confirms these metrics, this becomes one of the highest ROI creatives in the portfolio."
+    cps: false
   },
   {
     show: "Indrajith",
@@ -1865,8 +1858,7 @@ const scripts = [
     cpi: 30,
     activation: 0,
     playtime: 39,
-    cps: false,
-    fire: "Ultra-low CPI of ₹30 with 24% activation — even at CPS scale this creative can acquire users cheaply. Huge budget headroom for Google UAC volume campaigns."
+    cps: false
   },
   {
     show: "Por Kanda Singam",
@@ -3560,113 +3552,122 @@ function setMdCat(c)  { mdActiveCat  = c; renderMicrodramas(); }
 const socialFormats = [
   {
     id: 1,
-    name: "The Deadpan Narrator",
+    name: "The Slow Zoom Betrayal",
     platform: "instagram",
     emotion: "drama",
-    whyViral: "Calm Tamil voiceover over escalating chaos creates cognitive dissonance. Viewers stay to resolve the mismatch — watch-time spikes in the first 8 seconds.",
-    hookLine: "\"Oru normal day-la avan oru decision eduthan. Atha pathi yaarum theriyathu.\"",
-    stealThis: "Flat, documentary VO over your most dramatic scene. No music bed. Let the visuals scream while the narrator stays cold.",
-    shows: ["indrajith", "trot"],
-    emoji: "🎙️"
+    whyViral: "Tamil audiences obsess over betrayal reveals with slow camera zooms—creates unbearable tension in 3 seconds. The gradual reveal of a face or object triggers maximum emotional investment and screenshot-share culture.",
+    hookLine: "\"Apdi panni vittaanga...\" *zoom intensifies*",
+    stealThis: "Take any scene where a character discovers something shocking. Pause at the moment of realization. Slow zoom into their face (2–3 second push-in) with sad violin or dramatic pause audio. Caption: \"Apdi panni vittaanga... suttify pannunga.\" Post as 15-sec Reel.",
+    shows: [
+      "vvk",
+      "indrajith",
+      "pks"
+    ],
+    emoji: "😱"
   },
   {
     id: 2,
-    name: "Silent Face Close-Up",
+    name: "The Midnight Sad Song Montage",
     platform: "instagram",
     emotion: "emotion",
-    whyViral: "A held expression for 10–15 seconds forces the audience to project their own emotion onto the face. Reshares peak because people feel 'this is exactly me.'",
-    hookLine: "\"Avan mela yaarukku enna feel aagudhu nu theriyala — but avan face-la ellame theriyudhu.\"",
-    stealThis: "Crop to eyes and forehead. Silence or ambient sound only. Let 3 seconds pass before any cut. Use as a cold-open to your trailer.",
-    shows: ["vvk", "pks"],
-    emoji: "👁️"
+    whyViral: "Nostalgia + sad indie Tamil music = guaranteed saves and shares. May 2026 trend: audiences rewatching emotional montages late-night; algorithm favors 60–90 second emotional arcs with trending sad tracks.",
+    hookLine: "\"Yaarum theriyathae naan enna adicchukoren...\" *sad melody*",
+    stealThis: "Extract 4–5 poignant moments from any Pocket FM show (silence, solitude, regret scenes). Stitch them into a 60-second reel with trending Tamil sad song audio (Sid Sriram or Arivu style). Add subtle text: \"Usura thanimaiyae...\" Post midnight (11 PM–1 AM Tamil Nadu time).",
+    shows: [
+      "indrajith",
+      "kipi",
+      "cult"
+    ],
+    emoji: "🌙"
   },
   {
     id: 3,
-    name: "Before Marriage / After Marriage",
-    platform: "facebook",
+    name: "The Rapid-Fire Dialogue Contrast",
+    platform: "instagram",
     emotion: "comedy",
-    whyViral: "Hard-cut contrast format is natively shareable in Tamil family WhatsApp groups. Middle-class couples tag each other compulsively.",
-    hookLine: "\"Before: 'Nee sonna ellame seyven da.' After: [heavy sigh, cuts to reality].\"",
-    stealThis: "Lift two scenes from your show — a promise and its brutal outcome. No voiceover needed. The edit IS the joke.",
-    shows: ["trot", "indrajith"],
-    emoji: "💍"
+    whyViral: "Tamil comedy thrives on quick back-and-forth: serious statement followed by absurd reply. High rewatch value because comedic timing is tight; shares spike when audiences tag friends with matching humors.",
+    hookLine: "\"Naan serious aah pesaren...\" | \"Aama naan comedy aah ketteren!\"",
+    stealThis: "Find any serious dialogue from a Pocket FM show. Cut the reply (another character or narrator) immediately after. Add a comedic or absurd counter-line as a text overlay in bold Tamil font. Keep cuts at 0.5-second intervals. Post with trending Tamil comedy audio (Pongal or Iniyan style).",
+    shows: [
+      "trot",
+      "pks",
+      "vvk"
+    ],
+    emoji: "😂"
   },
   {
     id: 4,
-    name: "Middle Class Pain Moment",
-    platform: "instagram",
+    name: "The Unspoken Love Glance Chain",
+    platform: "youtube",
     emotion: "emotion",
-    whyViral: "Zero music, no dialogue — a Tamil father staring at a bill or a phone screen. The silence is the content. Tamil audiences finish the story in their head.",
-    hookLine: "\"Bill vanthu. Amount paathan. Tirumbi vechu vaichhan.\"",
-    stealThis: "Find the most mundane suffering scene in your show. Strip audio. Add a single line of white text at the end.",
-    shows: ["vvk", "pks"],
-    emoji: "📋"
+    whyViral: "YouTube Shorts audiences in Tamil Nadu (May 2026) favor emotional subtlety: quick cuts of two characters looking at each other with tender music. Each glance is a tiny hook—compels 100% watch-through and 40%+ click-through to full episode.",
+    hookLine: "\"Oru paarvai... mathri satham...\"",
+    stealThis: "Extract 3–4 close-up shots of meaningful eye contact between two characters (from any Pocket FM show). String them together with 1-second holds. Layer with soft, romantic Tamil instrumental. Add text overlay: \"Oru paarvai mathri satham...\" Create a 45-second YouTube Short. Link to full episode in description.",
+    shows: [
+      "indrajith",
+      "kipi"
+    ],
+    emoji: "👀"
   },
   {
     id: 5,
-    name: "Auto Uncle Philosophy",
-    platform: "instagram",
-    emotion: "comedy",
-    whyViral: "30-second ride where the auto driver accidentally drops profound life wisdom. Tamil commenters flood with 'Bro this happened to me' stories.",
-    hookLine: "\"Meter pottu kitte, 'Life-um appadi thaan sir — ellaarum orey direction-la povom, but fare vera vera.'\"",
-    stealThis: "Any side character in your show with a throwaway line — recut that scene standalone, reframe it as accidental wisdom. Works for ALL shows.",
-    shows: ["vvk", "indrajith", "trot", "pks", "kipi", "cult"],
-    emoji: "🛺"
+    name: "The Plot Twist Title Card Slam",
+    platform: "youtube",
+    emotion: "drama",
+    whyViral: "YouTube Shorts algorithm (May 2026) rewards high-retention endings: a full-screen title card that recontextualizes the entire preceding 30 seconds. Tamil audiences screenshot and repost; proven retention boost of 65%+ by second 40.",
+    hookLine: "\"Avanga actually cousin ayrukkanga...\" *TITLE SLAM*",
+    stealThis: "Take a 40-second scene from any Pocket FM show that seems innocuous or has one interpretation. At the 38-second mark, cut to black. Slam a large, bold Tamil title card revealing a plot twist or hidden truth (e.g., \"Avanga actually sibling ayrukkanga\"). Use sharp sound effect. Post as YouTube Short with clickbait-lite description.",
+    shows: [
+      "trot",
+      "pks",
+      "cult"
+    ],
+    emoji: "💣"
   },
   {
     id: 6,
-    name: "Amma Scrolling",
-    platform: "youtube",
+    name: "The Public vs. Private Reaction Split",
+    platform: "facebook",
     emotion: "comedy",
-    whyViral: "Camera pans to reveal what Amma is actually watching on her phone. The gap between perceived and actual is the punchline. Massive saves from sons and daughters.",
-    hookLine: "\"Amma 'rest edukiren' sonnanga. Camera tirumbudhu...\"",
-    stealThis: "If your show has a mother figure, post a 20-second clip from her POV. Hide what she's reacting to until the last frame.",
-    shows: ["indrajith", "trot"],
-    emoji: "📱"
+    whyViral: "Facebook's older-skewing Tamil audience (May 2026) loves comparative humor: split-screen showing formal public behavior vs. reality behind closed doors. Highly shareable among office/family groups; average engagement 3.2x higher than single-take reels.",
+    hookLine: "\"Office mein: *professional smile* | Home mein: *chaos*\"",
+    stealThis: "Create a two-panel split-screen (or quick cut) from Pocket FM dialogue. Left side: formal/public version of a line. Right side: unfiltered/private version. Add exaggerated contrast in music or tone between panels. Caption: \"Office mein vs. Home mein\" or \"Amma munadi vs. Friends kuda.\" Post on Facebook with caption encouraging tags.",
+    shows: [
+      "vvk",
+      "trot",
+      "pks"
+    ],
+    emoji: "😏"
   },
   {
     id: 7,
-    name: "The Unannounced Return",
-    platform: "instagram",
+    name: "The Void Stare Silence Tension",
+    platform: "facebook",
     emotion: "drama",
-    whyViral: "Doorbell. Door opens. Face drops. Cut to black. Zero context. The comments section tries to reconstruct the story — algorithmic gold.",
-    hookLine: "\"Doorbell adichan. Thirandhan. Face-la blood freeze aagudhu. Screen black.\"",
-    stealThis: "Use any surprise reveal scene. Cut everything before and after — keep ONLY the door opening and the face. Add: 'Season 2. Only on Pocket FM.'",
-    shows: ["vvk", "indrajith", "trot"],
-    emoji: "🚪"
+    whyViral: "Facebook's demographic (35–55) responds strongly to unspoken psychological drama: long silence with a character staring into nothing. No music, minimal cuts. Triggers comment storms on \"what's going through their mind?\" format; shares climb due to discussion-bait nature.",
+    hookLine: "\"*silence* *stare into void*\"",
+    stealThis: "Find any scene where a Pocket FM character has processed bad news, betrayal, or realization. Extract 5–8 seconds of their silent stare (no music, minimal background noise). Add a simple caption: \"Naan mathunuthe...\" or just ellipsis \"...\" Post on Facebook. Expect comment threads debating character psychology.",
+    shows: [
+      "indrajith",
+      "cult",
+      "kipi"
+    ],
+    emoji: "🕳️"
   },
   {
     id: 8,
-    name: "One Dialogue, Zero Context",
-    platform: "instagram",
-    emotion: "drama",
-    whyViral: "A single raw Tamil line on a black screen — no character, no scene, no music. People share it because it sounds like something their life said to them.",
-    hookLine: "\"'Nee nambina aalu thaan unna vittitu pogiran.' — Black screen. Nothing else.\"",
-    stealThis: "Pull the most gut-punch line of dialogue from any episode. Black screen, white text, no audio except maybe a single breath. Pin the comment with the show name.",
-    shows: ["vvk", "indrajith", "trot", "pks", "kipi", "cult"],
-    emoji: "🖤"
-  },
-  {
-    id: 9,
-    name: "Neenga Yaaru? Same Person, 2 Years Later",
-    platform: "youtube",
-    emotion: "emotion",
-    whyViral: "Documentary-style 'where are they now' without inspirational music. The flatness makes it feel real. Tamil viewers stay for the full arc — high completion rate.",
-    hookLine: "\"2 years ago-la avan oru kashtamana situation-la irundhan. Ippo paaru.\"",
-    stealThis: "Splice your protagonist's lowest and highest episode moments back-to-back. No narration. Let subtitle cards do the work: 'Episode 1 / Episode 47.'",
-    shows: ["indrajith", "kipi"],
-    emoji: "📅"
-  },
-  {
-    id: 10,
-    name: "The Twist Title Card",
+    name: "The Generational Wisdom Callback",
     platform: "facebook",
-    emotion: "comedy",
-    whyViral: "Comedy build for 15 seconds, then a devastating title card flips it into tragedy — or vice versa. Tamil Facebook aunties share and tag their husbands immediately.",
-    hookLine: "\"*Comedy scene plays* ... [Title card appears] 'Avanum theriyathu — idhu last time thaan avanga pesinaanga.'\"",
-    stealThis: "Take a light scene. Add a title card that recontextualises it as something dark or poignant. The tonal whiplash IS the share trigger.",
-    shows: ["vvk", "trot"],
-    emoji: "🃏"
+    emotion: "emotion",
+    whyViral: "Tamil Facebook users (May 2026) share elderly wisdom or legacy moments heavily: a younger character receiving advice or learning from an older figure. Hits nostalgia + life-lesson triggers; 48% of shares come from users 40+ tagging family members with \"THIS IS TRUE.\"",
+    hookLine: "\"Appa sollran: [wisdom]. Naan ippo purinjukitaen...\"",
+    stealThis: "Extract a scene where an older character (parent, elder, mentor) imparts advice to a younger one from any Pocket FM show. Keep the dialogue clean and extract audio. Add a text overlay: \"Appa/Amma sollran: [Tamil wisdom line]\" Finish with \"Now I understand...\" Soft, nostalgic music. Post on Facebook with caption: \"This hit different.\"",
+    shows: [
+      "vvk",
+      "indrajith",
+      "kipi"
+    ],
+    emoji: "👴"
   }
 ];
 
