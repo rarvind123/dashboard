@@ -323,7 +323,7 @@ def call_claude(system_prompt, user_prompt, max_tokens=4096):
         print('  ANTHROPIC_API_KEY not set — skipping AI generation')
         return None
     payload = json.dumps({
-        'model':      'anthropic/claude-haiku-4-5-20251001',
+        'model':      'anthropic/claude-haiku-4.5',
         'max_tokens': max_tokens,
         'messages':   [
             {'role': 'system', 'content': system_prompt},
