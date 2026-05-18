@@ -438,7 +438,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=8000)
+    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=5500)
     data = extract_json(raw)
 
     if not data or not isinstance(data, list):
@@ -500,7 +500,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=8000)
+    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=5500)
     data   = extract_json(raw)
 
     if not data or not isinstance(data, list):
