@@ -351,21 +351,42 @@ def call_claude(system_prompt, user_prompt, max_tokens=4096):
 
 
 def extract_json(text):
-    """Pull the first JSON array from a Claude response."""
+    """Pull the first JSON array from a Claude response, salvaging partial arrays if needed."""
     if not text:
         return None
-    # Strip markdown fences
     text = re.sub(r'^```(?:json)?\n?', '', text.strip(), flags=re.MULTILINE)
     text = re.sub(r'\n?```\s*$', '', text.strip(), flags=re.MULTILINE)
-    m = re.search(r'\[[\s\S]*\]', text)
+    m = re.search(r'\[[\s\S]*', text)
     if not m:
         print('  No JSON array found in response')
         return None
+    raw = m.group()
+    # Try full parse first
     try:
-        return json.loads(m.group())
-    except json.JSONDecodeError as e:
-        print(f'  JSON decode error: {e}')
-        return None
+        return json.loads(raw if raw.rstrip().endswith(']') else raw + ']')
+    except json.JSONDecodeError:
+        pass
+    # Salvage: extract every complete {...} object from the array
+    objects = []
+    depth, start = 0, None
+    for i, ch in enumerate(raw):
+        if ch == '{':
+            if depth == 0:
+                start = i
+            depth += 1
+        elif ch == '}':
+            depth -= 1
+            if depth == 0 and start is not None:
+                try:
+                    objects.append(json.loads(raw[start:i+1]))
+                except json.JSONDecodeError:
+                    pass
+                start = None
+    if objects:
+        print(f'  Salvaged {len(objects)} complete objects from truncated JSON')
+        return objects
+    print('  JSON decode error: could not salvage any objects')
+    return None
 
 
 # ─────────────────────────────────────────────
@@ -417,7 +438,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=4096)
+    raw  = call_claude(_PS_SYSTEM, user_prompt, max_tokens=8000)
     data = extract_json(raw)
 
     if not data or not isinstance(data, list):
@@ -479,7 +500,7 @@ Rules:
 
 Return ONLY the JSON array."""
 
-    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=4096)
+    raw    = call_claude(_MD_SYSTEM, user_prompt, max_tokens=8000)
     data   = extract_json(raw)
 
     if not data or not isinstance(data, list):
