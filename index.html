@@ -3044,8 +3044,8 @@ const powerstarts = [
 // ─── New-today registry (updated by scheduled task each run) ───────────────
 const newToday = {
   date: '2026-05-18',
-  powerstartIds: [1, 2, 3, 4, 5, 6, 7],
-  microdramaTitles: ["Naagin Ka Naata", "Khet Ke Hisaab", "The Corner Office Affair", "The Witness Protocol", "Jhooth Boldi Main", "Ritu Ka Badla", "Ek Teri Yaad Mein"]
+  powerstartIds: [],
+  microdramaTitles: []
 };
 const todayStr = new Date().toISOString().slice(0, 10);
 const isNewPS = id    => newToday.date === todayStr && newToday.powerstartIds.includes(id);
@@ -3413,119 +3413,116 @@ function setMdCat(c)  { mdActiveCat  = c; renderMicrodramas(); }
 const socialFormats = [
   {
     id: 1,
-    name: "The Rewind Confession",
+    name: "Reels Villain Origin Story",
     platform: "instagram",
-    emotion: "emotion",
-    whyViral: "Tamil audiences crave personal vulnerability mixed with nostalgia. Rewinding a scene while confessing a relatable regret creates parasocial connection and drives saves/shares for 'tag someone' engagement.",
-    hookLine: "\"Enakku ipdi irundhuchu... aana naan sonnadhu illa\" (I felt this way... but I never told anyone)",
-    stealThis: "Take a protagonist's moment of internal conflict from any Pocket FM show. Rewind it 3 times with increasing opacity, overlay a raw voice-over in Tamil admitting the character's hidden feeling. Add a 2-second pause before revealing the show name. Post with caption: 'Neenga ivlo deep depressing feel paniruppiyo?'",
+    emotion: "drama",
+    whyViral: "Tamil audiences obsess over villain backstories and 'how did they become like this' narratives. A 15-second villain origin format with a twist ending triggers massive replay and share rates because viewers want to justify the 'bad guy' logic.",
+    hookLine: "\"Avan nalla paiyan va solran... pero paaru enna nadandhaan\" (They say he's a good boy... but watch what happened)",
+    stealThis: "Take any dramatic scene from Indrajith or VVK where the antagonist makes a morally grey decision. Split-screen it: left side shows 'society rejected him', right side shows 'his single choice'. End with text: 'Avan villain aanadhaan reason' (That's why he became the villain). Use trending Tamil sad track underneath.",
     shows: [
-      "vvk",
       "indrajith",
-      "kipi"
+      "vvk",
+      "pks"
     ],
-    emoji: "⏮️"
+    emoji: "😈"
   },
   {
     id: 2,
-    name: "The Slow-Zoom Power-Up",
+    name: "The Climax Cliffhanger Loop",
     platform: "youtube",
     emotion: "drama",
-    whyViral: "YouTube Shorts Tamil viewers are addicted to slow-burn reveals. Zooming into a character's eyes while dramatic BGM builds triggers algorithm-favoured 'watch until end' behaviour, especially for hero introduction scenes.",
-    hookLine: "\"Intha vela neengalaam waiting parthiruppiyo?\" (Have you been waiting for this moment?)",
-    stealThis: "Extract any antagonist reveal or hero entry scene. Start with a wide shot, then slowly zoom 4-5x into the lead's face over 8 seconds while gradually increasing volume of intense Tamil cinematic BGM. Add a title card at 0:55 that reads 'Story continues on Pocket FM.' End with app icon.",
+    whyViral: "YouTube Shorts algorithm favours content that loops seamlessly and creates 'one more watch' fatigue. Tamil drama fans cannot resist a perfectly looped cliffhanger that makes them wonder 'what happened next?'",
+    hookLine: "\"Adhuku munadi naan unna sollanum... (Before that, I need to tell you...) *cut*\"",
+    stealThis: "Extract the 3-second moment right before a major revelation in TROT or KIPI. Loop it 4 times with slight audio/visual variation each loop. Add text overlay: 'Vera level twist waiting' (Next level twist coming). The loop creates anxiety and forces full watch-through for algorithm credit.",
     shows: [
       "trot",
-      "pks",
-      "cult"
-    ],
-    emoji: "🔍"
-  },
-  {
-    id: 3,
-    name: "The Uh-Oh Text Flash",
-    platform: "facebook",
-    emotion: "drama",
-    whyViral: "Facebook Tamil audiences (35-55 demo) respond to tension + immediacy. A notification/text overlay appearing suddenly triggers fear-of-missing-out and drives shares with comments like 'what happened next?'",
-    hookLine: "\"Yen da ith message vandhudhu?\" (Why did this message come?)",
-    stealThis: "Take a cliffhanger dialogue exchange. Extract 2-3 key words from the scene, create animated text overlays that flash onscreen like WhatsApp notifications (use authentic Tamil fonts). Time them to the dialogue beats. Share on Facebook with: 'Seri seri... continue panrathu Pocket FM la dhaan 👀'",
-    shows: [
-      "indrajith",
-      "vvk"
-    ],
-    emoji: "📲"
-  },
-  {
-    id: 4,
-    name: "The Side-Eye Judgment Cut",
-    platform: "instagram",
-    emotion: "comedy",
-    whyViral: "Millennials and Gen-Z Tamil audiences live for non-verbal humour and relatability. A character's disapproving side-eye + quick cut generates millions of views because it's a universal Tamil communication meme.",
-    hookLine: "\"Adhuvum solravum illa... neeyum paruppa\" (Not even worth mentioning... he's trash)",
-    stealThis: "Find a scene where a character reacts negatively to someone's behaviour. Isolate the side-eye glance, loop it 2 times, speed up the second loop to 1.5x, drop a comedic Tamil sound effect (like 'ayyo' or a sarcastic laugh), add captions: 'Naan enakku aaga vida nala irukke.' Post as Reel with trending audio layer.",
-    shows: [
-      "kipi",
-      "trot"
-    ],
-    emoji: "👀"
-  },
-  {
-    id: 5,
-    name: "The Last-Second Plot Flip",
-    platform: "youtube",
-    emotion: "emotion",
-    whyViral: "YouTube algorithm prioritises videos with shocking last-frame reveals. Tamil audiences expect twists; ending a Short with a character realisation or unexpected truth shift triggers loop-backs and 'watch again' engagement.",
-    hookLine: "\"Enakkum theriyala enakkum theriyala... aana\" (I didn't know... but then)",
-    stealThis: "Select a scene where a character's perspective shifts—realization moment, truth revealed, or betrayal uncovered. Build the scene normally for 45 seconds. In the last 5 seconds, show the character's reaction + a flash-cut to a contradictory moment earlier. Add title card: 'Full story: [Show Name] on Pocket FM.' End with download CTA.",
-    shows: [
-      "indrajith",
-      "cult"
+      "kipi"
     ],
     emoji: "🔄"
   },
   {
-    id: 6,
-    name: "The Lipread Subtitle Trap",
+    id: 3,
+    name: "Amma's Unsolicited Life Advice",
     platform: "facebook",
     emotion: "comedy",
-    whyViral: "Facebook Tamil audiences engage heavily with captions and 'guess the dialogue' formats. Showing a character speaking without sound, then revealing the (often absurd) actual dialogue, drives comments and reactions.",
-    hookLine: "\"Unakku enakku enna connection da?\" (What's our connection?)",
-    stealThis: "Mute a witty or emotional exchange between two characters. Add creative fake captions (humorous misinterpretations) for 15 seconds. Then unmute and reveal actual dialogue. Viewers will comment guessing. Post with caption: 'Naan correct guess pannen! Neenga?' to trigger comment engagement.",
+    whyViral: "Facebook's core Tamil demographic (25-45 year old mothers and aunties) immediately share content that validates their parenting philosophy or roasts their kids' generation in a loving way. This format hits that nerve perfectly.",
+    hookLine: "\"Unakku knowledge mattum thaan, common sense yeppadi poichu?\" (You have all the knowledge but where did your common sense go?)",
+    stealThis: "Find a scene where a character gets rejected or fails at something modern (dating app, corporate job, startup pitch). Cut to a 2-second moment of any mother-figure looking disappointed or knowing. Overlay Amma voiceover: 'Yen ipdi panni? Naan sollan-ley solran' (Why did you do this? I told you!). Post with caption: 'Adhey amma wisdom' (That's amma wisdom).",
+    shows: [
+      "cult",
+      "vvk"
+    ],
+    emoji: "👵"
+  },
+  {
+    id: 4,
+    name: "The Micro-Expression Reaction",
+    platform: "instagram",
+    emotion: "emotion",
+    whyViral: "Gen-Z Tamil audiences consume content at 2x speed and skip instantly unless the first 0.5 seconds have a micro-expression (shock, tears, realization). A genuine 1-second face reaction followed by dramatic music explosion drives 60%+ watch-to-end rates.",
+    hookLine: "\"Athan...\" (That's when...) *face reaction + music drop*",
+    stealThis: "Isolate any 1-second close-up of an actor's face the moment they realize something devastating (Indrajith or PKS climax scenes work best). Immediately cut to black with a 0.2-second white flash. Drop a heavy Tamil background score. Text overlay: single word like 'GASP' or 'WAIT' or 'SHOCK'. Post at 7 PM IST.",
+    shows: [
+      "indrajith",
+      "pks"
+    ],
+    emoji: "😲"
+  },
+  {
+    id: 5,
+    name: "The Dialogue Mashup Contradiction",
+    platform: "youtube",
+    emotion: "comedy",
+    whyViral: "Editing two contradictory dialogues from the same character 3-4 seconds apart, then adding 'gotcha' music, creates satisfying cognitive dissonance. Tamil audiences love catching hypocrisy and share these immediately as 'proof'.",
+    hookLine: "\"Naan athan-nu solli-ku-ten (I'm saying that)... *1 sec silence* ...athan-a naan panni-ku-ten (I'm doing the opposite)\"",
+    stealThis: "Find any character in VVK or CULT who says one thing early and contradicts it later. Edit: Dialogue A (0-2 sec) → Pause → Dialogue B (2-4 sec) → Insert '🤔 SAME PERSON?' text overlay → Comedy horn sound. Title: 'Yaaru nee actually?' (Who are you really?). Use trending hashtag.",
+    shows: [
+      "vvk",
+      "cult"
+    ],
+    emoji: "🤡"
+  },
+  {
+    id: 6,
+    name: "The Unexpected Emotion Whiplash",
+    platform: "facebook",
+    emotion: "emotion",
+    whyViral: "Facebook's algorithm boosts content with high emotional engagement (shares, comments, reactions). A format that starts comedic then shifts to genuinely touching in 8-10 seconds catches audiences off-guard and drives comment sections asking 'why am I crying laughing?'",
+    hookLine: "\"Oori oori potta makkal ellam... pero en amma matum...\" (Everyone in the village, but my mom alone...)",
+    stealThis: "Take a light comedic scene (Amma doing something silly, character being goofy). Cut after 5 seconds. Then immediately show a 3-second clip of sacrifice, love, or vulnerability from the same character/Amma. No music transition—just hard cut. Caption: 'Apdi tha life' (That's how life is). Facebook emotional engagement spikes on family-adjacent content.",
     shows: [
       "vvk",
       "pks"
     ],
-    emoji: "🤐"
+    emoji: "🥺"
   },
   {
     id: 7,
-    name: "The Heartbeat Climax Build",
+    name: "The Status-Update Relatable Burn",
     platform: "instagram",
-    emotion: "emotion",
-    whyViral: "Tamil audiences are emotionally driven; pairing a tense/tender moment with an actual heartbeat sound effect creates ASMR-like engagement and viral saves for 'emotional' collections.",
-    hookLine: "\"Nethikku partha ponal... aana ipdi solla mattenu\" (I wanted to tell you then... but couldn't)",
-    stealThis: "Extract an intimate/vulnerable moment (confession, first meeting, sacrifice scene). Overlay a thumping heartbeat sound effect that accelerates. Desaturate colours to 70% grayscale. Add soft captions in Tamil that echo the internal struggle. End with a 2-frame pause on the lead's face. Post with caption: 'Ipdi oru padam vera level.. story vera level' + Pocket FM link.",
+    emotion: "comedy",
+    whyViral: "Tamil Nadu's Instagram Reels users (ages 16-30) respond massively to content that roasts modern culture, relationships, or job hunting while disguising it as 'just a scene from the show'. The deniability makes it shareable in family chats.",
+    hookLine: "\"Relationship yeppadi irukku? *scene showing chaos* Exactly.\"",
+    stealThis: "Extract any chaotic interaction (argument, misunderstanding, failed plan) from TROT or KIPI. Caption it as: '[Modern Problem] vs [What your parents think]' or '[Dating App Reality]' or '[Your First Job]'. Keep it 8 seconds max. Post with trending music that sounds 'relatable sad'. The format works because it's thinly veiled social commentary.",
     shows: [
-      "kipi",
-      "indrajith",
-      "vvk"
+      "trot",
+      "kipi"
     ],
-    emoji: "💓"
+    emoji: "💔"
   },
   {
     id: 8,
-    name: "The Three-Second Reaction Stack",
+    name: "The Slow-Pan Mystery Build",
     platform: "facebook",
-    emotion: "comedy",
-    whyViral: "Short-form, stacked reaction clips tap into TikTok-style rapid-fire humour. Tamil audiences aged 25-40 on Facebook now expect faster cuts; three different character reactions to the same event feels fresh and shareable.",
-    hookLine: "\"Ipdi pannu nu sonnaya?!\" (Did you really do that?!)",
-    stealThis: "Find a shocking or hilarious moment in any show scene. Capture the lead's reaction (1 sec), then stack it with a supporting character's reaction (1 sec), then a third person's different take (1 sec). Use sharp cuts + comedic SFX between each. Repeat the stack 2x at 1.25x speed. Caption: 'Adhaan exact reaction' + Pocket FM branding.",
+    emotion: "drama",
+    whyViral: "Facebook's 45+ demographic responds to cinematic, slow-burn reveals. A 12-second video that slowly pans across a scene, pauses on faces, and builds tension before a title card reveal gets 70%+ view-through and massive shares among older Tamil audiences who associate 'quality' with pacing.",
+    hookLine: "\"Avanukku naan thaan... pero... naan avanukku illai\" (I am to him... but I'm not to him)",
+    stealThis: "Take a betrayal or realization scene from Indrajith. Shoot a slow pan across 3-4 faces (1 second each). Overlay subtle, high-quality background score. End with a 2-second title card: '[Character Name] Was Never What You Thought' or 'Sathyam Yen Pidithavilai' (Why didn't truth come out). Post between 8-10 PM on weekdays for maximum older user engagement.",
     shows: [
-      "trot",
-      "cult",
-      "pks"
+      "indrajith",
+      "vvk"
     ],
-    emoji: "⚡"
+    emoji: "🎬"
   }
 ];
 
