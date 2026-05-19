@@ -4135,20 +4135,19 @@ const scalingAds = [
 ];
 
 // ─── Scaling Intel helpers ───────────────────────────────────────────────────
-// Real cost-per-install from Meta Ads Manager CSV (13 Apr – 12 May 2026)
+// Real cost-per-install from Meta Ads Manager CSV (1 May – 19 May 2026)
 // Source: Amount Spent ÷ Mobile App Installs, show-level aggregate
-// CPI = Amount Spent ÷ Mobile App Installs (ad-set level, 13 May 2026)
 const SHOW_CPI = {
-  "Tiger Returns":    129,
-  "Indrajith":        225,
-  "Vaal Veesum":      327,
-  "Mahakaaviyam":     269,
-  "KING":             146,
-  "Por Kanda Singam": 120,
-  "Ki.pi. 2500":      508,
-  "Royal Varisu":      57,
-  "Cult":             288,  // prev export (0 installs 13 May)
-  "Agan":             218,  // prev export (0 installs 13 May)
+  "Tiger Returns":              105,  // ₹205,714 / 1,965 installs
+  "Indrajith - The Divine Warrior":  73,  // ₹338,725 / 4,620 installs
+  "Vaal Veesum Karikala":       189,  // ₹177,372 / 938 installs
+  "Mahakaaviyam":               446,  // ₹187,254 / 420 installs
+  "KING":                       140,  // ₹90,646 / 648 installs
+  "Por Kanda Singam":           164,  // ₹74,528 / 455 installs
+  "Ki.pi. 2500":                173,  // ₹100,256 / 580 installs
+  "Royal Varisu":               118,  // ₹9,058 / 77 installs
+  "The Guardian King":          244,  // ₹44,085 / 181 installs
+  "Cult - The Teenage Ruler":   288,  // prev export (no spend this period)
 };
 
 function getShowCpi(a) {
@@ -4247,7 +4246,7 @@ function renderScalingIntel() {
       <div class="meta-stat"><div class="meta-stat-val">${totalActs}</div><div class="meta-stat-label">Total Activations</div></div>
     </div>
     <div style="font-size:10px;color:#374151;margin-bottom:20px;">
-      Pocket FM India Regional · Tamil campaigns · 13 Apr – 12 May 2026 &nbsp;·&nbsp;
+      Pocket FM India Regional · Tamil campaigns · 1 May – 19 May 2026 &nbsp;·&nbsp;
       Score = CPI 40% + CTR 30% + Activations 30% &nbsp;·&nbsp;
       CPI = cost per mobile install (from Ads Manager) &nbsp;·&nbsp; Playtime est. from thruplay rate &nbsp;·&nbsp;
       <span style="color:#22c55e;">Top Performer ≥80</span> &nbsp;·&nbsp;
