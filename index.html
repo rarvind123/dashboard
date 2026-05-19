@@ -3761,12 +3761,13 @@ function metaBoard(dataSet, showTag) {
     return metaSortDir * (bv - av);
   });
   return `<div class="meta-board">${META_BUCKETS.map(b => {
-    const items = sorted.filter(b.test);
+    const all   = sorted.filter(b.test);
+    const items = all.slice(0, 10);
     return `<div class="bucket ${b.cls}">
       <div class="bucket-header">
         <div class="bucket-dot"></div>
         <div class="bucket-label">${b.label}</div>
-        <div class="bucket-count">${items.length}</div>
+        <div class="bucket-count">${items.length}${all.length > 10 ? ' / ' + all.length : ''}</div>
       </div>
       ${items.length
         ? items.map((s, i) => metaAdCard(s, i + 1, showTag)).join('')
