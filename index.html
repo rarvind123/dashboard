@@ -2808,157 +2808,121 @@ function renderSummary() {
 // ═══════════════════════════════════════════════
 function renderCreative() {
   const html = `
-    <div class="creative-date">Creative Performance Summary · 13 May 2026</div>
-
-    <!-- Cracked & Promising Scripts -->
-    <div style="margin-bottom:24px;">
-      <div class="section-title" style="margin-bottom:10px;">Cracked &amp; Promising Scripts in Scaling</div>
-      <div style="overflow-x:auto;">
-        <table style="width:100%;border-collapse:collapse;font-size:12px;">
-          <thead>
-            <tr style="background:#1f2937;color:#9ca3af;text-align:left;">
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;">Show</th>
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;">Script</th>
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;text-align:right;">Spend</th>
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;text-align:right;">CPI</th>
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;text-align:right;">Activation</th>
-              <th style="padding:7px 10px;border-bottom:1px solid #374151;text-align:right;">Playtime</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${[
-              {show:"VVK",       script:"Zombie Dragon",                                                   spend:"₹26,000", cpi:"₹84",  act:"5.83%",  pt:"10s"},
-              {show:"VVK",       script:"Fallen Empire",                                                   spend:"₹24,600", cpi:"₹390", act:"42.96%", pt:"11s"},
-              {show:"TROT",      script:"Real OG - Unknown Call",                                          spend:"₹10,300", cpi:"₹86",  act:"9.24%",  pt:"11s"},
-              {show:"KIPI",      script:"Vibasha's Love",                                                  spend:"₹23,900", cpi:"₹135", act:"8.47%",  pt:"2s"},
-              {show:"KIPI",      script:"Mother Trick",                                                    spend:"₹22,900", cpi:"₹148", act:"2.58%",  pt:"2s"},
-              {show:"Indrajith", script:"PKI + Eps Ilavarasi PS Opening – 1.40 Hrs Hyper Long",           spend:"₹7,064",  cpi:"—",    act:"20.59%", pt:"27s"},
-              {show:"Indrajith", script:"PKI + Eps – 1.41 Hrs Hyper Long",                                spend:"₹18,215", cpi:"—",    act:"40%",    pt:"19s"},
-              {show:"Indrajith", script:"Book Open + Ennai Thavira + Son of Fire – 1.18 Hrs Hyper Long",  spend:"—",       cpi:"—",    act:"10%",    pt:"21s"},
-              {show:"Indrajith", script:"Rukmini vs Abimanyu",                                            spend:"—",       cpi:"—",    act:"12.50%", pt:"25s"},
-              {show:"PKS",       script:"Iravatham – 19.38 Mins",                                         spend:"₹5,321",  cpi:"—",    act:"25%",    pt:"—"},
-              {show:"PKS",       script:"Jaathagam King Opening",                                         spend:"—",       cpi:"—",    act:"11.21%", pt:"—"},
-              {show:"PKS",       script:"Varnamithrar Correction Pani Pen Opening",                       spend:"—",       cpi:"—",    act:"33.33%", pt:"—"},
-              {show:"PKS",       script:"Parkadal",                                                       spend:"—",       cpi:"—",    act:"10%",    pt:"15s"},
-            ].map((r,i) => `<tr style="background:${i%2===0?'#111827':'#0f172a'}">
-              <td style="padding:6px 10px;color:#6ee7b7;font-weight:600;">${r.show}</td>
-              <td style="padding:6px 10px;color:#e5e7eb;">${r.script}</td>
-              <td style="padding:6px 10px;color:#d1d5db;text-align:right;">${r.spend}</td>
-              <td style="padding:6px 10px;color:${r.cpi==='—'?'#6b7280':'#4ade80'};text-align:right;font-weight:600;">${r.cpi}</td>
-              <td style="padding:6px 10px;color:#93c5fd;text-align:right;">${r.act}</td>
-              <td style="padding:6px 10px;color:#d1d5db;text-align:right;">${r.pt}</td>
-            </tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <div class="creative-date">Creative Performance Summary · 19 May 2026</div>
 
     <div class="creative-grid">
 
-      <!-- VVK -->
+      <!-- CULT -->
       <div class="creative-card">
-        <div class="cc-show"><div class="cc-show-dot" style="background:#22c55e"></div>VVK</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Prey" delivered very strong CTR and playtime in CPI testing → moved to CPS Scaling</span></div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Fallen Empire" and "Phoenix" continue strong in CPI testing → selected assets moved to scaling</span></div>
+        <div class="cc-show"><div class="cc-show-dot" style="background:#8b5cf6"></div>CULT</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Beast Awakening" — strong CPI testing → planned for CPS Scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Saving Bunny" — promising CPI testing → moved to CPS Scaling. Additional versions being explored</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Secret of the Century" — encouraging early performance. More versions in development to improve retention &amp; engagement</span></div>
       </div>
 
       <!-- KIPI -->
       <div class="creative-card">
         <div class="cc-show"><div class="cc-show-dot" style="background:#3b82f6"></div>KIPI</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Love Story" → strong CTR &amp; playtime → moved to CPS Scaling. More versions in exploration</span></div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Hidden Hero" → promising CPI testing. Versions being explored:</span></div>
-        <div class="cc-subitem">· Trimmed edits · Narration format · Q1 hook changes · Additional variations</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Special Case" — very strong CPI testing → planned for CPS Scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Akilan's Secret Lab" &amp; "Dollar Hunt" teaser integrations → promising results → moved to CPS Scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Screen-to-Script adaptation of RDK Gen AI — strong testing → moved to CPS Scaling. More versions in progress</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>10+ long-format original scripts showing strong testing potential — converting to 8-minute formats for better scaling performance</span></div>
       </div>
 
-      <!-- King -->
+      <!-- KING -->
       <div class="creative-card">
-        <div class="cc-show"><div class="cc-show-dot" style="background:#f59e0b"></div>King</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>Adapted best TROT promos for King → all assets delivered good CPI testing → moved to scaling</span></div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>Planning more TROT script adaptations for faster turnaround of scalable assets</span></div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>New tropes being explored with AI-assisted writing support</span></div>
+        <div class="cc-show"><div class="cc-show-dot" style="background:#f59e0b"></div>KING</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"The Watch," "Divorce Drama," &amp; "PM Ref" — very strong CPI testing → moved to CPS Scaling</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"One Day CEO" — promising results. Additional versions being explored to improve performance</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>New trope explorations in progress with AI-assisted writing workflows</span></div>
       </div>
 
-      <!-- Guardian King & Ragasiya Snehithane -->
+      <!-- VVK -->
       <div class="creative-card">
-        <div class="cc-show"><div class="cc-show-dot" style="background:#a78bfa"></div>The Guardian King</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Cost to Breathe" — 13s Avg Playtime · 0.70% CTR · 20% Hook Rate · 6.67% Activation</span></div>
-        <div class="cc-arrow"><span class="arr">→</span><span>Reworking to improve Hook Rate, Activation &amp; Avg Playtime</span></div>
-
-        <div class="cc-show" style="margin-top:14px;"><div class="cc-show-dot" style="background:#ec4899"></div>Ragasiya Snehithane</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Protector" — 34s Avg Playtime · 1.38% CTR · 46.03% Hook Rate · 10% Activation</span></div>
-        <div class="cc-arrow"><span class="arr">→</span><span>Reworking to improve Activation &amp; further optimize Avg Playtime</span></div>
+        <div class="cc-show"><div class="cc-show-dot" style="background:#22c55e"></div>VVK</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Dragon Egg" &amp; "Reverse Age" teaser assets — strong testing. Plans underway to integrate with high-performing promos to optimise CPI</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Zombie Dragon" + "Fallen Empire" — mixed results but promising activation. Additional versions in development</span></div>
       </div>
 
-      <!-- CULT -->
+      <!-- Indrajith -->
       <div class="creative-card">
-        <div class="cc-show"><div class="cc-show-dot" style="background:#8b5cf6"></div>CULT</div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Paradise" and "A Spore Fly" → promising CPI testing. More versions in exploration</span></div>
-        <div class="cc-bullet"><span class="cc-dot">•</span><span>Cult V0 screenplay completed and shared with Gen AI team</span></div>
-        <div class="cc-arrow"><span class="arr">→</span><span>2–3 new AI-based scripts planned for upload next week</span></div>
+        <div class="cc-show"><div class="cc-show-dot" style="background:#ef4444"></div>Indrajith</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Seven Warriors Hyper Long Asset" — strong activation &amp; engagement. Reworks: alternate openings, trims, episode stitching, intense PS integrations</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Rukmini VS Abimanyu" — promising. Reworks: alternate openings, Q1 rewrites, climax improvements, stronger in-app elements</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"PKI New Lion &amp; Seven Warrior Parallel Edit" — strong activation via non-linear storytelling. Reworks: stronger Q1 hooks, large-scale conflict sequences</span></div>
+      </div>
+
+      <!-- Ragasiya Snehithane -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#ec4899"></div>Ragasiya Snehithane</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Protector" — stable performance. Reworks: stronger in-app elements &amp; climax rewrites to improve activation</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Sitharth Entry 2.0" — encouraging engagement. Exploring faster opening cuts &amp; enhanced PS integrations for better AVP &amp; activation</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Escape Long" — promising long-format engagement. Reworks: stronger openings &amp; intense PS layering for better retention</span></div>
+      </div>
+
+      <!-- Por Kanda Singam -->
+      <div class="creative-card">
+        <div class="cc-show"><div class="cc-show-dot" style="background:#14b8a6"></div>Por Kanda Singam</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Parkadal" — promising activation. Multiple openings &amp; PS variations tested successfully</span></div>
+        <div class="cc-arrow"><span class="arr">→</span><span>Reworks: alternate Q1 rewrites &amp; dual climax variations to improve emotional payoff &amp; retention</span></div>
       </div>
 
       <!-- Experiments -->
       <div class="creative-card">
         <div class="cc-show"><div class="cc-show-dot" style="background:#f97316"></div>Experiments</div>
-        <div class="cc-section-label">TROT</div>
-        <div class="cc-subitem">· Company Drama + Fake Death Trending Powerstart → Good CTR</div>
-        <div class="cc-subitem">· Auction + Metro Station Micro Drama Powerstart</div>
-        <div class="cc-subitem">· Unknown Call + Final Boss Trending Powerstart</div>
-        <div class="cc-section-label">KING</div>
-        <div class="cc-subitem">· Rest House + Hidden Billionaire Trending Powerstart</div>
-        <div class="cc-subitem">· CM Vijay-based PS → initial numbers good → moved to Google ROAS</div>
-        <div class="cc-section-label">INDRAJITH</div>
-        <div class="cc-subitem">· Shiva Abimanyu + Martial Arts Micro Drama Powerstart</div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Fake Death" MD Powerstart + "Company Drama" → major uplift in CTR &amp; CPI efficiency</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Hotel Room" MD Powerstart + "Time to Reveal" → improved CPI efficiency, slight CTR growth</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Metro Station" MD Powerstart + "Auction" (Zee5) → CTR dropped but CPI improved significantly. Reworks in progress</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>"Hidden Billionaire" MD Powerstart + "Rest House" (KING) → improved CTR &amp; better CPI efficiency</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>VVK &amp; Indrajith fantasy powerstart promo experiments in post-production — results expected coming weeks</span></div>
+        <div class="cc-bullet"><span class="cc-dot">•</span><span>Promos without captions &amp; bands — mixed early results. Learnings to be applied from next week</span></div>
       </div>
 
       <!-- Gen AI Updates -->
       <div class="creative-card">
         <div class="cc-show"><div class="cc-show-dot" style="background:#06b6d4"></div>Gen AI Updates</div>
-        <div class="cc-section-label">Production Status</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">Mahakaviyam – Honey Trap</strong> — In-house, in process. Few assets sent to scaling</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">TROT – Kick Gen AI LA</strong> — In-house, in process. Scaling assets performing well</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – PKI</strong> — Full version received 11 May. Corrections shared. Upload planned 12 May</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">VVK/BKR – Two Losers</strong> — KS Files full versions received. Corrections given. Upload this week</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">VVK/BKR – Chosen Dragon</strong> — 11th Hour Productions in progress. TAT: 31 May</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Son of Fire (AI Tales)</strong> — First 3 mins in FB testing. TAT: 31 May</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Son of Fire (Blink Studios)</strong> — PPM in process. TAT: ~25 days</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Another Round</strong> — PPM almost complete, awaiting vocal track. TAT: ~30 days</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">CULT – VO Version</strong> — In-house video generation in process. TAT: 28 May</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">KIPI/Shoorveer – Akilan Vs Vibhasha</strong> — In-house video generation in process. TAT: 13 May</div>
-        <div class="cc-section-label">Uploaded Last Week</div>
-        <div class="cc-subitem">· TROT — 10 assets uploaded. Few moved to scaling</div>
-        <div class="cc-subitem">· BY/Indrajith — 18 assets uploaded. Few moved to scaling</div>
-        <div class="cc-subitem">· BY/Indrajith — PKI Gen AI LA First 10 mins + AI Sketch → FB testing</div>
-        <div class="cc-subitem">· BY/Indrajith — Son of Fire First 3 mins + AI Sketch → FB testing</div>
-        <div class="cc-subitem">· BKR/VVK — Two Losers 14 mins + AI Sketch → FB testing</div>
+        <div class="cc-section-label">New Productions</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Son of Fire</strong> — PPM completed. Vendor advance payment pending. TAT: 22 Jun</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">VVK/BKR – Chosen Dragon</strong> — Video generation in progress. TAT: 31 May</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Another Round</strong> — Video generation in progress. TAT: 15 Jun</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">CULT – VO Version</strong> — Gen AI LA + AI Sketch uploaded for FB testing. Alternate openings being explored</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Insta Empire / KING – Rest House</strong> — PPM completed. Video generation in progress. TAT: 1 Jun</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">The Return / Ragasiya Snehithane – En Magan</strong> — PPM in progress. TAT: 15 Jun</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">SY/PKS – VKS 4.0</strong> — Awaiting business case sheet &amp; legal approvals. TAT: 18 Jun</div>
+        <div class="cc-section-label">Gen AI Versions</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">MK – Honey Trap</strong> — Revised visuals received. Metrics-based versions in progress</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – PKI</strong> — Metrics-based versions performing well → preparing for scaling</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">BY/Indrajith – Son of Fire</strong> — Metrics-based versions positive → preparing for scaling</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">BKR/VVK – Two Losers</strong> — Metrics-based versions performing well → preparing for scaling</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">CULT – VO Version</strong> — Metrics-driven reworks in progress based on initial testing insights</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Akilan Vs Vibhasha</strong> — Gen AI LA + episodic crunch performing well → preparing for scaling</div>
       </div>
 
       <!-- Editor Box -->
       <div class="creative-card">
         <div class="cc-show"><div class="cc-show-dot" style="background:#fbbf24"></div>Editor Box</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 1 – Vinoth</strong> — In App, LA Match only. Business case in process</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 2 – Vinoth 2</strong> — In App, LA Match only. Business case in process</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 3 – Darwin</strong> — Gen AI Sketch · KIPI Eps 27–50 done · Eps 61–75 in process</div>
-        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 4 – Snekha</strong> — Gen AI Sketch · KIPI Eps 60–75 in process</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 1 – Vinoth</strong> — In-App LA Match work in progress. Business case sheet under process</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 2 – Vinoth 2</strong> — In-App LA Match work in progress. Business case sheet under process</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 3 – Darwin</strong> — Gen AI Sketch corrections for KIPI episodes underway</div>
+        <div class="cc-subitem">· <strong style="color:#f3f4f6">Box 4 – Snekha</strong> — Gen AI Sketch work for KIPI episodes in progress</div>
       </div>
 
       <!-- InApp Delivery -->
       <div class="creative-card">
-        <div class="cc-show"><div class="cc-show-dot" style="background:#14b8a6"></div>In-App Delivery Status</div>
+        <div class="cc-show"><div class="cc-show-dot" style="background:#14b8a6"></div>In-App Gen AI Adaptations</div>
         <div class="cc-section-label">Hindi Gen AI LA Adaptation</div>
-        <div class="cc-subitem">· SY / PKS — Eps 23–32 (~3 hrs) uploaded</div>
+        <div class="cc-subitem">· SY / PKS — Eps 33–40 uploaded to In-App platform</div>
         <div class="cc-section-label">Tamil Gen AI LA</div>
-        <div class="cc-subitem">· KIPI / Shoorveer — Eps 14–19 (~1 hr) uploaded</div>
-        <div class="cc-subitem">· KIPI / Shoorveer — Eps 21–27 in correction, upload this week</div>
+        <div class="cc-subitem">· Shoorveer / KIPI — Eps 20–27 uploaded. Total 5 hrs completed</div>
         <div class="cc-section-label">Tamil Gen AI Sketch</div>
-        <div class="cc-subitem">· KIPI — First 25 hrs (Darwin) · TAT: Week 1 June</div>
-        <div class="cc-subitem">· KIPI — Second 25 hrs (Snekha) · TAT: Week 1 June</div>
+        <div class="cc-subitem">· KIPI – First 25 hrs (Darwin) · TAT: Week 1 June</div>
+        <div class="cc-subitem">· KIPI – Second 25 hrs (Snekha) · TAT: Week 1 June</div>
       </div>
 
       <!-- Overall Summary -->
       <div class="creative-card" style="grid-column:1/-1;">
         <div class="cc-show"><div class="cc-show-dot" style="background:#22c55e"></div>Overall Summary</div>
-        <p style="color:#d1d5db;line-height:1.6;margin:6px 0 0;">This week focused mainly on testing hyper long assets and original promos across multiple shows. Several assets delivered strong hook rates and stable CTR performance, especially in Ragasiya Snehithane and Por Kanda Singam. Hyper long assets in PKI and Indrajith also showed promising early scaling signals. Activation and Average Play Time continue to remain key focus areas across most creatives. Reworks are happening to improve retention, activation, hook efficiency, and overall scaling stability. Multiple assets have shown positive early signs for scaling and are being actively optimised for better CPI performance.</p>
+        <p style="color:#d1d5db;line-height:1.6;margin:6px 0 0;">This week's focus remained on improving retention-driven creatives through aggressive reworks, alternate openings, intense PS integrations, and non-linear storytelling experiments. Several assets across Indrajith, Ragasiya Snehithane, and Por Kanda Singam delivered promising activation and engagement signals. Hyperlong and adaptation-led creatives continued showing strong early scaling potential, while original promos maintained stable engagement performance. Major ongoing efforts are focused on improving opening hook strength, tighter pacing for higher AVP, and stronger in-app engagement layers to improve activation and retention.</p>
       </div>
 
     </div>`;
