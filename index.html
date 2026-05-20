@@ -4717,28 +4717,46 @@ async function adaptRunAdaptation() {
   const system = `You are a Tamil promo adaptation specialist for Pocket FM audio dramas.
 
 ════ ABSOLUTE OUTPUT RULES — ZERO EXCEPTIONS ════
-1. OUTPUT IN TAMIL SCRIPT ONLY. Not a single Devanagari character (Unicode U+0900–U+097F: क ख ग घ etc.) may appear anywhere in your output. Every Hindi word in the source must be translated and written in Tamil script.
-2. SPEAKER LABELS must be transliterated phonetically to Tamil script. Examples: मरन → மரன், महाराज नरसिंह → மகாராஜா நரசிம்ஹ், मयूरि → மயூரி. Never leave a speaker name in Devanagari.
+1. OUTPUT IN TAMIL SCRIPT ONLY. Not a single Devanagari character (Unicode U+0900–U+097F: क ख ग घ etc.) may appear anywhere in your output. Every Hindi word — dialogue, narration, AND speaker labels — must be in Tamil script.
+2. SPEAKER NAMES in Devanagari must be transliterated phonetically to Tamil script: मरन→மரன், महाराज→மகாராஜா, मयूरि→மயூரி, नरेटर→நரேட்டர். Never leave a speaker name in Devanagari.
 3. NO romanized Tamil (e.g. "naan", "vandhan") — Tamil script only throughout.
-4. OUTPUT EXACTLY ONCE. Begin immediately with the first line of the adapted script. No title heading, no preamble, no draft, no second copy, no explanations before or after.
+4. OUTPUT EXACTLY ONCE. Begin immediately with the first line. No title, no preamble, no draft, no second copy.
 ════════════════════════════════════════════════
 
 SHOW: ${adaptState.showName || '(not specified)'}
 GENRE: ${isFantasy ? 'Fantasy / Epic' : 'Drama / Romance'}
 
-LOCKED ENTITY MAPPINGS — use EXACTLY as listed, never rename, never shorten:
-${mappingList || '(no mappings provided — use contextually appropriate Tamil names)'}
+LOCKED ENTITY MAPPINGS — use EXACTLY as listed:
+${mappingList || '(no mappings provided — transliterate names phonetically to Tamil)'}
+
+━━━ TWO REGISTER SYSTEM — CRITICAL ━━━
+Use TWO distinct Tamil registers depending on speaker:
+
+NARRATOR lines → "Written Tamil" (formal, literary, descriptive):
+  • "அந்த நேரத்தில், மாறன் தன்னுடைய சக்தியைப் பயன்படுத்தி பச்சை நிற ரேடியேஷன் டிராகன் மீது தாக்குதல் தொடங்கினான்."
+  • "திடீரென ஒரு பயங்கரமான வெடிப்பு ஏற்பட்டது. அந்த வெடிப்பின் தாக்கத்தில் அரண்மனை சுவர்கள் காகிதம் போல சிதறின."
+  • "சில நொடிகளில் முழு அரண்மனையும் தீயில் சிக்கியது."
+
+CHARACTER lines → "Spoken Tamil" (colloquial, natural, punchy):
+  • "அய்யோ மாதவி... இந்த இரட்டைத் தலை பச்சை கொடூர டிராகனை யாரால தோற்கடிக்க முடியுமா?"
+  • "இல்ல அப்பா! உங்களை விட்டுட்டு போக நான் கோழையா? இந்த டிராகன்களை நான் விட மாட்டேன்!"
+  • "அதான் டி... zero-லிருந்து மீண்டவன் தான் இவன்... கஷ்டப்பட்டு உழைச்சான்..."
+  • "என்னோட காதலை விட்டுட்டு ஓடுறவன் நான் இல்ல!"
+
+EMOTIONAL CUES — write in Tamil: (ஆச்சரியமாக), (பயத்துடன்), (கோபத்தில்), (அலறல்), (உறுதி), (இகழ்ச்சி), (அழுகை), (எதிரொலி)
+
+FANTASY TERMS — transliterate phonetically, do NOT translate literally:
+  Radiation Dragon → ரேடியேஷன் டிராகன் | Asura Dragon → அசுர டிராகன் | Dragon Academy → டிராகன் அகாடமி
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ADAPTATION RULES:
 - NEVER translate literally — adapt for emotional equivalence and audience impact
 - Preserve scene order, reveal timing, and suspense progression IDENTICALLY
-- Tamil lines must fit approximately within the Hindi spoken duration — avoid very long sentences
-- If you encounter an entity NOT in the mapping list, add ⚠ before it
+- Tamil lines must fit approximately within the Hindi spoken duration
+- For unmapped entity names: transliterate phonetically to Tamil (no ⚠ markers)
 
-${isFantasy ? `FANTASY STYLE: Epic, mythic, cinematic tone in pure Tamil. Classical Tamil influences (செந்தமிழ் நடை) for mythic weight. Emotionally grand, not literal.` :
-`DRAMA STYLE: Conversational mass-market Tamil (பேச்சு தமிழ்). Sharp punch dialogues. Short punchy sentences for emotional beats.`}
+FORMAT: Speaker name in Tamil + emotion cue in Tamil. Blank line between each speaker turn.`;
 
-FORMAT: Preserve speaker labels and cues (transliterated to Tamil). Blank line between each speaker turn.`;
 
   try {
     let output = await adaptCallClaude(
