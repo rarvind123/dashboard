@@ -3778,6 +3778,38 @@ function metaBoard(dataSet, showTag) {
 
 function renderMetaIntel() {
   const summaryHtml = `
+    <div style="background:#111827;border:1px solid #1f2937;border-left:3px solid #6366f1;border-radius:8px;padding:14px 18px;margin-bottom:18px;font-size:12px;color:#d1d5db;line-height:1.7;">
+      <div style="font-weight:700;color:#a5b4fc;margin-bottom:8px;font-size:13px;">SES — Script Efficiency Score (0–100)</div>
+      <div style="margin-bottom:6px;color:#9ca3af;">Composite rank of how well a creative performs <em>relative to the account average</em>. Weighted blend of:</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;">
+        <div style="background:#1f2937;border-radius:6px;padding:8px 10px;">
+          <div style="color:#f3f4f6;font-weight:600;">CTR</div>
+          <div style="color:#6ee7b7;font-size:11px;">30% weight</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:2px;">Higher than avg = better</div>
+        </div>
+        <div style="background:#1f2937;border-radius:6px;padding:8px 10px;">
+          <div style="color:#f3f4f6;font-weight:600;">Hook Rate</div>
+          <div style="color:#6ee7b7;font-size:11px;">25% weight</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:2px;">3s plays ÷ impressions</div>
+        </div>
+        <div style="background:#1f2937;border-radius:6px;padding:8px 10px;">
+          <div style="color:#f3f4f6;font-weight:600;">Thruplay Rate</div>
+          <div style="color:#6ee7b7;font-size:11px;">25% weight</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:2px;">Higher than avg = better</div>
+        </div>
+        <div style="background:#1f2937;border-radius:6px;padding:8px 10px;">
+          <div style="color:#f3f4f6;font-weight:600;">CPM</div>
+          <div style="color:#6ee7b7;font-size:11px;">20% weight</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:2px;">Lower than avg = better</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:11px;">
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-right:4px;"></span><strong style="color:#22c55e;">80+</strong> Outperforming — scale</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3b82f6;margin-right:4px;"></span><strong style="color:#93c5fd;">60–79</strong> Above avg — watch</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-right:4px;"></span><strong style="color:#fcd34d;">40–59</strong> Mixed — optimise</span>
+        <span><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:4px;"></span><strong style="color:#fca5a5;">&lt;40</strong> Underperforming — rework or pull</span>
+      </div>
+    </div>
     <div class="meta-summary-grid">
       <div class="meta-stat">
         <div class="meta-stat-val">₹${(metaSummary.totalSpend/1e5).toFixed(1)}L</div>
