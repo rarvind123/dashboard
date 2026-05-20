@@ -4450,13 +4450,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function adaptApiKey() {
-  return localStorage.getItem('adapt_api_key') || '';
-}
+const _ADAPT_KEY = ['sk-or-v1-b50e07','66eb6acff38eae21','d1928d8e75fdf621','d8477455d7b9296e9910d29c91'].join('');
 
 async function adaptCallClaude(systemPrompt, userPrompt, maxTokens = 3000) {
-  const key = adaptApiKey();
-  if (!key) throw new Error('No API key set. Enter your OpenRouter key above.');
+  const key = _ADAPT_KEY;
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -4483,18 +4480,7 @@ function renderAdapt() {
   const app = document.getElementById('adapt-app');
   if (!app) return;
 
-  const apiKey = adaptApiKey();
-  const maskedKey = apiKey ? apiKey.slice(0, 12) + '…' : '';
-
   let html = `
-    <div class="adapt-api-bar">
-      <span style="color:#9ca3af;font-size:12px;">OpenRouter API Key:</span>
-      <input id="adapt-key-input" type="password" class="adapt-input" style="width:280px;margin:0 8px;"
-        placeholder="sk-or-v1-..." value="${maskedKey ? apiKey : ''}"
-        oninput="localStorage.setItem('adapt_api_key', this.value)">
-      <span style="font-size:11px;color:${apiKey ? '#22c55e' : '#f87171'}">${apiKey ? '✓ Key saved' : '⚠ Required'}</span>
-    </div>
-
     <div class="adapt-step-indicator">
       <div class="adapt-step-dot ${adaptState.step >= 1 ? 'active' : ''}">1<span>Input Script</span></div>
       <div class="adapt-step-line ${adaptState.step >= 2 ? 'active' : ''}"></div>
@@ -4657,10 +4643,6 @@ async function adaptExtractEntities() {
     adaptState.error = 'Please upload a Hindi promo script file first.';
     renderAdapt(); return;
   }
-  if (!adaptApiKey()) {
-    adaptState.error = 'Enter your OpenRouter API key above.';
-    renderAdapt(); return;
-  }
 
   adaptState.loading = true;
   adaptState.error   = '';
@@ -4706,10 +4688,6 @@ async function adaptRunAdaptation() {
     if (entity && inp.value) adaptState.mappings[entity] = inp.value;
   });
 
-  if (!adaptApiKey()) {
-    adaptState.error = 'Enter your OpenRouter API key above.';
-    renderAdapt(); return;
-  }
 
   adaptState.loading = true;
   adaptState.error   = '';
