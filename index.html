@@ -4472,7 +4472,7 @@ async function adaptCallClaude(systemPrompt, userPrompt, maxTokens = 3000) {
       'X-Title': 'Pocket FM Promo Adapt'
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-haiku-4.5',
+      model: 'anthropic/claude-sonnet-4-5',
       max_tokens: maxTokens,
       messages: [
         { role: 'system', content: systemPrompt },
@@ -4623,6 +4623,7 @@ function renderAdaptStep3() {
         <div class="adapt-header" style="margin:0;">Tamil Adaptation — ${adaptState.showName}${adaptState.scriptName ? ' · ' + adaptState.scriptName : ''} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
         <div style="display:flex;gap:8px;">
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
+          <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([adaptState.output],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(adaptState.showName||'script').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_'+(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_tamil.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';renderAdapt()">New Adaptation</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Edit Mappings</button>
         </div>
@@ -4710,41 +4711,46 @@ async function adaptRunAdaptation() {
 
   const system = `You are a Tamil promo adaptation specialist for Pocket FM audio dramas.
 
+⚠ CRITICAL: Your ENTIRE output must be written in Tamil script (தமிழ் எழுத்து) ONLY.
+- Do NOT write any Hindi words or Devanagari characters (क ख ग etc.)
+- Do NOT write romanized Tamil (e.g. "naan", "vandhan") — use Tamil script only
+- Speaker labels like "Narrator:" and character names may remain in English/Tamil as appropriate
+- Every single line of dialogue and narration must be in Tamil script
+
 SHOW: ${adaptState.showName || '(not specified)'}
 GENRE: ${isFantasy ? 'Fantasy / Epic' : 'Drama / Romance'}
-${adaptState.duration ? `TARGET DURATION: approximately ${adaptState.duration} seconds spoken` : ''}
 
 LOCKED ENTITY MAPPINGS — use EXACTLY as listed, never rename, never shorten, never use alternates:
 ${mappingList || '(no mappings provided — use contextually appropriate Tamil names)'}
 
-CORE RULES:
+ADAPTATION RULES:
 1. NEVER translate literally — adapt for emotional equivalence and audience impact
 2. Preserve scene order, reveal timing, and suspense progression IDENTICALLY
-3. Tamil lines must fit approximately within the Hindi spoken duration — avoid long sentences
-4. Output ONLY the adapted Tamil script — no commentary, no notes, no explanations
+3. Tamil lines must fit approximately within the Hindi spoken duration — avoid very long sentences
+4. Output ONLY the adapted Tamil script — no commentary, no notes, no explanations, no preamble
 5. If you encounter an entity NOT in the mapping list, add ⚠ before it
 6. Preserve all speaker labels exactly: Narrator:, Character (cue):
 
 ${isFantasy ? `FANTASY ADAPTATION STYLE:
-- Epic, mythic, cinematic tone
+- Epic, mythic, cinematic tone in pure Tamil
 - Preserve lore terminology with perfect consistency
 - Emotionally grand — not childish or literal
 - World-building immersion is critical
-- Use classical Tamil influences where appropriate for mythic weight` :
+- Use classical Tamil influences (செந்தமிழ் நடை) where appropriate for mythic weight` :
 `DRAMA ADAPTATION STYLE:
-- Conversational, natural, mass-market Tamil
+- Conversational, natural, mass-market Tamil (பேச்சு தமிழ்)
 - Sharp punch dialogues — humiliation and suspense must land hard
 - Relatable everyday language, not literary Tamil
 - Emotional realism — audiences must feel the drama
 - Short punchy sentences for key emotional beats`}
 
-OUTPUT FORMAT: Preserve all narrator and character labels. Keep line breaks between speakers.`;
+OUTPUT FORMAT: Preserve all narrator and character labels. Keep line breaks between speakers. Output the full adapted script once, from start to finish — do not repeat or summarize.`;
 
   try {
     const output = await adaptCallClaude(
       system,
       `Adapt this Hindi promo script to Tamil:\n\n${adaptState.hindiScript}`,
-      4000
+      8000
     );
     adaptState.output = output;
     adaptState.step   = 3;
