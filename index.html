@@ -4413,13 +4413,22 @@ const adaptState = {
   error: ''
 };
 
+const ADAPT_MAX_CHARS = 30000; // ~7,500 tokens — enough for any promo script
+
 function adaptHandleFile(file) {
   if (!file) return;
   adaptState.fileName = file.name;
   const reader = new FileReader();
   reader.onload = e => {
-    adaptState.hindiScript = e.target.result;
-    adaptState.error = '';
+    const text = e.target.result;
+    if (text.length > ADAPT_MAX_CHARS) {
+      adaptState.hindiScript = '';
+      adaptState.fileName = '';
+      adaptState.error = `File too large (${Math.round(text.length/1000)}k characters). Promo scripts should be under 30,000 characters. You may have uploaded a full episode — please upload only the promo script.`;
+    } else {
+      adaptState.hindiScript = text;
+      adaptState.error = '';
+    }
     renderAdapt();
   };
   reader.readAsText(file);
