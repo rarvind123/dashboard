@@ -4410,7 +4410,8 @@ const adaptState = {
   mappings: {},
   output: '',
   loading: false,
-  error: ''
+  error: '',
+  warning: ''
 };
 
 const ADAPT_MAX_CHARS = 30000; // ~7,500 tokens — enough for any promo script
@@ -4472,7 +4473,7 @@ async function adaptCallClaude(systemPrompt, userPrompt, maxTokens = 3000) {
       'X-Title': 'Pocket FM Promo Adapt'
     },
     body: JSON.stringify({
-      model: 'anthropic/claude-sonnet-4-5',
+      model: 'anthropic/claude-sonnet-4-6',
       max_tokens: maxTokens,
       messages: [
         { role: 'system', content: systemPrompt },
@@ -4604,16 +4605,19 @@ function renderAdaptStep2() {
 }
 
 function renderAdaptStep3() {
+  const hasDevanagari = line => /[ऀ-ॿ]/.test(line);
   const lines = adaptState.output.split('\n');
   const formattedLines = lines.map(line => {
+    const deva = hasDevanagari(line);
+    const style = deva ? ' style="background:#3f1010;border-left:3px solid #ef4444;padding-left:6px;"' : '';
     if (/^(Narrator|நேரேட்டர்)\s*:/i.test(line)) {
-      return `<div class="adapt-out-narrator">${line}</div>`;
-    } else if (/^[A-Za-z஀-௿].+\s*[\(（]/.test(line) && line.includes(':')) {
-      return `<div class="adapt-out-char">${line}</div>`;
+      return `<div class="adapt-out-narrator"${style}>${line}</div>`;
+    } else if (/^[A-Za-z஀-௿ऀ-ॿ].+[\(（]/.test(line) && line.includes(':')) {
+      return `<div class="adapt-out-char"${style}>${line}</div>`;
     } else if (line.trim() === '') {
       return '<div style="height:10px;"></div>';
     } else {
-      return `<div class="adapt-out-line">${line}</div>`;
+      return `<div class="adapt-out-line"${style}>${line}</div>`;
     }
   }).join('');
 
@@ -4624,10 +4628,11 @@ function renderAdaptStep3() {
         <div style="display:flex;gap:8px;">
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
           <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([adaptState.output],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(adaptState.showName||'script').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_'+(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_tamil.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
-          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';renderAdapt()">New Adaptation</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';adaptState.warning='';renderAdapt()">New Adaptation</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Edit Mappings</button>
         </div>
       </div>
+      ${adaptState.warning ? `<div style="background:#3f1010;border:1px solid #ef4444;border-radius:6px;padding:10px 14px;margin-bottom:12px;color:#fca5a5;font-size:12px;">⚠ ${adaptState.warning}</div>` : ''}
       <div class="adapt-output">${formattedLines}</div>
       <textarea id="adapt-raw" style="position:absolute;left:-9999px;top:-9999px;">${adaptState.output}</textarea>
       <div style="margin-top:16px;">
@@ -4711,47 +4716,45 @@ async function adaptRunAdaptation() {
 
   const system = `You are a Tamil promo adaptation specialist for Pocket FM audio dramas.
 
-⚠ CRITICAL: Your ENTIRE output must be written in Tamil script (தமிழ் எழுத்து) ONLY.
-- Do NOT write any Hindi words or Devanagari characters (क ख ग etc.)
-- Do NOT write romanized Tamil (e.g. "naan", "vandhan") — use Tamil script only
-- Speaker labels like "Narrator:" and character names may remain in English/Tamil as appropriate
-- Every single line of dialogue and narration must be in Tamil script
+════ ABSOLUTE OUTPUT RULES — ZERO EXCEPTIONS ════
+1. OUTPUT IN TAMIL SCRIPT ONLY. Not a single Devanagari character (Unicode U+0900–U+097F: क ख ग घ etc.) may appear anywhere in your output. Every Hindi word in the source must be translated and written in Tamil script.
+2. SPEAKER LABELS must be transliterated phonetically to Tamil script. Examples: मरन → மரன், महाराज नरसिंह → மகாராஜா நரசிம்ஹ், मयूरि → மயூரி. Never leave a speaker name in Devanagari.
+3. NO romanized Tamil (e.g. "naan", "vandhan") — Tamil script only throughout.
+4. OUTPUT EXACTLY ONCE. Begin immediately with the first line of the adapted script. No title heading, no preamble, no draft, no second copy, no explanations before or after.
+════════════════════════════════════════════════
 
 SHOW: ${adaptState.showName || '(not specified)'}
 GENRE: ${isFantasy ? 'Fantasy / Epic' : 'Drama / Romance'}
 
-LOCKED ENTITY MAPPINGS — use EXACTLY as listed, never rename, never shorten, never use alternates:
+LOCKED ENTITY MAPPINGS — use EXACTLY as listed, never rename, never shorten:
 ${mappingList || '(no mappings provided — use contextually appropriate Tamil names)'}
 
 ADAPTATION RULES:
-1. NEVER translate literally — adapt for emotional equivalence and audience impact
-2. Preserve scene order, reveal timing, and suspense progression IDENTICALLY
-3. Tamil lines must fit approximately within the Hindi spoken duration — avoid very long sentences
-4. Output ONLY the adapted Tamil script — no commentary, no notes, no explanations, no preamble
-5. If you encounter an entity NOT in the mapping list, add ⚠ before it
-6. Preserve all speaker labels exactly: Narrator:, Character (cue):
+- NEVER translate literally — adapt for emotional equivalence and audience impact
+- Preserve scene order, reveal timing, and suspense progression IDENTICALLY
+- Tamil lines must fit approximately within the Hindi spoken duration — avoid very long sentences
+- If you encounter an entity NOT in the mapping list, add ⚠ before it
 
-${isFantasy ? `FANTASY ADAPTATION STYLE:
-- Epic, mythic, cinematic tone in pure Tamil
-- Preserve lore terminology with perfect consistency
-- Emotionally grand — not childish or literal
-- World-building immersion is critical
-- Use classical Tamil influences (செந்தமிழ் நடை) where appropriate for mythic weight` :
-`DRAMA ADAPTATION STYLE:
-- Conversational, natural, mass-market Tamil (பேச்சு தமிழ்)
-- Sharp punch dialogues — humiliation and suspense must land hard
-- Relatable everyday language, not literary Tamil
-- Emotional realism — audiences must feel the drama
-- Short punchy sentences for key emotional beats`}
+${isFantasy ? `FANTASY STYLE: Epic, mythic, cinematic tone in pure Tamil. Classical Tamil influences (செந்தமிழ் நடை) for mythic weight. Emotionally grand, not literal.` :
+`DRAMA STYLE: Conversational mass-market Tamil (பேச்சு தமிழ்). Sharp punch dialogues. Short punchy sentences for emotional beats.`}
 
-OUTPUT FORMAT: Preserve all narrator and character labels. Keep line breaks between speakers. Output the full adapted script once, from start to finish — do not repeat or summarize.`;
+FORMAT: Preserve speaker labels and cues (transliterated to Tamil). Blank line between each speaker turn.`;
 
   try {
-    const output = await adaptCallClaude(
+    let output = await adaptCallClaude(
       system,
       `Adapt this Hindi promo script to Tamil:\n\n${adaptState.hindiScript}`,
-      8000
+      16000
     );
+    // If model restarted mid-output (outputs script twice), keep only the later copy
+    const restartIdx = output.search(/\n#\s+[A-Z஀-௿]/);
+    if (restartIdx > 0) output = output.slice(restartIdx + 1);
+    // Warn if Devanagari leaked through
+    if (/[ऀ-ॿ]/.test(output)) {
+      adaptState.warning = 'Some Hindi text was not converted. Lines highlighted in red below contain Devanagari — re-adapt or fix manually.';
+    } else {
+      adaptState.warning = '';
+    }
     adaptState.output = output;
     adaptState.step   = 3;
   } catch(e) {
