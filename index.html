@@ -4539,14 +4539,14 @@ function renderAdaptStep1() {
       </div>
       <div class="adapt-label" style="margin-top:20px;">Hindi Promo Script File</div>
       <label class="adapt-file-drop" id="adapt-drop-zone">
-        <input type="file" id="adapt-file-input" accept=".txt,.docx,.doc" style="display:none"
+        <input type="file" id="adapt-file-input" accept=".txt" style="display:none"
           onchange="adaptHandleFile(this.files[0])">
         ${hasFile
           ? `<div style="color:#22c55e;font-size:14px;font-weight:600;">✓ ${adaptState.fileName || 'File loaded'}</div>
              <div style="color:#6b7280;font-size:12px;margin-top:4px;">${adaptState.hindiScript.length} characters · <span style="color:#6366f1;cursor:pointer;" onclick="document.getElementById('adapt-file-input').click()">Replace file</span></div>`
           : `<div style="font-size:28px;margin-bottom:8px;">📄</div>
              <div style="color:#e5e7eb;font-size:14px;font-weight:500;">Drop .txt file here or click to browse</div>
-             <div style="color:#6b7280;font-size:12px;margin-top:4px;">.txt files supported</div>`
+             <div style="color:#6b7280;font-size:12px;margin-top:4px;">Plain text (.txt) only — if you have a Word file, do File → Save As → Plain Text first</div>`
         }
       </label>
       <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
