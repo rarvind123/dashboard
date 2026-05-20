@@ -1030,6 +1030,47 @@
     .bucket.strong  .bucket-label { color: #3b82f6; }
     .bucket.average .bucket-label { color: #f59e0b; }
     .bucket.weak    .bucket-label { color: #ef4444; }
+
+    /* ─── PROMO ADAPT TAB ─────────────────────────────────────────────── */
+    .adapt-api-bar { display:flex; align-items:center; gap:8px; background:#0f172a; border:1px solid #1f2937; border-radius:8px; padding:10px 16px; margin-bottom:20px; }
+    .adapt-step-indicator { display:flex; align-items:center; gap:0; margin-bottom:24px; }
+    .adapt-step-dot { display:flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:50%; background:#1f2937; border:2px solid #374151; color:#6b7280; font-size:12px; font-weight:700; position:relative; flex-shrink:0; }
+    .adapt-step-dot.active { background:#4f46e5; border-color:#6366f1; color:#fff; }
+    .adapt-step-dot span { position:absolute; top:34px; left:50%; transform:translateX(-50%); font-size:10px; color:#6b7280; white-space:nowrap; font-weight:400; }
+    .adapt-step-dot.active span { color:#a5b4fc; }
+    .adapt-step-line { flex:1; height:2px; background:#374151; }
+    .adapt-step-line.active { background:#4f46e5; }
+    .adapt-card { background:#111827; border:1px solid #1f2937; border-radius:10px; padding:20px 24px; margin-bottom:16px; }
+    .adapt-header { font-size:14px; font-weight:700; color:#e5e7eb; margin-bottom:16px; letter-spacing:0.02em; }
+    .adapt-form-row { display:flex; gap:16px; align-items:flex-end; flex-wrap:wrap; }
+    .adapt-label { font-size:11px; color:#6b7280; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:5px; }
+    .adapt-input { background:#0f172a; border:1px solid #374151; border-radius:6px; color:#e5e7eb; font-size:13px; padding:7px 10px; outline:none; transition:border-color .15s; width:100%; box-sizing:border-box; }
+    .adapt-input:focus { border-color:#6366f1; }
+    .adapt-select { background:#0f172a; border:1px solid #374151; border-radius:6px; color:#e5e7eb; font-size:13px; padding:7px 10px; outline:none; width:100%; box-sizing:border-box; }
+    .adapt-textarea { background:#0f172a; border:1px solid #374151; border-radius:6px; color:#e5e7eb; font-size:12px; font-family:monospace; padding:12px; outline:none; width:100%; min-height:220px; resize:vertical; line-height:1.6; box-sizing:border-box; transition:border-color .15s; }
+    .adapt-textarea:focus { border-color:#6366f1; }
+    .adapt-btn { background:#4f46e5; color:#fff; border:none; border-radius:6px; padding:9px 20px; font-size:13px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:background .15s; }
+    .adapt-btn:hover { background:#4338ca; }
+    .adapt-btn:disabled { background:#374151; color:#6b7280; cursor:not-allowed; }
+    .adapt-btn-secondary { background:#1f2937; color:#d1d5db; border:1px solid #374151; border-radius:6px; padding:8px 14px; font-size:12px; cursor:pointer; transition:background .15s; }
+    .adapt-btn-secondary:hover { background:#374151; }
+    .adapt-entity-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+    .adapt-entity-col { background:#0f172a; border:1px solid #1f2937; border-radius:8px; padding:12px; }
+    .adapt-entity-col-header { font-size:11px; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid #1f2937; }
+    .adapt-entity-row { display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+    .adapt-entity-hindi { font-size:12px; color:#e5e7eb; min-width:80px; flex-shrink:0; }
+    .adapt-entity-tamil { flex:1; font-size:12px; padding:5px 8px; min-width:0; }
+    .adapt-output { background:#0f172a; border:1px solid #1f2937; border-radius:8px; padding:20px; max-height:520px; overflow-y:auto; line-height:1.8; }
+    .adapt-out-narrator { color:#a5b4fc; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; margin-top:12px; margin-bottom:2px; }
+    .adapt-out-char { color:#6ee7b7; font-weight:600; font-size:12px; margin-top:10px; margin-bottom:2px; }
+    .adapt-out-line { color:#e5e7eb; font-size:13px; line-height:1.7; }
+    .adapt-error { background:#7f1d1d; border:1px solid #ef4444; border-radius:6px; padding:10px 14px; color:#fca5a5; font-size:12px; margin-bottom:16px; }
+    .adapt-loading { display:inline-block; width:14px; height:14px; border:2px solid #6366f1; border-top-color:transparent; border-radius:50%; animation:adapt-spin .6s linear infinite; }
+    @keyframes adapt-spin { to { transform:rotate(360deg); } }
+    @media (max-width: 900px) {
+      .adapt-entity-grid { grid-template-columns: repeat(2, 1fr); }
+      .adapt-form-row { flex-direction: column; }
+    }
   </style>
 </head>
 <body>
@@ -1081,6 +1122,7 @@
     <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
     <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
     <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
+    <button class="tab-btn"        onclick="switchTab('adapt',this)">🌐 Promo Adapt</button>
   </div>
   <div class="tab-bar" id="subtabs-powerstarters" style="display:none">
     <button class="tab-btn" onclick="switchTab('powerstarts',this)">⚡ Trending</button>
@@ -1191,6 +1233,10 @@
 
 <div id="tab-scale" class="tab-pane">
   <div id="scale-app"></div>
+</div>
+
+<div id="tab-adapt" class="tab-pane">
+  <div id="adapt-app"></div>
 </div>
 
 
@@ -4329,6 +4375,336 @@ function setScalingSort(key) {
 }
 
 renderScalingIntel();
+
+// ═══════════════════════════════════════════════
+//   PROMO ADAPT TAB
+// ═══════════════════════════════════════════════
+
+const adaptState = {
+  step: 1,
+  showName: '',
+  genre: 'fantasy',
+  duration: '',
+  hindiScript: '',
+  entities: { characters: [], locations: [], lore: [], relationships: [] },
+  mappings: {},
+  output: '',
+  loading: false,
+  error: ''
+};
+
+function adaptApiKey() {
+  return localStorage.getItem('adapt_api_key') || '';
+}
+
+async function adaptCallClaude(systemPrompt, userPrompt, maxTokens = 3000) {
+  const key = adaptApiKey();
+  if (!key) throw new Error('No API key set. Enter your OpenRouter key above.');
+  const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${key}`,
+      'Content-Type': 'application/json',
+      'HTTP-Referer': 'https://rarvind123.github.io/dashboard/',
+      'X-Title': 'Pocket FM Promo Adapt'
+    },
+    body: JSON.stringify({
+      model: 'anthropic/claude-haiku-4.5',
+      max_tokens: maxTokens,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt }
+      ]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message);
+  return data.choices[0].message.content;
+}
+
+function renderAdapt() {
+  const app = document.getElementById('adapt-app');
+  if (!app) return;
+
+  const apiKey = adaptApiKey();
+  const maskedKey = apiKey ? apiKey.slice(0, 12) + '…' : '';
+
+  let html = `
+    <div class="adapt-api-bar">
+      <span style="color:#9ca3af;font-size:12px;">OpenRouter API Key:</span>
+      <input id="adapt-key-input" type="password" class="adapt-input" style="width:280px;margin:0 8px;"
+        placeholder="sk-or-v1-..." value="${maskedKey ? apiKey : ''}"
+        oninput="localStorage.setItem('adapt_api_key', this.value)">
+      <span style="font-size:11px;color:${apiKey ? '#22c55e' : '#f87171'}">${apiKey ? '✓ Key saved' : '⚠ Required'}</span>
+    </div>
+
+    <div class="adapt-step-indicator">
+      <div class="adapt-step-dot ${adaptState.step >= 1 ? 'active' : ''}">1<span>Input Script</span></div>
+      <div class="adapt-step-line ${adaptState.step >= 2 ? 'active' : ''}"></div>
+      <div class="adapt-step-dot ${adaptState.step >= 2 ? 'active' : ''}">2<span>Map Entities</span></div>
+      <div class="adapt-step-line ${adaptState.step >= 3 ? 'active' : ''}"></div>
+      <div class="adapt-step-dot ${adaptState.step >= 3 ? 'active' : ''}">3<span>Tamil Output</span></div>
+    </div>`;
+
+  if (adaptState.error) {
+    html += `<div class="adapt-error">⚠ ${adaptState.error}</div>`;
+  }
+
+  if (adaptState.step === 1) {
+    html += renderAdaptStep1();
+  } else if (adaptState.step === 2) {
+    html += renderAdaptStep2();
+  } else {
+    html += renderAdaptStep3();
+  }
+
+  app.innerHTML = html;
+}
+
+function renderAdaptStep1() {
+  return `
+    <div class="adapt-card">
+      <div class="adapt-header">Step 1 — Upload Hindi Promo Script</div>
+      <div class="adapt-form-row">
+        <div style="flex:1">
+          <div class="adapt-label">Tamil Show Name</div>
+          <input class="adapt-input" id="adapt-show" type="text" placeholder="e.g. Vaal Veesum Karikala"
+            value="${adaptState.showName}" oninput="adaptState.showName=this.value">
+        </div>
+        <div style="flex:1">
+          <div class="adapt-label">Genre</div>
+          <select class="adapt-select" id="adapt-genre" onchange="adaptState.genre=this.value">
+            <option value="fantasy" ${adaptState.genre==='fantasy'?'selected':''}>Fantasy / Epic</option>
+            <option value="drama" ${adaptState.genre==='drama'?'selected':''}>Drama / Romance</option>
+          </select>
+        </div>
+        <div style="width:120px">
+          <div class="adapt-label">Duration (sec)</div>
+          <input class="adapt-input" id="adapt-dur" type="number" placeholder="60"
+            value="${adaptState.duration}" oninput="adaptState.duration=this.value">
+        </div>
+      </div>
+      <div class="adapt-label" style="margin-top:16px;">Hindi Promo Script</div>
+      <textarea class="adapt-textarea" id="adapt-script" placeholder="Paste the full Hindi promo script here...
+Include narrator labels and character dialogue as-is."
+        oninput="adaptState.hindiScript=this.value">${adaptState.hindiScript}</textarea>
+      <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
+        <button class="adapt-btn" onclick="adaptExtractEntities()" ${adaptState.loading?'disabled':''}>
+          ${adaptState.loading ? '<span class="adapt-loading"></span> Extracting…' : 'Extract Entities →'}
+        </button>
+        <span style="font-size:11px;color:#6b7280;">Claude will identify all characters, locations, lore and relationships</span>
+      </div>
+    </div>`;
+}
+
+function renderAdaptStep2() {
+  const cats = [
+    { key: 'characters',    label: 'Characters',         icon: '👤' },
+    { key: 'locations',     label: 'Locations',          icon: '📍' },
+    { key: 'lore',          label: 'Lore / Objects',     icon: '✨' },
+    { key: 'relationships', label: 'Relationships',      icon: '🔗' },
+  ];
+
+  const colsHtml = cats.map(cat => {
+    const items = adaptState.entities[cat.key] || [];
+    const rows = items.map(entity => {
+      const val = adaptState.mappings[entity] || '';
+      const safeEntity = entity.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      return `<div class="adapt-entity-row">
+        <span class="adapt-entity-hindi">${entity}</span>
+        <span style="color:#4b5563;">→</span>
+        <input class="adapt-input adapt-entity-tamil" type="text"
+          placeholder="Tamil equivalent"
+          value="${val}"
+          oninput="adaptState.mappings['${safeEntity}'] = this.value">
+      </div>`;
+    }).join('');
+    return `<div class="adapt-entity-col">
+      <div class="adapt-entity-col-header">${cat.icon} ${cat.label}</div>
+      ${rows || '<div style="color:#4b5563;font-size:12px;padding:8px 0;">None detected</div>'}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="adapt-card">
+      <div class="adapt-header">Step 2 — Map Hindi Entities to Tamil Equivalents</div>
+      <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">
+        Fill in Tamil equivalents for each entity. These mappings will be <strong style="color:#a5b4fc;">locked</strong> — Claude will never deviate from them during adaptation.
+        Leave blank to skip an entity.
+      </div>
+      <div class="adapt-entity-grid">${colsHtml}</div>
+      <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="adapt-btn" onclick="adaptRunAdaptation()" ${adaptState.loading?'disabled':''}>
+          ${adaptState.loading ? '<span class="adapt-loading"></span> Adapting…' : 'Lock Mappings &amp; Adapt →'}
+        </button>
+        <button class="adapt-btn-secondary" onclick="adaptState.step=1;renderAdapt()">← Back</button>
+        <span style="font-size:11px;color:#6b7280;">Claude will adapt the promo using only the Tamil equivalents you've entered above</span>
+      </div>
+    </div>`;
+}
+
+function renderAdaptStep3() {
+  const lines = adaptState.output.split('\n');
+  const formattedLines = lines.map(line => {
+    if (/^(Narrator|நேரேட்டர்)\s*:/i.test(line)) {
+      return `<div class="adapt-out-narrator">${line}</div>`;
+    } else if (/^[A-Za-z஀-௿].+\s*[\(（]/.test(line) && line.includes(':')) {
+      return `<div class="adapt-out-char">${line}</div>`;
+    } else if (line.trim() === '') {
+      return '<div style="height:10px;"></div>';
+    } else {
+      return `<div class="adapt-out-line">${line}</div>`;
+    }
+  }).join('');
+
+  return `
+    <div class="adapt-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div class="adapt-header" style="margin:0;">Tamil Adaptation — ${adaptState.showName} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
+        <div style="display:flex;gap:8px;">
+          <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';renderAdapt()">New Adaptation</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Edit Mappings</button>
+        </div>
+      </div>
+      <div class="adapt-output">${formattedLines}</div>
+      <textarea id="adapt-raw" style="position:absolute;left:-9999px;top:-9999px;">${adaptState.output}</textarea>
+      <div style="margin-top:16px;">
+        <div class="adapt-label">Entity Mappings Used</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
+          ${Object.entries(adaptState.mappings).filter(([,v])=>v).map(([h,t]) =>
+            `<span style="background:#1f2937;border:1px solid #374151;border-radius:4px;padding:3px 8px;font-size:11px;color:#d1d5db;">
+              <span style="color:#9ca3af;">${h}</span> → <span style="color:#6ee7b7;">${t}</span>
+            </span>`
+          ).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+async function adaptExtractEntities() {
+  adaptState.showName    = document.getElementById('adapt-show')?.value || adaptState.showName;
+  adaptState.genre       = document.getElementById('adapt-genre')?.value || adaptState.genre;
+  adaptState.hindiScript = document.getElementById('adapt-script')?.value || adaptState.hindiScript;
+
+  if (!adaptState.hindiScript.trim()) {
+    adaptState.error = 'Please paste a Hindi promo script first.';
+    renderAdapt(); return;
+  }
+  if (!adaptApiKey()) {
+    adaptState.error = 'Enter your OpenRouter API key above.';
+    renderAdapt(); return;
+  }
+
+  adaptState.loading = true;
+  adaptState.error   = '';
+  renderAdapt();
+
+  try {
+    const system = `You are an entity extractor for audio drama promo scripts.
+Extract ALL named entities from the Hindi script provided.
+Return ONLY valid JSON — no commentary, no markdown fences.
+Structure:
+{
+  "characters": ["Name1","Name2"],
+  "locations":  ["Place1","Place2"],
+  "lore":       ["Object1","Power1","Creature1","Kingdom1"],
+  "relationships": ["role1","role2"]
+}
+Include every character name, location, fantasy object, power, artifact, kingdom, creature, and relationship role mentioned.`;
+
+    const raw    = await adaptCallClaude(system, `Extract all entities from this Hindi promo script:\n\n${adaptState.hindiScript}`);
+    const json   = raw.replace(/^```(?:json)?\n?/,'').replace(/\n?```\s*$/,'');
+    const parsed = JSON.parse(json);
+
+    adaptState.entities = {
+      characters:    parsed.characters    || [],
+      locations:     parsed.locations     || [],
+      lore:          parsed.lore          || [],
+      relationships: parsed.relationships || [],
+    };
+    adaptState.mappings = {};
+    adaptState.step     = 2;
+  } catch(e) {
+    adaptState.error = e.message;
+  }
+
+  adaptState.loading = false;
+  renderAdapt();
+}
+
+async function adaptRunAdaptation() {
+  // collect any last-minute mapping edits from DOM
+  document.querySelectorAll('.adapt-entity-tamil').forEach(inp => {
+    const entity = inp.previousElementSibling?.previousElementSibling?.textContent;
+    if (entity && inp.value) adaptState.mappings[entity] = inp.value;
+  });
+
+  if (!adaptApiKey()) {
+    adaptState.error = 'Enter your OpenRouter API key above.';
+    renderAdapt(); return;
+  }
+
+  adaptState.loading = true;
+  adaptState.error   = '';
+  renderAdapt();
+
+  const mappingList = Object.entries(adaptState.mappings)
+    .filter(([,v]) => v)
+    .map(([h,t]) => `  "${h}" → "${t}"`)
+    .join('\n');
+
+  const isFantasy = adaptState.genre === 'fantasy';
+
+  const system = `You are a Tamil promo adaptation specialist for Pocket FM audio dramas.
+
+SHOW: ${adaptState.showName || '(not specified)'}
+GENRE: ${isFantasy ? 'Fantasy / Epic' : 'Drama / Romance'}
+${adaptState.duration ? `TARGET DURATION: approximately ${adaptState.duration} seconds spoken` : ''}
+
+LOCKED ENTITY MAPPINGS — use EXACTLY as listed, never rename, never shorten, never use alternates:
+${mappingList || '(no mappings provided — use contextually appropriate Tamil names)'}
+
+CORE RULES:
+1. NEVER translate literally — adapt for emotional equivalence and audience impact
+2. Preserve scene order, reveal timing, and suspense progression IDENTICALLY
+3. Tamil lines must fit approximately within the Hindi spoken duration — avoid long sentences
+4. Output ONLY the adapted Tamil script — no commentary, no notes, no explanations
+5. If you encounter an entity NOT in the mapping list, add ⚠ before it
+6. Preserve all speaker labels exactly: Narrator:, Character (cue):
+
+${isFantasy ? `FANTASY ADAPTATION STYLE:
+- Epic, mythic, cinematic tone
+- Preserve lore terminology with perfect consistency
+- Emotionally grand — not childish or literal
+- World-building immersion is critical
+- Use classical Tamil influences where appropriate for mythic weight` :
+`DRAMA ADAPTATION STYLE:
+- Conversational, natural, mass-market Tamil
+- Sharp punch dialogues — humiliation and suspense must land hard
+- Relatable everyday language, not literary Tamil
+- Emotional realism — audiences must feel the drama
+- Short punchy sentences for key emotional beats`}
+
+OUTPUT FORMAT: Preserve all narrator and character labels. Keep line breaks between speakers.`;
+
+  try {
+    const output = await adaptCallClaude(
+      system,
+      `Adapt this Hindi promo script to Tamil:\n\n${adaptState.hindiScript}`,
+      4000
+    );
+    adaptState.output = output;
+    adaptState.step   = 3;
+  } catch(e) {
+    adaptState.error = e.message;
+  }
+
+  adaptState.loading = false;
+  renderAdapt();
+}
+
+renderAdapt();
 
 // ─── Fire tooltip ───────────────────────────────────────────────────────────
 (function() {
