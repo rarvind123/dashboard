@@ -1067,6 +1067,8 @@
     .adapt-error { background:#7f1d1d; border:1px solid #ef4444; border-radius:6px; padding:10px 14px; color:#fca5a5; font-size:12px; margin-bottom:16px; }
     .adapt-loading { display:inline-block; width:14px; height:14px; border:2px solid #6366f1; border-top-color:transparent; border-radius:50%; animation:adapt-spin .6s linear infinite; }
     @keyframes adapt-spin { to { transform:rotate(360deg); } }
+    .adapt-file-drop { display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0f172a; border:2px dashed #374151; border-radius:10px; padding:32px 20px; cursor:pointer; text-align:center; transition:border-color .15s, background .15s; margin-top:6px; }
+    .adapt-file-drop:hover, .adapt-file-drop.drag-over { border-color:#6366f1; background:#0d1526; }
     @media (max-width: 900px) {
       .adapt-entity-grid { grid-template-columns: repeat(2, 1fr); }
       .adapt-form-row { flex-direction: column; }
@@ -1112,6 +1114,7 @@
   <div class="master-tab-bar">
     <button class="master-tab active" onclick="switchMaster('scripting',this)">✍ Scripting</button>
     <button class="master-tab"        onclick="switchMaster('powerstarters',this)">⚡ Powerstarters</button>
+    <button class="master-tab"        onclick="switchMaster('adapt',this)">🌐 Promo Adapt</button>
   </div>
   <div class="tab-bar" id="subtabs-scripting">
     <button class="tab-btn active" onclick="switchTab('perf',this)">🧪 Testing Intel</button>
@@ -1122,13 +1125,14 @@
     <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
     <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
     <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
-    <button class="tab-btn"        onclick="switchTab('adapt',this)">🌐 Promo Adapt</button>
+
   </div>
   <div class="tab-bar" id="subtabs-powerstarters" style="display:none">
     <button class="tab-btn" onclick="switchTab('powerstarts',this)">⚡ Trending</button>
     <button class="tab-btn" onclick="switchTab('microdramas',this)">🎬 Microdrama</button>
     <button class="tab-btn" onclick="switchTab('social',this)">📱 Social Media</button>
   </div>
+  <div class="tab-bar" id="subtabs-adapt" style="display:none"></div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -1249,12 +1253,19 @@ function switchMaster(group, btn) {
   btn.classList.add('active');
   const scriptingBar = document.getElementById('subtabs-scripting');
   const powerBar     = document.getElementById('subtabs-powerstarters');
+  const adaptBar     = document.getElementById('subtabs-adapt');
   scriptingBar.style.display = group === 'scripting'     ? 'flex' : 'none';
   powerBar.style.display     = group === 'powerstarters' ? 'flex' : 'none';
+  adaptBar.style.display     = group === 'adapt'         ? 'flex' : 'none';
   if (group === 'scripting') {
     switchTab('perf', scriptingBar.querySelector('.tab-btn'));
-  } else {
+  } else if (group === 'powerstarters') {
     switchTab('powerstarts', powerBar.querySelector('.tab-btn'));
+  } else if (group === 'adapt') {
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-adapt').classList.add('active');
+    renderAdapt();
   }
 }
 
@@ -4391,8 +4402,9 @@ renderScalingIntel();
 const adaptState = {
   step: 1,
   showName: '',
+  scriptName: '',
   genre: 'fantasy',
-  duration: '',
+  fileName: '',
   hindiScript: '',
   entities: { characters: [], locations: [], lore: [], relationships: [] },
   mappings: {},
@@ -4400,6 +4412,43 @@ const adaptState = {
   loading: false,
   error: ''
 };
+
+function adaptHandleFile(file) {
+  if (!file) return;
+  adaptState.fileName = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    adaptState.hindiScript = e.target.result;
+    adaptState.error = '';
+    renderAdapt();
+  };
+  reader.readAsText(file);
+}
+
+// drag-and-drop support
+document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('dragover', e => {
+    const zone = e.target.closest('#adapt-drop-zone');
+    if (zone) { e.preventDefault(); zone.classList.add('drag-over'); }
+  });
+  document.addEventListener('dragleave', e => {
+    const zone = e.target.closest('#adapt-drop-zone');
+    if (zone) zone.classList.remove('drag-over');
+  });
+  document.addEventListener('drop', e => {
+    const zone = e.target.closest('#adapt-drop-zone');
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) adaptHandleFile(file);
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('#adapt-drop-zone') && !e.target.closest('input') && !e.target.closest('span[onclick]')) {
+      document.getElementById('adapt-file-input')?.click();
+    }
+  });
+});
 
 function adaptApiKey() {
   return localStorage.getItem('adapt_api_key') || '';
@@ -4470,14 +4519,20 @@ function renderAdapt() {
 }
 
 function renderAdaptStep1() {
+  const hasFile = !!adaptState.hindiScript;
   return `
     <div class="adapt-card">
       <div class="adapt-header">Step 1 — Upload Hindi Promo Script</div>
       <div class="adapt-form-row">
         <div style="flex:1">
-          <div class="adapt-label">Tamil Show Name</div>
+          <div class="adapt-label">Show Name</div>
           <input class="adapt-input" id="adapt-show" type="text" placeholder="e.g. Vaal Veesum Karikala"
             value="${adaptState.showName}" oninput="adaptState.showName=this.value">
+        </div>
+        <div style="flex:1">
+          <div class="adapt-label">Script Name</div>
+          <input class="adapt-input" id="adapt-scriptname" type="text" placeholder="e.g. Dragon Egg v2"
+            value="${adaptState.scriptName||''}" oninput="adaptState.scriptName=this.value">
         </div>
         <div style="flex:1">
           <div class="adapt-label">Genre</div>
@@ -4486,18 +4541,21 @@ function renderAdaptStep1() {
             <option value="drama" ${adaptState.genre==='drama'?'selected':''}>Drama / Romance</option>
           </select>
         </div>
-        <div style="width:120px">
-          <div class="adapt-label">Duration (sec)</div>
-          <input class="adapt-input" id="adapt-dur" type="number" placeholder="60"
-            value="${adaptState.duration}" oninput="adaptState.duration=this.value">
-        </div>
       </div>
-      <div class="adapt-label" style="margin-top:16px;">Hindi Promo Script</div>
-      <textarea class="adapt-textarea" id="adapt-script" placeholder="Paste the full Hindi promo script here...
-Include narrator labels and character dialogue as-is."
-        oninput="adaptState.hindiScript=this.value">${adaptState.hindiScript}</textarea>
+      <div class="adapt-label" style="margin-top:20px;">Hindi Promo Script File</div>
+      <label class="adapt-file-drop" id="adapt-drop-zone">
+        <input type="file" id="adapt-file-input" accept=".txt,.docx,.doc" style="display:none"
+          onchange="adaptHandleFile(this.files[0])">
+        ${hasFile
+          ? `<div style="color:#22c55e;font-size:14px;font-weight:600;">✓ ${adaptState.fileName || 'File loaded'}</div>
+             <div style="color:#6b7280;font-size:12px;margin-top:4px;">${adaptState.hindiScript.length} characters · <span style="color:#6366f1;cursor:pointer;" onclick="document.getElementById('adapt-file-input').click()">Replace file</span></div>`
+          : `<div style="font-size:28px;margin-bottom:8px;">📄</div>
+             <div style="color:#e5e7eb;font-size:14px;font-weight:500;">Drop .txt file here or click to browse</div>
+             <div style="color:#6b7280;font-size:12px;margin-top:4px;">.txt files supported</div>`
+        }
+      </label>
       <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
-        <button class="adapt-btn" onclick="adaptExtractEntities()" ${adaptState.loading?'disabled':''}>
+        <button class="adapt-btn" onclick="adaptExtractEntities()" ${adaptState.loading||!hasFile?'disabled':''}>
           ${adaptState.loading ? '<span class="adapt-loading"></span> Extracting…' : 'Extract Entities →'}
         </button>
         <span style="font-size:11px;color:#6b7280;">Claude will identify all characters, locations, lore and relationships</span>
@@ -4568,7 +4626,7 @@ function renderAdaptStep3() {
   return `
     <div class="adapt-card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="adapt-header" style="margin:0;">Tamil Adaptation — ${adaptState.showName} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
+        <div class="adapt-header" style="margin:0;">Tamil Adaptation — ${adaptState.showName}${adaptState.scriptName ? ' · ' + adaptState.scriptName : ''} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
         <div style="display:flex;gap:8px;">
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';renderAdapt()">New Adaptation</button>
@@ -4591,12 +4649,12 @@ function renderAdaptStep3() {
 }
 
 async function adaptExtractEntities() {
-  adaptState.showName    = document.getElementById('adapt-show')?.value || adaptState.showName;
-  adaptState.genre       = document.getElementById('adapt-genre')?.value || adaptState.genre;
-  adaptState.hindiScript = document.getElementById('adapt-script')?.value || adaptState.hindiScript;
+  adaptState.showName   = document.getElementById('adapt-show')?.value      || adaptState.showName;
+  adaptState.scriptName = document.getElementById('adapt-scriptname')?.value || adaptState.scriptName;
+  adaptState.genre      = document.getElementById('adapt-genre')?.value      || adaptState.genre;
 
   if (!adaptState.hindiScript.trim()) {
-    adaptState.error = 'Please paste a Hindi promo script first.';
+    adaptState.error = 'Please upload a Hindi promo script file first.';
     renderAdapt(); return;
   }
   if (!adaptApiKey()) {
