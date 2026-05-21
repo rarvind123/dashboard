@@ -1067,6 +1067,10 @@
     .adapt-error { background:#7f1d1d; border:1px solid #ef4444; border-radius:6px; padding:10px 14px; color:#fca5a5; font-size:12px; margin-bottom:16px; }
     .adapt-loading { display:inline-block; width:14px; height:14px; border:2px solid #6366f1; border-top-color:transparent; border-radius:50%; animation:adapt-spin .6s linear infinite; }
     @keyframes adapt-spin { to { transform:rotate(360deg); } }
+    .adapt-uncertain { background:rgba(245,158,11,0.22); color:#fcd34d; border-radius:3px; padding:1px 4px; border-bottom:2px solid #f59e0b; cursor:help; }
+    .adapt-edit-area { width:100%; min-height:420px; background:#0f172a; color:#e5e7eb; border:1px solid #374151; border-radius:8px; padding:16px; font-size:13px; line-height:1.8; font-family:'Segoe UI',Arial,sans-serif; resize:vertical; }
+    .adapt-edit-area:focus { outline:none; border-color:#6366f1; }
+    .adapt-learn-badge { font-size:11px; color:#6b7280; background:#1f2937; padding:3px 10px; border-radius:10px; border:1px solid #374151; }
     .adapt-file-drop { display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0f172a; border:2px dashed #374151; border-radius:10px; padding:32px 20px; cursor:pointer; text-align:center; transition:border-color .15s, background .15s; margin-top:6px; }
     .adapt-file-drop:hover, .adapt-file-drop.drag-over { border-color:#6366f1; background:#0d1526; }
     @media (max-width: 900px) {
@@ -4411,6 +4415,8 @@ const adaptState = {
   entities: { characters: [], locations: [], lore: [], relationships: [] },
   mappings: {},
   output: '',
+  originalOutput: '',
+  editMode: false,
   loading: false,
   error: '',
   warning: ''
@@ -4623,37 +4629,102 @@ function renderAdaptStep2() {
     </div>`;
 }
 
+// ─── Learnings store ───────────────────────────────────────────────────────
+function adaptLoadLearnings() {
+  try { return JSON.parse(localStorage.getItem('pf_adapt_learnings') || '[]'); } catch { return []; }
+}
+function adaptSaveLearnings(arr) {
+  localStorage.setItem('pf_adapt_learnings', JSON.stringify(arr.slice(-40)));
+}
+function adaptToggleEdit() {
+  if (!adaptState.editMode && !adaptState.originalOutput) {
+    adaptState.originalOutput = adaptState.output;
+  }
+  adaptState.editMode = !adaptState.editMode;
+  renderAdapt();
+}
+function adaptSaveEdit() {
+  const ta = document.getElementById('adapt-edit-area');
+  if (!ta) return;
+  const edited = ta.value.trim();
+  const original = (adaptState.originalOutput || adaptState.output).replace(/\[\?|\?\]/g, '');
+  const oLines = original.split('\n');
+  const eLines = edited.split('\n');
+  const corrections = [];
+  const len = Math.max(oLines.length, eLines.length);
+  for (let i = 0; i < len; i++) {
+    const o = (oLines[i] || '').trim();
+    const e = (eLines[i] || '').trim();
+    if (o && e && o !== e && o.length > 8 && e.length > 4) {
+      corrections.push({ original: o, corrected: e, show: adaptState.showName, genre: adaptState.genre, targetLang: adaptState.targetLang, date: new Date().toISOString().split('T')[0] });
+    }
+  }
+  if (corrections.length) {
+    adaptSaveLearnings([...adaptLoadLearnings(), ...corrections]);
+  }
+  adaptState.output = edited;
+  adaptState.editMode = false;
+  renderAdapt();
+}
+
 function renderAdaptStep3() {
-  const hasDevanagari = line => /[ऀ-ॿ]/.test(line);
-  const lines = adaptState.output.split('\n');
-  const formattedLines = lines.map(line => {
-    const deva = hasDevanagari(line);
-    const style = deva ? ' style="background:#3f1010;border-left:3px solid #ef4444;padding-left:6px;"' : '';
-    if (/^(Narrator|நேரேட்டர்)\s*:/i.test(line)) {
-      return `<div class="adapt-out-narrator"${style}>${line}</div>`;
+  const rawOutput = adaptState.output;
+  const cleanOutput = rawOutput.replace(/\[\?|\?\]/g, ''); // strip markers for copy/download
+  const uncertainCount = (rawOutput.match(/\[\?/g) || []).length;
+  const learnings = adaptLoadLearnings();
+  const tgtLang = adaptState.targetLang || 'Tamil';
+
+  // Format with uncertain highlights + Devanagari warnings
+  const formattedLines = rawOutput.split('\n').map(line => {
+    const deva = /[ऀ-ॿ]/.test(line);
+    const baseStyle = deva ? ' style="background:#3f1010;border-left:3px solid #ef4444;padding-left:6px;"' : '';
+    // Wrap [?...?] in highlight spans
+    const highlighted = line.replace(/\[\?([^\?]*)\?\]/g, '<span class="adapt-uncertain" title="Flagged for review">$1</span>');
+    if (/^(Narrator|நரேட்டர்)\s*[:(]/i.test(line)) {
+      return `<div class="adapt-out-narrator"${baseStyle}>${highlighted}</div>`;
     } else if (/^[A-Za-z஀-௿ऀ-ॿ].+[\(（]/.test(line) && line.includes(':')) {
-      return `<div class="adapt-out-char"${style}>${line}</div>`;
+      return `<div class="adapt-out-char"${baseStyle}>${highlighted}</div>`;
     } else if (line.trim() === '') {
       return '<div style="height:10px;"></div>';
     } else {
-      return `<div class="adapt-out-line"${style}>${line}</div>`;
+      return `<div class="adapt-out-line"${baseStyle}>${highlighted}</div>`;
     }
   }).join('');
 
   return `
     <div class="adapt-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-        <div class="adapt-header" style="margin:0;">${adaptState.targetLang||'Tamil'} Adaptation — ${adaptState.showName}${adaptState.scriptName ? ' · ' + adaptState.scriptName : ''} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
-        <div style="display:flex;gap:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <div class="adapt-header" style="margin:0;">${tgtLang} Adaptation — ${adaptState.showName}${adaptState.scriptName ? ' · ' + adaptState.scriptName : ''} · ${adaptState.genre === 'fantasy' ? 'Fantasy / Epic' : 'Drama / Romance'}</div>
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+          ${learnings.filter(l => !l.targetLang || l.targetLang === tgtLang).length > 0
+            ? `<span class="adapt-learn-badge">✓ ${learnings.filter(l=>!l.targetLang||l.targetLang===tgtLang).length} corrections stored</span>` : ''}
+          <button class="adapt-btn-secondary" onclick="adaptToggleEdit()" style="${adaptState.editMode ? 'border-color:#6366f1;color:#a5b4fc;' : ''}">
+            ${adaptState.editMode ? '👁 Preview' : '✏️ Edit'}
+          </button>
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
-          <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([adaptState.output],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=(adaptState.showName||'script').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_'+(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9஀-௿ ]/g,'_')+'_'+(adaptState.targetLang||'adapted').toLowerCase().replace(/\s+/g,'_')+'.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
-          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.error='';adaptState.warning='';renderAdapt()">New Adaptation</button>
-          <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Edit Mappings</button>
+          <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([document.getElementById('adapt-raw').value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='${(adaptState.showName||'script').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.targetLang||'adapted').toLowerCase()}.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.originalOutput='';adaptState.editMode=false;adaptState.error='';adaptState.warning='';renderAdapt()">New</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Mappings</button>
         </div>
       </div>
+
+      ${uncertainCount > 0 && !adaptState.editMode ? `
+        <div style="background:#1c1407;border:1px solid #f59e0b;border-radius:6px;padding:10px 14px;margin-bottom:12px;color:#fcd34d;font-size:12px;">
+          ✏️ <strong>${uncertainCount} phrase${uncertainCount>1?'s':''} flagged for review</strong> (highlighted in orange below).
+          Click <strong>Edit</strong> to fix them — your corrections will be remembered for all future adaptations.
+        </div>` : ''}
       ${adaptState.warning ? `<div style="background:#3f1010;border:1px solid #ef4444;border-radius:6px;padding:10px 14px;margin-bottom:12px;color:#fca5a5;font-size:12px;">⚠ ${adaptState.warning}</div>` : ''}
-      <div class="adapt-output">${formattedLines}</div>
-      <textarea id="adapt-raw" style="position:absolute;left:-9999px;top:-9999px;">${adaptState.output}</textarea>
+
+      ${adaptState.editMode ? `
+        <div style="font-size:11px;color:#6b7280;margin-bottom:8px;">Edit anything below. Your changes will be saved as correction examples to improve future adaptations.</div>
+        <textarea id="adapt-edit-area" class="adapt-edit-area">${cleanOutput}</textarea>
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+          <button class="adapt-btn" onclick="adaptSaveEdit()">Save &amp; Learn →</button>
+          <span style="font-size:11px;color:#6b7280;">Every correction you make trains the tool to write better</span>
+        </div>
+      ` : `<div class="adapt-output">${formattedLines}</div>`}
+
+      <textarea id="adapt-raw" style="position:absolute;left:-9999px;top:-9999px;">${cleanOutput}</textarea>
       <div style="margin-top:16px;">
         <div class="adapt-label">Entity Mappings Used</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
@@ -4738,6 +4809,15 @@ async function adaptRunAdaptation() {
   const tgt = adaptState.targetLang || 'Tamil';
   const isTamil = tgt.toLowerCase() === 'tamil';
 
+  // Inject writer corrections as few-shot learnings
+  const storedLearnings = adaptLoadLearnings()
+    .filter(l => !l.targetLang || l.targetLang.toLowerCase() === tgt.toLowerCase())
+    .slice(-12);
+  const learningsSection = storedLearnings.length > 0
+    ? `\n━━━ WRITER CORRECTIONS — these exact patterns were wrong in previous outputs, apply fixes ━━━\n` +
+      storedLearnings.map(l => `WRONG: "${l.original}"\nRIGHT: "${l.corrected}"`).join('\n')
+    : '';
+
   const system = `You are a senior commercial ${tgt} ${isFantasy ? 'fantasy/epic' : 'drama/romance'} promo writer for Pocket FM. You write like a master oral storyteller — NOT like a translator.
 
 ════ ABSOLUTE RULES ════
@@ -4812,7 +4892,13 @@ ${isFantasy ?
 `FANTASY: Mythic ${tgt}. Timeless, legendary, epic. Preserve any English the original writer used.` :
 `DRAMA: Conversational realism. Emotional punch. Relatable phrasing. Short punchy sentences on key beats.`}
 
-FORMAT: Speaker name (emotion cue in ${tgt}). Blank line between turns.`;
+FORMAT: Speaker name (emotion cue in ${tgt}). Blank line between turns.
+
+━━━ UNCERTAINTY MARKING ━━━
+As you write, wrap any word or phrase you are not fully confident about in [? and ?].
+Flag: unusual vocabulary, words whose exact ${tgt} meaning you are unsure of, unmapped names you had to guess, phrases that might sound unnatural to a native ${tgt} speaker.
+Example: "அவன் [?புயலாய்?] பாய்ந்தான்" — if புயலாய் felt like your best guess but not certain.
+Mark 3–8 items per script. Only mark genuinely uncertain items, not standard phrases.${learningsSection}`;
 
 
   try {
