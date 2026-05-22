@@ -1121,14 +1121,14 @@
     <button class="master-tab"        onclick="switchMaster('adapt',this)">🌐 Promo Adapt</button>
   </div>
   <div class="tab-bar" id="subtabs-scripting">
-    <button class="tab-btn active" onclick="switchTab('perf',this)">🧪 Testing Intel</button>
+    <button class="tab-btn active" onclick="switchTab('meta',this)">📊 Creative Intel</button>
+    <button class="tab-btn"        onclick="switchTab('perf',this)">🧪 Testing Intel</button>
     <button class="tab-btn"        onclick="switchTab('test',this)">📋 Test Data</button>
     <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
     <button class="tab-btn"        onclick="switchTab('pipe',this)">Asset Pipeline</button>
     <button class="tab-btn"        onclick="switchTab('inapp',this)">InApp Videos</button>
     <button class="tab-btn"        onclick="switchTab('summary',this)">Script Cracking</button>
     <button class="tab-btn"        onclick="switchTab('creative',this)">Creative Summary</button>
-    <button class="tab-btn"        onclick="switchTab('meta',this)">📊 Creative Intel</button>
 
   </div>
   <div class="tab-bar" id="subtabs-powerstarters" style="display:none">
@@ -1142,7 +1142,7 @@
 <!-- ══════════════════════════════════════════════
      TAB 1 — TESTING INTELLIGENCE
 ══════════════════════════════════════════════ -->
-<div id="tab-perf" class="tab-pane active">
+<div id="tab-perf" class="tab-pane">
 
   <!-- Legend -->
   <div class="legend">
@@ -1231,7 +1231,7 @@
 <!-- ══════════════════════════════════════════════
      TAB 9 — META CREATIVE INTEL
 ══════════════════════════════════════════════ -->
-<div id="tab-meta" class="tab-pane">
+<div id="tab-meta" class="tab-pane active">
   <div id="meta-app"></div>
 </div>
 
@@ -1262,7 +1262,7 @@ function switchMaster(group, btn) {
   powerBar.style.display     = group === 'powerstarters' ? 'flex' : 'none';
   adaptBar.style.display     = group === 'adapt'         ? 'flex' : 'none';
   if (group === 'scripting') {
-    switchTab('perf', scriptingBar.querySelector('.tab-btn'));
+    switchTab('meta', scriptingBar.querySelector('.tab-btn'));
   } else if (group === 'powerstarters') {
     switchTab('powerstarts', powerBar.querySelector('.tab-btn'));
   } else if (group === 'adapt') {
@@ -4234,19 +4234,19 @@ const scalingAds = [
 ];
 
 // ─── Scaling Intel helpers ───────────────────────────────────────────────────
-// Real cost-per-install from Meta Ads Manager CSV (1 May – 19 May 2026)
-// Source: Amount Spent ÷ Mobile App Installs, show-level aggregate
+// Real cost-per-install from Meta Ads Manager CSV (1 May – 22 May 2026)
+// Source: Amount Spent ÷ Mobile App Installs, show-level aggregate across both exports
 const SHOW_CPI = {
-  "Tiger Returns":              105,  // ₹205,714 / 1,965 installs
-  "Indrajith - The Divine Warrior":  73,  // ₹338,725 / 4,620 installs
-  "Vaal Veesum Karikala":       189,  // ₹177,372 / 938 installs
-  "Mahakaaviyam":               446,  // ₹187,254 / 420 installs
-  "KING":                       140,  // ₹90,646 / 648 installs
-  "Por Kanda Singam":           164,  // ₹74,528 / 455 installs
-  "Ki.pi. 2500":                173,  // ₹100,256 / 580 installs
-  "Royal Varisu":               118,  // ₹9,058 / 77 installs
-  "The Guardian King":          244,  // ₹44,085 / 181 installs
-  "Cult - The Teenage Ruler":   288,  // prev export (no spend this period)
+  "Tiger Returns":              105,  // ₹209,474 / 2,004 installs (1–22 May combined)
+  "Indrajith - The Divine Warrior":  74,  // ₹343,038 / 4,629 installs
+  "Vaal Veesum Karikala":       190,  // ₹179,006 / 942 installs
+  "Mahakaaviyam":               447,  // ₹189,169 / 423 installs
+  "KING":                       141,  // ₹93,624 / 663 installs
+  "Por Kanda Singam":           166,  // ₹76,514 / 462 installs
+  "Ki.pi. 2500":                174,  // ₹101,254 / 581 installs
+  "Royal Varisu":               115,  // ₹9,217 / 80 installs
+  "The Guardian King":          265,  // ₹48,013 / 181 installs (₹3,928 new spend, 0 attr installs 22 May)
+  "Cult - The Teenage Ruler":   288,  // prev export (inactive this period)
 };
 
 function getShowCpi(a) {
@@ -4345,7 +4345,7 @@ function renderScalingIntel() {
       <div class="meta-stat"><div class="meta-stat-val">${totalActs}</div><div class="meta-stat-label">Total Activations</div></div>
     </div>
     <div style="font-size:10px;color:#374151;margin-bottom:20px;">
-      Pocket FM India Regional · Tamil campaigns · 1 May – 19 May 2026 &nbsp;·&nbsp;
+      Pocket FM India Regional · Tamil campaigns · 1 May – 22 May 2026 &nbsp;·&nbsp;
       Score = CPI 40% + CTR 30% + Activations 30% &nbsp;·&nbsp;
       CPI = cost per mobile install (from Ads Manager) &nbsp;·&nbsp; Playtime est. from thruplay rate &nbsp;·&nbsp;
       <span style="color:#22c55e;">Top Performer ≥80</span> &nbsp;·&nbsp;
@@ -4414,6 +4414,8 @@ const adaptState = {
   output: '',
   originalOutput: '',
   editMode: false,
+  savedRevision: false,
+  savedCorrectionCount: 0,
   loading: false,
   error: '',
   warning: ''
@@ -4638,6 +4640,7 @@ function adaptToggleEdit() {
     adaptState.originalOutput = adaptState.output;
   }
   adaptState.editMode = !adaptState.editMode;
+  if (adaptState.editMode) adaptState.savedRevision = false;
   renderAdapt();
 }
 function adaptSaveEdit() {
@@ -4661,7 +4664,50 @@ function adaptSaveEdit() {
   }
   adaptState.output = edited;
   adaptState.editMode = false;
+  adaptState.savedRevision = true;
+  adaptState.savedCorrectionCount = corrections.length;
   renderAdapt();
+}
+
+async function adaptConvertTanglish() {
+  const ta = document.getElementById('adapt-edit-area');
+  const btn = document.getElementById('adapt-tanglish-btn');
+  if (!ta || !btn) return;
+  const text = ta.value.trim();
+  if (!text) return;
+  btn.disabled = true;
+  btn.textContent = 'Converting…';
+  try {
+    const tgt = adaptState.targetLang || 'Tamil';
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${_ADAPT_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'anthropic/claude-sonnet-4-6',
+        max_tokens: 4096,
+        messages: [
+          { role: 'system', content: `You are a Tanglish-to-${tgt} Unicode converter for an audio drama script editor.
+
+TASK: Convert any Tanglish text (${tgt} words typed in Roman/Latin script) into proper ${tgt} Unicode. Leave everything else untouched.
+
+RULES:
+1. Tanglish (${tgt} in Roman script) → ${tgt} Unicode. Examples:
+   "naan vandhen" → "நான் வந்தேன்" | "enna panra" → "என்ன பண்ற" | "paaru da" → "பாரு டா" | "super-ah irukku" → "சூப்பர்-ஆ இருக்கு"
+2. Real English words → keep exactly as typed (e.g. "zero", "action", "king", "boss", "level", "super" used as English, brand names, proper nouns, technical terms).
+3. Existing ${tgt} Unicode → keep unchanged.
+4. Speaker labels, colons, parentheses, emotion cues, line breaks, blank lines → preserve exactly.
+5. DO NOT translate. DO NOT paraphrase. DO NOT change word order or meaning.
+6. Return ONLY the converted script. No commentary, no explanation.` },
+          { role: 'user', content: text }
+        ]
+      })
+    });
+    const data = await res.json();
+    const converted = data?.choices?.[0]?.message?.content?.trim();
+    if (converted) ta.value = converted;
+  } catch(e) { /* silently ignore — textarea unchanged */ }
+  btn.disabled = false;
+  btn.textContent = 'Convert Tanglish → Tamil';
 }
 
 function renderAdaptStep3() {
@@ -4700,12 +4746,18 @@ function renderAdaptStep3() {
           </button>
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
           <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([document.getElementById('adapt-raw').value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='${(adaptState.showName||'script').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.targetLang||'adapted').toLowerCase()}.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
-          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.originalOutput='';adaptState.editMode=false;adaptState.error='';adaptState.warning='';renderAdapt()">New</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.originalOutput='';adaptState.editMode=false;adaptState.savedRevision=false;adaptState.savedCorrectionCount=0;adaptState.error='';adaptState.warning='';renderAdapt()">New</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Mappings</button>
         </div>
       </div>
 
-      ${uncertainCount > 0 && !adaptState.editMode ? `
+      ${!adaptState.editMode && adaptState.savedRevision ? `
+        <div style="background:#052e16;border:1px solid #22c55e;border-radius:6px;padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="color:#86efac;font-size:12px;">✓ <strong>Revised version saved</strong>${adaptState.savedCorrectionCount > 0 ? ` — ${adaptState.savedCorrectionCount} correction${adaptState.savedCorrectionCount>1?'s':''} learned and will apply to all future adaptations` : ' — no line changes detected, but edits applied'}.
+          </span>
+          <button class="adapt-btn-secondary" style="border-color:#22c55e;color:#86efac;white-space:nowrap;" onclick="adaptToggleEdit()">✏️ Edit Again</button>
+        </div>` : ''}
+      ${uncertainCount > 0 && !adaptState.editMode && !adaptState.savedRevision ? `
         <div style="background:#1c1407;border:1px solid #f59e0b;border-radius:6px;padding:10px 14px;margin-bottom:12px;color:#fcd34d;font-size:12px;">
           ✏️ <strong>${uncertainCount} phrase${uncertainCount>1?'s':''} flagged for review</strong> (highlighted in orange below).
           Click <strong>Edit</strong> to fix them — your corrections will be remembered for all future adaptations.
@@ -4715,9 +4767,10 @@ function renderAdaptStep3() {
       ${adaptState.editMode ? `
         <div style="font-size:11px;color:#6b7280;margin-bottom:8px;">Edit anything below. Your changes will be saved as correction examples to improve future adaptations.</div>
         <textarea id="adapt-edit-area" class="adapt-edit-area">${cleanOutput}</textarea>
-        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
           <button class="adapt-btn" onclick="adaptSaveEdit()">Save &amp; Learn →</button>
-          <span style="font-size:11px;color:#6b7280;">Every correction you make trains the tool to write better</span>
+          <button id="adapt-tanglish-btn" class="adapt-btn-secondary" style="border-color:#818cf8;color:#a5b4fc;" onclick="adaptConvertTanglish()">Convert Tanglish → Tamil</button>
+          <span style="font-size:11px;color:#6b7280;">Type corrections in Tanglish — hit Convert before saving</span>
         </div>
       ` : `<div class="adapt-output">${formattedLines}</div>`}
 
