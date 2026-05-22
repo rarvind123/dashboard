@@ -1122,6 +1122,7 @@
   </div>
   <div class="tab-bar" id="subtabs-scripting">
     <button class="tab-btn active" onclick="switchTab('meta',this)">📊 Creative Intel</button>
+    <button class="tab-btn"        onclick="switchTab('genai',this)">🤖 Gen AI Testing</button>
     <button class="tab-btn"        onclick="switchTab('perf',this)">🧪 Testing Intel</button>
     <button class="tab-btn"        onclick="switchTab('test',this)">📋 Test Data</button>
     <button class="tab-btn"        onclick="switchTab('scale',this)">📈 Scaling Intel</button>
@@ -1233,6 +1234,10 @@
 ══════════════════════════════════════════════ -->
 <div id="tab-meta" class="tab-pane active">
   <div id="meta-app"></div>
+</div>
+
+<div id="tab-genai" class="tab-pane">
+  <div id="genai-app"></div>
 </div>
 
 <div id="tab-test" class="tab-pane">
@@ -3662,6 +3667,7 @@ renderPipeline();
 renderInapp();
 renderSummary();
 renderCreative();
+renderGenAiIntel();
 renderPowerstarts();
 renderMicrodramas();
 renderSocialPowerstarts();
@@ -4198,6 +4204,292 @@ function setTestSort(key) {
 }
 
 renderTestIntel();
+
+// ═══════════════════════════════════════════════
+//   DATA — GEN AI TESTING INTEL
+//   Source: Meta Testing account CSV · 22 Apr 2023 – 21 May 2026
+//   Gen AI ad sets only · Tamil campaigns
+// ═══════════════════════════════════════════════
+const GEN_AI_ADS = [
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 2",type:"Original",cpi:22.98,installs:54,spend:1241.05,impressions:96389,status:"inactive",starts:"2026-05-05"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 9",type:"Adaptation",cpi:24.15,installs:49,spend:1183.36,impressions:67783,status:"inactive",starts:"2026-05-19"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Cracked Promo Match",type:"Original",cpi:27.43,installs:118,spend:3236.72,impressions:210604,status:"inactive",starts:"2026-04-21"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 1",type:"Original",cpi:28.28,installs:43,spend:1216.03,impressions:77217,status:"inactive",starts:"2026-05-05"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM 5 MINS GEN AI + AI Sketch",type:"Adaptation",cpi:28.97,installs:75,spend:2172.85,impressions:112255,status:"inactive",starts:"2026-04-24"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Cracked Promo Match (Revised)",type:"Original",cpi:31.33,installs:43,spend:1347.12,impressions:116492,status:"inactive",starts:"2026-05-12"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 1",type:"Original",cpi:32.27,installs:74,spend:2387.79,impressions:103379,status:"inactive",starts:"2026-04-23"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 3",type:"Original",cpi:33.68,installs:36,spend:1212.43,impressions:71051,status:"inactive",starts:"2026-05-05"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 4 With Teaser 4",type:"Original",cpi:34.10,installs:7,spend:238.72,impressions:21044,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 4",type:"Original",cpi:34.50,installs:35,spend:1207.35,impressions:64283,status:"inactive",starts:"2026-05-05"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"Son of fire Gen AI LA 4 Mins + AI Sketch FT Version 1",type:"Original",cpi:35.11,installs:36,spend:1264.06,impressions:98235,status:"inactive",starts:"2026-05-12"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 2",type:"Original",cpi:35.22,installs:41,spend:1444.14,impressions:64462,status:"inactive",starts:"2026-05-15"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version",type:"Original",cpi:35.32,installs:60,spend:2118.95,impressions:131537,status:"inactive",starts:"2026-05-14"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 2",type:"Original",cpi:35.34,installs:68,spend:2403.37,impressions:170754,status:"inactive",starts:"2026-04-23"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 1 With Salar Ps",type:"Original",cpi:35.44,installs:57,spend:2019.87,impressions:109779,status:"inactive",starts:"2026-04-30"},
+  {show:"Cult - The Teenage Ruler",genre:"Fantasy",script:"CULT VO Version GEN AI LA 3 MINS + AI SKETCH Version 2",type:"Original",cpi:35.51,installs:35,spend:1242.89,impressions:93282,status:"inactive",starts:"2026-05-19"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Cracked Promo Match #2",type:"Original",cpi:35.72,installs:56,spend:2000.49,impressions:108426,status:"inactive",starts:"2026-04-24"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 10",type:"Adaptation",cpi:36.09,installs:33,spend:1191.06,impressions:71448,status:"inactive",starts:"2026-05-19"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 6 With Ps 1",type:"Adaptation",cpi:36.90,installs:10,spend:369.03,impressions:22827,status:"active",starts:"2026-05-21"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 1 With Kick Ps",type:"Original",cpi:37.71,installs:77,spend:2903.85,impressions:142609,status:"inactive",starts:"2026-04-28"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 3 With Kick Ps",type:"Original",cpi:38.05,installs:58,spend:2207.14,impressions:106668,status:"inactive",starts:"2026-04-30"},
+  {show:"Cult - The Teenage Ruler",genre:"Fantasy",script:"CULT VO Version GEN AI LA 3 MINS + AI SKETCH Version 3",type:"Original",cpi:38.31,installs:31,spend:1187.48,impressions:85536,status:"inactive",starts:"2026-05-19"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 5",type:"Original",cpi:38.90,installs:32,spend:1244.77,impressions:82499,status:"inactive",starts:"2026-05-05"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 3 (Revised)",type:"Original",cpi:39.06,installs:33,spend:1288.97,impressions:114202,status:"inactive",starts:"2026-05-12"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 4 With Ring PS",type:"Original",cpi:39.16,installs:92,spend:3603.09,impressions:171149,status:"inactive",starts:"2026-04-20"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 6 (Revised)",type:"Original",cpi:39.55,installs:26,spend:1028.35,impressions:48161,status:"inactive",starts:"2026-05-19"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Two losers Gen AI LA 14mins + AI Sketch Cracked Promo",type:"Original",cpi:39.63,installs:25,spend:990.79,impressions:55599,status:"active",starts:"2026-05-20"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 8 Reworked",type:"Adaptation",cpi:40.07,installs:36,spend:1442.38,impressions:103369,status:"inactive",starts:"2026-05-15"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 2",type:"Original",cpi:40.82,installs:58,spend:2367.43,impressions:145083,status:"inactive",starts:"2026-04-23"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 2 With Kick Ps",type:"Original",cpi:40.96,installs:71,spend:2908.12,impressions:146686,status:"inactive",starts:"2026-04-28"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 11",type:"Adaptation",cpi:41.12,installs:29,spend:1192.48,impressions:71718,status:"inactive",starts:"2026-05-19"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Two losers Gen AI LA 14mins + AI Sketch Version 2",type:"Original",cpi:41.27,installs:39,spend:1609.37,impressions:107122,status:"inactive",starts:"2026-05-15"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"Son of fire Gen AI LA 4 Mins + AI Sketch Cracked Promo",type:"Original",cpi:41.29,installs:40,spend:1651.50,impressions:86516,status:"inactive",starts:"2026-05-15"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 2 With Ring Ps",type:"Original",cpi:41.31,installs:49,spend:2024.14,impressions:116612,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 3",type:"Original",cpi:41.62,installs:57,spend:2372.47,impressions:126943,status:"inactive",starts:"2026-04-23"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 3 With Salar Ps",type:"Original",cpi:42.38,installs:52,spend:2203.93,impressions:117182,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 3 With Ring PS",type:"Original",cpi:42.78,installs:47,spend:2010.84,impressions:106184,status:"inactive",starts:"2026-04-24"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 1 With Ring Ps",type:"Original",cpi:42.84,installs:68,spend:2913.26,impressions:164349,status:"inactive",starts:"2026-04-28"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 4 With Ring PS #2",type:"Original",cpi:42.88,installs:47,spend:2015.25,impressions:102414,status:"inactive",starts:"2026-04-24"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 5 With Kick PS",type:"Original",cpi:43.10,installs:47,spend:2025.68,impressions:92633,status:"inactive",starts:"2026-04-24"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM 10 MINS GEN AI + AI Sketch",type:"Adaptation",cpi:43.37,installs:21,spend:910.73,impressions:57139,status:"inactive",starts:"2026-05-06"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM 10 MINS GEN AI + AI Sketch FT Version 1",type:"Adaptation",cpi:43.40,installs:29,spend:1258.61,impressions:76480,status:"inactive",starts:"2026-05-12"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 3",type:"Original",cpi:43.45,installs:55,spend:2389.95,impressions:123474,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 4",type:"Original",cpi:44.14,installs:66,spend:2913.48,impressions:268279,status:"inactive",starts:"2026-04-28"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 4 With Ring Ps",type:"Original",cpi:44.90,installs:49,spend:2199.96,impressions:139921,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 2 With Ring Ps",type:"Original",cpi:45.04,installs:48,spend:2161.77,impressions:112796,status:"inactive",starts:"2026-05-07"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 3 With Ring PS #2",type:"Original",cpi:45.79,installs:79,spend:3617.45,impressions:193981,status:"inactive",starts:"2026-04-20"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version",type:"Adaptation",cpi:45.85,installs:27,spend:1237.86,impressions:81993,status:"inactive",starts:"2026-05-13"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 4",type:"Original",cpi:45.89,installs:52,spend:2386.27,impressions:92224,status:"inactive",starts:"2026-04-23"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 3",type:"Adaptation",cpi:45.92,installs:42,spend:1928.82,impressions:143339,status:"inactive",starts:"2026-05-14"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 6",type:"Adaptation",cpi:46.02,installs:42,spend:1932.91,impressions:145033,status:"inactive",starts:"2026-05-14"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 4 With Kick Ps",type:"Original",cpi:46.12,installs:63,spend:2905.74,impressions:127660,status:"inactive",starts:"2026-04-28"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 4",type:"Original",cpi:46.71,installs:31,spend:1448.12,impressions:65027,status:"inactive",starts:"2026-05-15"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 5",type:"Adaptation",cpi:46.96,installs:41,spend:1925.44,impressions:127525,status:"inactive",starts:"2026-05-14"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"Son of fire Gen AI LA 4 Mins + AI Sketch Cracked Promo (Revised)",type:"Original",cpi:47.43,installs:19,spend:901.13,impressions:43274,status:"active",starts:"2026-05-20"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Two losers Gen AI LA 14mins + AI Sketch",type:"Original",cpi:47.53,installs:32,spend:1521.06,impressions:141554,status:"inactive",starts:"2026-05-08"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA - New opening 3 without FB",type:"Original",cpi:48.05,installs:40,spend:1922.01,impressions:120224,status:"inactive",starts:"2026-04-30"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 2",type:"Adaptation",cpi:48.31,installs:40,spend:1932.56,impressions:115896,status:"inactive",starts:"2026-05-14"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 3 With Ring Ps",type:"Original",cpi:48.32,installs:64,spend:3092.24,impressions:181569,status:"inactive",starts:"2026-04-28"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version 4 With 1Hr Fdr",type:"Original",cpi:49.11,installs:19,spend:933.08,impressions:46609,status:"active",starts:"2026-05-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 3 With Ring Ps",type:"Original",cpi:49.12,installs:38,spend:1866.59,impressions:93585,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 4",type:"Original",cpi:49.18,installs:48,spend:2360.42,impressions:156998,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12 mins Version 3 Revised New Visual",type:"Original",cpi:49.29,installs:9,spend:443.58,impressions:23603,status:"active",starts:"2026-05-21"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 8 With Ps 6",type:"Adaptation",cpi:49.87,installs:7,spend:349.11,impressions:20490,status:"active",starts:"2026-05-21"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"Son of fire Gen AI LA 4 Mins + AI Sketch",type:"Original",cpi:50.17,installs:18,spend:903.09,impressions:70840,status:"inactive",starts:"2026-05-06"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 3",type:"Original",cpi:50.57,installs:37,spend:1871.19,impressions:179420,status:"inactive",starts:"2026-05-07"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version 5 With 1Hr Fdr",type:"Original",cpi:50.81,installs:18,spend:914.52,impressions:51155,status:"active",starts:"2026-05-20"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version 6 With 1Hr Fdr",type:"Original",cpi:51.12,installs:23,spend:1175.73,impressions:74004,status:"inactive",starts:"2026-05-19"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 2",type:"Original",cpi:51.49,installs:46,spend:2368.67,impressions:110183,status:"inactive",starts:"2026-04-23"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 4 With Salar Ps",type:"Original",cpi:51.67,installs:39,spend:2015.15,impressions:106722,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 5",type:"Original",cpi:52.15,installs:46,spend:2398.93,impressions:129490,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 10",type:"Original",cpi:52.19,installs:39,spend:2035.56,impressions:136153,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 4",type:"Original",cpi:52.26,installs:56,spend:2926.39,impressions:319688,status:"inactive",starts:"2026-04-28"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version (Revised Visual)",type:"Original",cpi:52.35,installs:30,spend:1570.42,impressions:104613,status:"inactive",starts:"2026-05-15"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA - New opening 1",type:"Original",cpi:52.47,installs:37,spend:1941.45,impressions:143259,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 5 With Salar Ps",type:"Original",cpi:52.71,installs:68,spend:3584.51,impressions:163806,status:"inactive",starts:"2026-04-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 2 With Salar PS",type:"Original",cpi:53.08,installs:68,spend:3609.44,impressions:168700,status:"inactive",starts:"2026-04-20"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 6",type:"Original",cpi:53.40,installs:4,spend:213.58,impressions:17906,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 3 With Kick PS",type:"Original",cpi:53.44,installs:67,spend:3580.71,impressions:163781,status:"inactive",starts:"2026-04-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 4 With Kick PS",type:"Original",cpi:53.44,installs:38,spend:2030.59,impressions:88805,status:"inactive",starts:"2026-04-24"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 4 (Revised)",type:"Original",cpi:53.46,installs:25,spend:1336.39,impressions:110654,status:"inactive",starts:"2026-05-12"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 7",type:"Original",cpi:53.65,installs:27,spend:1448.56,impressions:61634,status:"inactive",starts:"2026-05-15"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 4 With Kick PS #2",type:"Original",cpi:53.83,installs:67,spend:3606.50,impressions:148777,status:"inactive",starts:"2026-04-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 2 With Kick PS",type:"Original",cpi:53.87,installs:67,spend:3609.56,impressions:172275,status:"inactive",starts:"2026-04-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 2 With Kick PS #2",type:"Original",cpi:54.77,installs:37,spend:2026.67,impressions:95330,status:"inactive",starts:"2026-04-24"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 5",type:"Original",cpi:55.28,installs:53,spend:2929.62,impressions:279083,status:"inactive",starts:"2026-04-28"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 7",type:"Adaptation",cpi:55.34,installs:26,spend:1438.80,impressions:104505,status:"inactive",starts:"2026-05-15"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 6",type:"Original",cpi:55.51,installs:26,spend:1443.33,impressions:74448,status:"inactive",starts:"2026-05-15"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 4 Revised New Visual",type:"Original",cpi:56.21,installs:10,spend:562.12,impressions:33389,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 8",type:"Original",cpi:56.28,installs:36,spend:2025.94,impressions:158797,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 5 With Kick PS",type:"Original",cpi:56.59,installs:63,spend:3564.87,impressions:147254,status:"inactive",starts:"2026-04-20"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 4 With Ring Ps",type:"Original",cpi:56.61,installs:33,spend:1868.20,impressions:93494,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 10",type:"Original",cpi:57.17,installs:9,spend:514.56,impressions:43530,status:"inactive",starts:"2026-05-06"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Super dragon - Ghibli Visual style",type:"Adaptation",cpi:57.38,installs:18,spend:1032.89,impressions:83577,status:"inactive",starts:"2026-05-12"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version 7 With 1Hr Fdr",type:"Original",cpi:57.72,installs:19,spend:1096.64,impressions:59281,status:"inactive",starts:"2026-05-19"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 5 With Salar Ps #2",type:"Original",cpi:58.30,installs:35,spend:2040.40,impressions:89382,status:"inactive",starts:"2026-04-24"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 1 With Ring Ps",type:"Original",cpi:58.39,installs:32,spend:1868.52,impressions:98086,status:"inactive",starts:"2026-05-07"},
+  {show:"Cult - The Teenage Ruler",genre:"Fantasy",script:"Cult VO Version Gen AI LA + AI Sketch",type:"Original",cpi:58.71,installs:28,spend:1643.83,impressions:140063,status:"inactive",starts:"2026-05-15"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 3",type:"Original",cpi:58.97,installs:40,spend:2358.81,impressions:125727,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 3",type:"Original",cpi:59.55,installs:40,spend:2382.11,impressions:123294,status:"inactive",starts:"2026-04-23"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 5",type:"Original",cpi:60.16,installs:24,spend:1443.82,impressions:67570,status:"inactive",starts:"2026-05-15"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 4",type:"Adaptation",cpi:61.39,installs:31,spend:1903.01,impressions:116888,status:"inactive",starts:"2026-05-14"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 2 With Salar PS #2",type:"Original",cpi:61.59,installs:33,spend:2032.49,impressions:104841,status:"inactive",starts:"2026-04-24"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 6",type:"Original",cpi:61.69,installs:9,spend:555.22,impressions:48914,status:"inactive",starts:"2026-05-06"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Cracked Promo Match (Revised) #2",type:"Original",cpi:62.65,installs:16,spend:1002.32,impressions:58613,status:"active",starts:"2026-05-20"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"AKILAN VS VIBASHA GEN AI LA Full Version 3",type:"Original",cpi:62.93,installs:23,spend:1447.29,impressions:47350,status:"inactive",starts:"2026-05-15"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 10 Mins Version 3 With Kick PS #2",type:"Original",cpi:63.53,installs:32,spend:2033.10,impressions:103330,status:"inactive",starts:"2026-04-24"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA - New opening 2",type:"Original",cpi:64.47,installs:30,spend:1934.15,impressions:148871,status:"inactive",starts:"2026-04-30"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 7mins Version 5 With Ring Ps",type:"Original",cpi:64.48,installs:29,spend:1869.86,impressions:92436,status:"inactive",starts:"2026-05-07"},
+  {show:"Tiger Returns",genre:"Male Drama",script:"Kick Gen AI LA 8 Mins Version 2 With Salar Ps",type:"Original",cpi:64.79,installs:34,spend:2202.93,impressions:119088,status:"inactive",starts:"2026-04-30"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version With 1Hr Fdr + Ps 1",type:"Original",cpi:65.09,installs:7,spend:455.63,impressions:23416,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version With Teaser 4",type:"Original",cpi:65.25,installs:37,spend:2414.30,impressions:145459,status:"inactive",starts:"2026-04-23"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Super dragon - POP Visual style",type:"Adaptation",cpi:65.54,installs:24,spend:1572.91,impressions:158159,status:"inactive",starts:"2026-05-12"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version 2 With 1Hr Fdr",type:"Original",cpi:66.01,installs:14,spend:924.20,impressions:51322,status:"active",starts:"2026-05-20"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA Full Version With 1Hr Fdr + Ps 2",type:"Original",cpi:67.10,installs:7,spend:469.72,impressions:25013,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 7",type:"Original",cpi:67.54,installs:30,spend:2026.22,impressions:187197,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 8",type:"Original",cpi:67.60,installs:13,spend:878.83,impressions:65618,status:"inactive",starts:"2026-05-06"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 9",type:"Original",cpi:67.98,installs:13,spend:883.71,impressions:65370,status:"inactive",starts:"2026-05-06"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 6",type:"Original",cpi:68.59,installs:3,spend:205.77,impressions:20313,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 5 (Revised)",type:"Original",cpi:69.97,installs:15,spend:1049.59,impressions:57904,status:"inactive",starts:"2026-05-19"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 8",type:"Original",cpi:70.05,installs:29,spend:2031.52,impressions:151914,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 9",type:"Original",cpi:70.23,installs:29,spend:2036.72,impressions:156338,status:"inactive",starts:"2026-04-30"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 6 With Ps 2",type:"Adaptation",cpi:70.60,installs:6,spend:423.60,impressions:26210,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 1 With Teaser 1",type:"Original",cpi:71.49,installs:41,spend:2931.20,impressions:244216,status:"inactive",starts:"2026-04-28"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 6 (Revised)",type:"Original",cpi:72.11,installs:18,spend:1298.05,impressions:117305,status:"inactive",starts:"2026-05-09"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 4",type:"Original",cpi:72.22,installs:26,spend:1877.59,impressions:151523,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 12mins Version 5",type:"Original",cpi:72.67,installs:28,spend:2034.71,impressions:151711,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 5",type:"Original",cpi:72.94,installs:26,spend:1896.57,impressions:164881,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 2 With Teaser 2",type:"Original",cpi:72.99,installs:40,spend:2919.70,impressions:289595,status:"inactive",starts:"2026-04-28"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 4 With Teaser 4 (Revised)",type:"Original",cpi:73.07,installs:18,spend:1315.25,impressions:122775,status:"inactive",starts:"2026-05-09"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 10",type:"Original",cpi:78.06,installs:26,spend:2029.52,impressions:168075,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 6",type:"Original",cpi:78.18,installs:24,spend:1876.38,impressions:124132,status:"inactive",starts:"2026-05-07"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Super dragon - Anime Visual style",type:"Adaptation",cpi:79.56,installs:13,spend:1034.24,impressions:100107,status:"inactive",starts:"2026-05-12"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 1",type:"Original",cpi:81.59,installs:23,spend:1876.60,impressions:199269,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 8mins Version 2",type:"Original",cpi:81.98,installs:23,spend:1885.59,impressions:165113,status:"inactive",starts:"2026-05-07"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version With Teaser 1",type:"Original",cpi:83.56,installs:37,spend:3091.75,impressions:265839,status:"inactive",starts:"2026-04-21"},
+  {show:"Ki.pi. 2500",genre:"Fantasy",script:"Akilan Vs Vibhasha Gen AI LA With 1Hr Fdr",type:"Original",cpi:84.83,installs:18,spend:1526.99,impressions:99473,status:"inactive",starts:"2026-05-15"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version With Teaser 5",type:"Original",cpi:84.97,installs:29,spend:2464.01,impressions:150999,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 11",type:"Original",cpi:88.43,installs:23,spend:2033.96,impressions:168906,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 7",type:"Original",cpi:90.26,installs:10,spend:902.56,impressions:66007,status:"inactive",starts:"2026-05-06"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 7 With Ps 3",type:"Adaptation",cpi:91.78,installs:4,spend:367.12,impressions:23975,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 3 With Teaser 3",type:"Original",cpi:93.17,installs:22,spend:2049.83,impressions:222021,status:"inactive",starts:"2026-04-30"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 9 (Revised)",type:"Original",cpi:98.60,installs:13,spend:1281.78,impressions:83107,status:"inactive",starts:"2026-05-09"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version With Teaser 2",type:"Original",cpi:99.30,installs:24,spend:2383.17,impressions:128782,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA Full Version With Teaser 3",type:"Original",cpi:99.78,installs:24,spend:2394.82,impressions:163744,status:"inactive",starts:"2026-04-23"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 7",type:"Original",cpi:102.13,installs:20,spend:2042.54,impressions:204067,status:"inactive",starts:"2026-04-30"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 8 With Ps 5",type:"Adaptation",cpi:106.09,installs:4,spend:424.37,impressions:24675,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 6 (Revised)",type:"Original",cpi:107.49,installs:12,spend:1289.88,impressions:85104,status:"inactive",starts:"2026-05-09"},
+  {show:"Vaal Veesum Karikala",genre:"Fantasy",script:"Super dragon - Pixar Visual style",type:"Adaptation",cpi:110.23,installs:11,spend:1212.49,impressions:99234,status:"inactive",starts:"2026-05-13"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 5",type:"Original",cpi:110.47,installs:8,spend:883.74,impressions:65382,status:"inactive",starts:"2026-05-06"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 6 (Revised)",type:"Original",cpi:118.22,installs:11,spend:1300.47,impressions:108630,status:"inactive",starts:"2026-05-09"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15 mins Version 3 Revised New Visual",type:"Original",cpi:133.26,installs:7,spend:932.80,impressions:46008,status:"active",starts:"2026-05-20"},
+  {show:"Indrajith - The Divine Warrior",genre:"Fantasy",script:"PAISON KA INNAM GEN AI LA Full Version 7 With Ps 4",type:"Adaptation",cpi:145.90,installs:3,spend:437.69,impressions:28479,status:"active",starts:"2026-05-21"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 10mins Version 10 (Revised)",type:"Original",cpi:260.04,installs:5,spend:1300.19,impressions:88052,status:"inactive",starts:"2026-05-09"},
+  {show:"Mahakaaviyam",genre:"Fantasy",script:"Honey trap Gen AI LA 15mins Version 9",type:"Original",cpi:null,installs:0,spend:181.65,impressions:14923,status:"inactive",starts:"2026-04-30"},
+];
+
+let genAiSortKey  = 'cpi';
+let genAiSortFlip = 1;
+let genAiShowFilter = 'all';
+
+const GENAI_SORT = {
+  cpi:      { fn:(a,b) => (a.cpi||9999)-(b.cpi||9999), label:'CPI',      dir:'▲' },
+  installs: { fn:(a,b) => b.installs-a.installs,        label:'Installs', dir:'▼' },
+  spend:    { fn:(a,b) => b.spend-a.spend,              label:'Spend',    dir:'▼' },
+};
+
+function genAiCpiCls(cpi) {
+  if (!cpi || cpi > 75) return 'ses-red';
+  if (cpi <= 35) return 'ses-green';
+  if (cpi <= 50) return 'ses-blue';
+  return 'ses-yellow';
+}
+
+function genAiCard(a, rank) {
+  const nm  = a.script.length > 34 ? a.script.slice(0,34)+'…' : a.script;
+  const cls = genAiCpiCls(a.cpi);
+  const cpiDisp = a.cpi ? '₹'+a.cpi : '—';
+  const typeCls = a.type === 'Original' ? 'color:#34d399;' : 'color:#a78bfa;';
+  const dot = a.status === 'active' ? '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#22c55e;margin-right:4px;flex-shrink:0;" title="Currently active"></span>' : '';
+  return `
+    <div class="script-card">
+      <div class="card-top">
+        <div class="card-left">
+          <div class="rank-badge"><span class="rank-arrow">▲</span>${rank}</div>
+          <div class="script-name" style="display:flex;align-items:center;gap:2px;">${dot}${nm}</div>
+        </div>
+        <span class="ses-pill ${cls}" style="font-size:11px;">${cpiDisp}</span>
+      </div>
+      <div class="script-show-tag">${a.show} · ${a.genre}</div>
+      <div class="metrics">
+        <div class="metric highlight">CPI <span>${cpiDisp}</span></div>
+        <div class="metric">Installs <span>${a.installs}</span></div>
+        <div class="metric">Spend <span>₹${(a.spend/1000).toFixed(1)}k</span></div>
+        <div class="metric">Impr <span>${(a.impressions/1000).toFixed(0)}k</span></div>
+      </div>
+      <div style="margin-top:6px;"><span style="font-size:10px;${typeCls}border:1px solid currentColor;padding:1px 7px;border-radius:10px;">${a.type}</span></div>
+    </div>`;
+}
+
+function genAiBoard(data) {
+  const withInstalls = data.filter(a => a.cpi && a.installs > 0);
+  const cfg = GENAI_SORT[genAiSortKey];
+  const sorted = [...withInstalls].sort((a,b) => genAiSortFlip * cfg.fn(a,b));
+  const buckets = [
+    {cls:'elite',   label:'Elite — Scale Candidates', test: a => a.cpi <= 35},
+    {cls:'strong',  label:'Strong — Good Signal',     test: a => a.cpi > 35 && a.cpi <= 50},
+    {cls:'average', label:'Average — Keep Testing',   test: a => a.cpi > 50 && a.cpi <= 75},
+    {cls:'weak',    label:'Review — Rework Needed',   test: a => a.cpi > 75},
+  ];
+  return `<div class="meta-board">${buckets.map(b => {
+    const items = sorted.filter(b.test);
+    return `<div class="bucket ${b.cls}">
+      <div class="bucket-header">
+        <div class="bucket-dot"></div>
+        <div class="bucket-label">${b.label}</div>
+        <div class="bucket-count">${items.length}</div>
+      </div>
+      ${items.length ? items.map((a,i) => genAiCard(a,i+1)).join('') : '<div class="empty-bucket">— none —</div>'}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderGenAiIntel() {
+  const el = document.getElementById('genai-app');
+  if (!el) return;
+  const shows = [...new Set(GEN_AI_ADS.map(a => a.show))].sort();
+  const filtered = genAiShowFilter === 'all' ? GEN_AI_ADS : GEN_AI_ADS.filter(a => a.show === genAiShowFilter);
+  const withInst = filtered.filter(a => a.installs > 0 && a.cpi);
+  const totalSpend    = filtered.reduce((s,a) => s+a.spend, 0);
+  const totalInstalls = filtered.reduce((s,a) => s+a.installs, 0);
+  const avgCpi  = totalInstalls > 0 ? Math.round(totalSpend/totalInstalls) : 0;
+  const bestCpi = withInst.length ? Math.min(...withInst.map(a=>a.cpi)).toFixed(2) : '—';
+  const activeCount = GEN_AI_ADS.filter(a => a.status === 'active').length;
+  const cfg   = GENAI_SORT[genAiSortKey];
+  const arrow = genAiSortFlip === 1 ? cfg.dir : (cfg.dir === '▼' ? '▲' : '▼');
+  const sortBtns = Object.entries(GENAI_SORT).map(([key,c]) => {
+    const act = genAiSortKey === key;
+    return `<button class="sort-btn${act?' active':''}" onclick="setGenAiSort('${key}')">${c.label}${act?`<span class="sort-arrow"> ${arrow}</span>`:''}</button>`;
+  }).join('');
+  const showPills = ['all',...shows].map(s => {
+    const act = genAiShowFilter === s;
+    const lbl = s === 'all' ? 'All Shows' : s;
+    return `<button class="sort-btn${act?' active':''}" style="font-size:10px;" onclick="setGenAiFilter('${s}')">${lbl}</button>`;
+  }).join('');
+  el.innerHTML = `
+    <div class="creative-date">🤖 Gen AI Testing Intel · Tamil Campaigns · Apr 2023 – May 2026</div>
+    <div class="meta-summary-grid" style="grid-template-columns:repeat(6,1fr);margin-bottom:12px;">
+      <div class="meta-stat"><div class="meta-stat-val">${GEN_AI_ADS.length}</div><div class="meta-stat-label">Gen AI Creatives</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${activeCount}</div><div class="meta-stat-label">Currently Active</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">${totalInstalls.toLocaleString()}</div><div class="meta-stat-label">Total Installs</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">₹${(totalSpend/1000).toFixed(0)}k</div><div class="meta-stat-label">Total Spend</div></div>
+      <div class="meta-stat"><div class="meta-stat-val">₹${avgCpi}</div><div class="meta-stat-label">Avg CPI</div></div>
+      <div class="meta-stat"><div class="meta-stat-val" style="color:#34d399;">₹${bestCpi}</div><div class="meta-stat-label">Best CPI Ever</div></div>
+    </div>
+    <div style="font-size:10px;color:#374151;margin-bottom:14px;">
+      Meta Testing account · Gen AI ad sets only · Tamil · 6 shows ·
+      <span style="color:#22c55e;">Elite CPI ≤₹35</span> ·
+      <span style="color:#93c5fd;">Strong ≤₹50</span> ·
+      <span style="color:#fcd34d;">Average ≤₹75</span> ·
+      <span style="color:#fca5a5;">Review &gt;₹75</span> ·
+      <span style="color:#22c55e;">●</span> green dot = currently active
+    </div>
+    <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">
+      <span style="font-size:11px;color:#6b7280;margin-right:2px;">Sort:</span>${sortBtns}
+      <span style="font-size:11px;color:#6b7280;margin-left:10px;margin-right:2px;">Show:</span>${showPills}
+    </div>
+    ${genAiBoard(filtered)}`;
+}
+
+function setGenAiSort(key) {
+  if (genAiSortKey === key) genAiSortFlip *= -1;
+  else { genAiSortKey = key; genAiSortFlip = 1; }
+  renderGenAiIntel();
+}
+function setGenAiFilter(show) {
+  genAiShowFilter = show;
+  renderGenAiIntel();
+}
 
 // ═══════════════════════════════════════════════
 //   DATA — TAB: SCALING INTEL (India Regional)
