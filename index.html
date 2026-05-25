@@ -42,6 +42,8 @@
       padding: 0 24px;
       background: #0d1117;
       border-bottom: 1px solid #1f2937;
+      overflow-x: auto;
+      flex-shrink: 0;
     }
     .master-tab {
       padding: 11px 22px;
@@ -1077,6 +1079,54 @@
       .adapt-entity-grid { grid-template-columns: repeat(2, 1fr); }
       .adapt-form-row { flex-direction: column; }
     }
+
+    /* ─── AI Control Center / System Status ─── */
+    .cc-banner {
+      background: linear-gradient(135deg, #111827 0%, #0f172a 100%);
+      border: 1px solid #1f2937;
+      border-left: 3px solid #10b981;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.6;
+    }
+    .cc-banner strong { color: #e5e7eb; }
+    .cc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .cc-btn {
+      background: #059669; color: #fff; border: none; border-radius: 6px;
+      padding: 9px 16px; font-size: 12px; font-weight: 700; cursor: pointer;
+      letter-spacing: 0.03em; transition: background .15s;
+    }
+    .cc-btn:hover { background: #10b981; }
+    .cc-btn.secondary { background: #1f2937; color: #d1d5db; border: 1px solid #374151; }
+    .cc-btn.secondary:hover { background: #374151; }
+    .cc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .cc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .cc-stat {
+      background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 14px;
+    }
+    .cc-stat .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: #6b7280; }
+    .cc-stat .value { font-size: 22px; font-weight: 700; color: #f9fafb; margin-top: 6px; }
+    .cc-stat .sub { font-size: 10px; color: #4b5563; margin-top: 4px; }
+    .cc-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+    .cc-table th, .cc-table td { border: 1px solid #1f2937; padding: 8px 10px; text-align: left; }
+    .cc-table th { background: #0f172a; color: #9ca3af; font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .cc-health { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .cc-health.healthy { background: #14532d; color: #4ade80; }
+    .cc-health.degraded { background: #713f12; color: #fbbf24; }
+    .cc-health.failing { background: #7f1d1d; color: #fca5a5; }
+    .cc-health.idle { background: #1f2937; color: #9ca3af; }
+    .cc-flow {
+      background: #0f172a; border: 1px solid #1f2937; border-radius: 8px;
+      padding: 14px; font-family: ui-monospace, monospace; font-size: 12px; color: #93c5fd;
+      line-height: 1.7; margin-top: 10px;
+    }
+    .cc-incident { font-size: 11px; color: #d1d5db; padding: 8px 0; border-bottom: 1px solid #1f2937; }
+    .cc-incident .type { color: #f87171; font-weight: 700; font-size: 10px; text-transform: uppercase; }
+    .cc-status-msg { font-size: 12px; color: #6b7280; margin-bottom: 12px; }
+    .cc-loading { display: inline-block; width: 14px; height: 14px; border: 2px solid #10b981; border-top-color: transparent; border-radius: 50%; animation: adapt-spin .6s linear infinite; vertical-align: middle; margin-right: 6px; }
   </style>
 </head>
 <body>
@@ -1119,6 +1169,7 @@
     <button class="master-tab active" onclick="switchMaster('scripting',this)">✍ Scripting</button>
     <button class="master-tab"        onclick="switchMaster('powerstarters',this)">⚡ Powerstarters</button>
     <button class="master-tab"        onclick="switchMaster('adapt',this)">🌐 Promo Adapt</button>
+    <button class="master-tab"        onclick="switchMaster('controlcenter',this)">🛰 System Status</button>
   </div>
   <div class="tab-bar" id="subtabs-scripting">
     <button class="tab-btn active" onclick="switchTab('meta',this)">📊 Creative Intel</button>
@@ -1138,6 +1189,9 @@
     <button class="tab-btn" onclick="switchTab('social',this)">📱 Social Media</button>
   </div>
   <div class="tab-bar" id="subtabs-adapt" style="display:none"></div>
+  <div class="tab-bar" id="subtabs-controlcenter" style="display:none">
+    <button class="tab-btn active" onclick="switchTab('systemstatus',this)">System Status</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════════
@@ -1252,6 +1306,10 @@
   <div id="adapt-app"></div>
 </div>
 
+<div id="tab-systemstatus" class="tab-pane">
+  <div id="systemstatus-app"></div>
+</div>
+
 
 <script>
 // ═══════════════════════════════════════════════
@@ -1263,9 +1321,11 @@ function switchMaster(group, btn) {
   const scriptingBar = document.getElementById('subtabs-scripting');
   const powerBar     = document.getElementById('subtabs-powerstarters');
   const adaptBar     = document.getElementById('subtabs-adapt');
+  const controlBar   = document.getElementById('subtabs-controlcenter');
   scriptingBar.style.display = group === 'scripting'     ? 'flex' : 'none';
   powerBar.style.display     = group === 'powerstarters' ? 'flex' : 'none';
   adaptBar.style.display     = group === 'adapt'         ? 'flex' : 'none';
+  controlBar.style.display   = group === 'controlcenter' ? 'flex' : 'none';
   if (group === 'scripting') {
     switchTab('meta', scriptingBar.querySelector('.tab-btn'));
   } else if (group === 'powerstarters') {
@@ -1275,6 +1335,9 @@ function switchMaster(group, btn) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('tab-adapt').classList.add('active');
     renderAdapt();
+  } else if (group === 'controlcenter') {
+    switchTab('systemstatus', controlBar.querySelector('.tab-btn'));
+    renderSystemStatus(false);
   }
 }
 
@@ -4702,6 +4765,10 @@ const adaptState = {
   targetLang: 'Tamil',
   fileName: '',
   hindiScript: '',
+  normalizedScript: '',
+  normalizedEntities: [],
+  displayMode: 'Hinglish',
+  writerLanguage: 'hindi',
   entities: { characters: [], locations: [], lore: [], relationships: [] },
   mappings: {},
   output: '',
@@ -4790,14 +4857,29 @@ function renderAdapt() {
   const app = document.getElementById('adapt-app');
   if (!app) return;
 
+  const steps = [
+    { n: 1, label: 'Upload Script' },
+    { n: 2, label: 'Language Normalize' },
+    { n: 3, label: 'Adaptation Analysis' },
+    { n: 4, label: 'Rewrite Directions' },
+    { n: 5, label: 'Adaptation Output' },
+  ];
+
   let html = `
-    <div class="adapt-step-indicator">
-      <div class="adapt-step-dot ${adaptState.step >= 1 ? 'active' : ''}">1<span>Input Script</span></div>
-      <div class="adapt-step-line ${adaptState.step >= 2 ? 'active' : ''}"></div>
-      <div class="adapt-step-dot ${adaptState.step >= 2 ? 'active' : ''}">2<span>Map Entities</span></div>
-      <div class="adapt-step-line ${adaptState.step >= 3 ? 'active' : ''}"></div>
-      <div class="adapt-step-dot ${adaptState.step >= 3 ? 'active' : ''}">3<span>Tamil Output</span></div>
-    </div>`;
+    <div class="adapt-room-banner">
+      <div class="brand">Promo OS</div>
+      <div class="room">Adaptation Room</div>
+      <div class="sub">Rewrite Studio · Emotional Reframing · ${adaptState.displayMode || 'Phonetic'} readability</div>
+    </div>
+    <div class="adapt-step-indicator">`;
+
+  steps.forEach((s, i) => {
+    if (i > 0) {
+      html += `<div class="adapt-step-line ${adaptState.step >= s.n ? 'active' : ''}"></div>`;
+    }
+    html += `<div class="adapt-step-dot ${adaptState.step >= s.n ? 'active' : ''}">${s.n}<span>${s.label}</span></div>`;
+  });
+  html += `</div>`;
 
   if (adaptState.error) {
     html += `<div class="adapt-error">⚠ ${adaptState.error}</div>`;
@@ -4806,9 +4888,13 @@ function renderAdapt() {
   if (adaptState.step === 1) {
     html += renderAdaptStep1();
   } else if (adaptState.step === 2) {
-    html += renderAdaptStep2();
+    html += renderAdaptStep2Normalize();
+  } else if (adaptState.step === 3) {
+    html += renderAdaptStep3Analysis();
+  } else if (adaptState.step === 4) {
+    html += renderAdaptStep4Mappings();
   } else {
-    html += renderAdaptStep3();
+    html += renderAdaptStep5Output();
   }
 
   app.innerHTML = html;
@@ -4869,14 +4955,87 @@ function renderAdaptStep1() {
         }
       </label>
       <div style="margin-top:16px;display:flex;align-items:center;gap:12px;">
-        <button class="adapt-btn" onclick="adaptExtractEntities()" ${adaptState.loading||!hasFile?'disabled':''}>
-          ${adaptState.loading ? '<span class="adapt-loading"></span> Extracting…' : 'Extract Entities →'}
+        <button class="adapt-btn" onclick="adaptBeginNormalize()" ${adaptState.loading||!hasFile?'disabled':''}>
+          ${adaptState.loading ? '<span class="adapt-loading"></span> Normalizing…' : 'Continue → Language Normalize'}
         </button>
       </div>
     </div>`;
 }
 
-function renderAdaptStep2() {
+function renderAdaptStep2Normalize() {
+  const entities = adaptState.normalizedEntities || [];
+  const rows = entities.slice(0, 80).map((e, idx) => {
+    const safe = (e.original || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    const phon = (e.phonetic || '').replace(/"/g, '&quot;');
+    return `<div class="adapt-norm-row">
+      <span class="adapt-norm-original">${e.original}</span>
+      <span style="color:#52525b;">→</span>
+      <input class="adapt-input adapt-norm-phonetic" type="text" value="${phon}"
+        placeholder="${adaptState.displayMode} phonetic"
+        oninput="adaptState.normalizedEntities[${idx}].phonetic=this.value">
+      <span class="adapt-norm-cat">${e.category || 'entity'}</span>
+    </div>`;
+  }).join('');
+
+  const preview = (adaptState.normalizedScript || adaptState.hindiScript || '').slice(0, 2800);
+
+  return `
+    <div class="adapt-card">
+      <div class="adapt-header">Step 2 — Language Normalization</div>
+      <div style="font-size:12px;color:#71717a;margin-bottom:16px;line-height:1.6;">
+        Native-script story entities converted to <strong style="color:#fbbf24;">${adaptState.displayMode}</strong> phonetics for writer readability.
+        Cultural flavor preserved — this is not translation.
+      </div>
+      ${entities.length ? `
+        <div style="margin-bottom:16px;">${rows}</div>
+        <div class="adapt-label">Readable script preview (entities normalized only)</div>
+        <textarea class="adapt-textarea" readonly style="min-height:160px;margin-top:6px;">${preview.replace(/</g,'&lt;')}</textarea>
+      ` : `<div style="color:#71717a;font-size:12px;margin-bottom:16px;">No native-script entities detected — continuing with original script.</div>`}
+      <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="adapt-btn" onclick="adaptApplyNormalizationAndAnalyze()" ${adaptState.loading?'disabled':''}>
+          ${adaptState.loading ? '<span class="adapt-loading"></span> Analyzing…' : 'Run Adaptation Analysis →'}
+        </button>
+        <button class="adapt-btn-secondary" onclick="adaptState.step=1;renderAdapt()">← Back</button>
+        <span style="font-size:11px;color:#71717a;">${entities.length} entities · narration and dramatic lines untouched</span>
+      </div>
+    </div>`;
+}
+
+function renderAdaptStep3Analysis() {
+  const cats = [
+    { key: 'characters', label: 'Characters', icon: '👤' },
+    { key: 'locations', label: 'Locations', icon: '📍' },
+    { key: 'lore', label: 'Lore / Objects', icon: '✨' },
+    { key: 'relationships', label: 'Relationships', icon: '🔗' },
+  ];
+  const total = cats.reduce((n, c) => n + (adaptState.entities[c.key]?.length || 0), 0);
+
+  const summary = cats.map(cat => {
+    const items = adaptState.entities[cat.key] || [];
+    return `<div class="adapt-entity-col">
+      <div class="adapt-entity-col-header">${cat.icon} ${cat.label} (${items.length})</div>
+      ${items.length ? items.slice(0, 8).map(i => `<div style="font-size:12px;color:#d4d4d8;margin-bottom:4px;">${i}</div>`).join('') + (items.length > 8 ? `<div style="font-size:11px;color:#52525b;">+${items.length-8} more</div>` : '') : '<div style="color:#52525b;font-size:12px;">None detected</div>'}
+    </div>`;
+  }).join('');
+
+  return `
+    <div class="adapt-card">
+      <div class="adapt-header">Step 3 — Adaptation Analysis</div>
+      <div style="font-size:12px;color:#71717a;margin-bottom:16px;line-height:1.6;">
+        Story entities extracted from the normalized script. Review before setting rewrite directions for ${adaptState.targetLang || 'target language'}.
+      </div>
+      <div class="adapt-entity-grid">${summary}</div>
+      <div style="margin-top:20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="adapt-btn" onclick="adaptState.step=4;renderAdapt()">
+          Set Rewrite Directions →
+        </button>
+        <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Normalize</button>
+        <span style="font-size:11px;color:#71717a;">${total} entities ready for ${adaptState.sourceLang} → ${adaptState.targetLang} mapping</span>
+      </div>
+    </div>`;
+}
+
+function renderAdaptStep4Mappings() {
   const cats = [
     { key: 'characters',    label: 'Characters',         icon: '👤' },
     { key: 'locations',     label: 'Locations',          icon: '📍' },
@@ -4906,7 +5065,7 @@ function renderAdaptStep2() {
 
   return `
     <div class="adapt-card">
-      <div class="adapt-header">Step 2 — Map ${adaptState.sourceLang||'Source'} Entities to ${adaptState.targetLang||'Target'} Equivalents</div>
+      <div class="adapt-header">Step 4 — Rewrite Directions · Map ${adaptState.sourceLang||'Source'} → ${adaptState.targetLang||'Target'}</div>
       <div style="font-size:12px;color:#6b7280;margin-bottom:16px;">
         Fill in ${adaptState.targetLang||'target language'} equivalents for each entity. These mappings will be <strong style="color:#a5b4fc;">locked</strong>.
       </div>
@@ -4915,8 +5074,8 @@ function renderAdaptStep2() {
         <button class="adapt-btn" onclick="adaptRunAdaptation()" ${adaptState.loading?'disabled':''}>
           ${adaptState.loading ? '<span class="adapt-loading"></span> Adapting…' : 'Lock Mappings &amp; Adapt →'}
         </button>
-        <button class="adapt-btn-secondary" onclick="adaptState.step=1;renderAdapt()">← Back</button>
-        <span style="font-size:11px;color:#6b7280;">Claude will adapt the promo using only the Tamil equivalents you've entered above</span>
+        <button class="adapt-btn-secondary" onclick="adaptState.step=3;renderAdapt()">← Analysis</button>
+        <span style="font-size:11px;color:#6b7280;">Claude will adapt using locked ${adaptState.targetLang||'target'} equivalents</span>
       </div>
     </div>`;
 }
@@ -5003,7 +5162,7 @@ RULES:
   btn.textContent = 'Convert Tanglish → Tamil';
 }
 
-function renderAdaptStep3() {
+function renderAdaptStep5Output() {
   const rawOutput = adaptState.output;
   const cleanOutput = rawOutput.replace(/\[\?|\?\]/g, ''); // strip markers for copy/download
   const uncertainCount = (rawOutput.match(/\[\?/g) || []).length;
@@ -5040,7 +5199,7 @@ function renderAdaptStep3() {
           <button class="adapt-btn-secondary" onclick="navigator.clipboard.writeText(document.getElementById('adapt-raw').value)">Copy</button>
           <button class="adapt-btn-secondary" onclick="(function(){const blob=new Blob([document.getElementById('adapt-raw').value],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='${(adaptState.showName||'script').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.scriptName||'adapt').replace(/[^a-zA-Z0-9 ]/g,'_')}_${(adaptState.targetLang||'adapted').toLowerCase()}.txt';a.click();URL.revokeObjectURL(url);})()">⬇ Download</button>
           <button class="adapt-btn-secondary" onclick="adaptState.step=1;adaptState.output='';adaptState.originalOutput='';adaptState.editMode=false;adaptState.savedRevision=false;adaptState.savedCorrectionCount=0;adaptState.error='';adaptState.warning='';renderAdapt()">New</button>
-          <button class="adapt-btn-secondary" onclick="adaptState.step=2;renderAdapt()">← Mappings</button>
+          <button class="adapt-btn-secondary" onclick="adaptState.step=4;renderAdapt()">← Directions</button>
         </div>
       </div>
 
@@ -5081,7 +5240,57 @@ function renderAdaptStep3() {
     </div>`;
 }
 
-async function adaptExtractEntities() {
+function adaptResolveWriterLanguage(label) {
+  const key = (label || '').trim().toLowerCase();
+  if (key.includes('tamil')) return 'tamil';
+  if (key.includes('hindi') || key.includes('devanagari')) return 'hindi';
+  if (key.includes('telugu')) return 'telugu';
+  if (key.includes('malayalam')) return 'malayalam';
+  if (key.includes('kannada')) return 'kannada';
+  return 'hindi';
+}
+
+function adaptResolveDisplayMode(label) {
+  const modes = { tamil: 'Tanglish', hindi: 'Hinglish', telugu: 'Telgish', malayalam: 'Manglish', kannada: 'Kanglish' };
+  return modes[adaptResolveWriterLanguage(label)] || 'Hinglish';
+}
+
+function adaptLocalNormalizeEntities(script, sourceLabel) {
+  const lang = adaptResolveWriterLanguage(sourceLabel);
+  const ranges = {
+    tamil: /[\u0B80-\u0BFF]+/g,
+    hindi: /[\u0900-\u097F]+/g,
+    telugu: /[\u0C00-\u0C7F]+/g,
+    malayalam: /[\u0D00-\u0D7F]+/g,
+    kannada: /[\u0C80-\u0CFF]+/g,
+  };
+  const pattern = ranges[lang] || ranges.hindi;
+  const seen = new Set();
+  const entities = [];
+  for (const line of script.split('\n')) {
+    for (const token of line.match(pattern) || []) {
+      if (token.length < 2 || seen.has(token)) continue;
+      seen.add(token);
+      entities.push({
+        original: token,
+        phonetic: token.slice(0, 24),
+        category: 'cultural',
+      });
+      if (entities.length >= 80) return entities;
+    }
+  }
+  return entities;
+}
+
+function adaptApplyLocalNormalization(script, entities) {
+  let normalized = script;
+  for (const e of entities) {
+    if (e.original && e.phonetic) normalized = normalized.split(e.original).join(e.phonetic);
+  }
+  return normalized;
+}
+
+async function adaptBeginNormalize() {
   adaptState.showName   = document.getElementById('adapt-show')?.value      || adaptState.showName;
   adaptState.scriptName = document.getElementById('adapt-scriptname')?.value || adaptState.scriptName;
   adaptState.genre      = document.getElementById('adapt-genre')?.value      || adaptState.genre;
@@ -5098,8 +5307,69 @@ async function adaptExtractEntities() {
   renderAdapt();
 
   try {
+    const res = await fetch('/api/language-normalize', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        script: adaptState.hindiScript,
+        sourceLanguage: adaptState.sourceLang,
+      }),
+    });
+    if (res.ok) {
+      const data = await res.json();
+      adaptState.normalizedScript   = data.normalizedScript || adaptState.hindiScript;
+      adaptState.normalizedEntities = data.entities || [];
+      adaptState.displayMode        = data.displayMode || adaptState.displayMode;
+      adaptState.writerLanguage     = data.sourceLanguage || adaptState.writerLanguage;
+    } else {
+      throw new Error('API unavailable');
+    }
+  } catch (e) {
+    // Standalone GitHub Pages — no Promo OS API; use client-side heuristic fallback
+    const entities = adaptLocalNormalizeEntities(adaptState.hindiScript, adaptState.sourceLang);
+    adaptState.normalizedEntities = entities;
+    adaptState.normalizedScript = adaptApplyLocalNormalization(adaptState.hindiScript, entities);
+    adaptState.displayMode = adaptResolveDisplayMode(adaptState.sourceLang);
+    adaptState.writerLanguage = adaptResolveWriterLanguage(adaptState.sourceLang);
+    adaptState.error = entities.length ? '' : '';
+  }
+
+  adaptState.step = 2;
+  adaptState.loading = false;
+  renderAdapt();
+}
+
+function adaptRebuildNormalizedScript() {
+  let script = adaptState.hindiScript;
+  for (const e of adaptState.normalizedEntities || []) {
+    if (e.original && e.phonetic) {
+      script = script.split(e.original).join(e.phonetic);
+    }
+  }
+  adaptState.normalizedScript = script;
+}
+
+async function adaptApplyNormalizationAndAnalyze() {
+  adaptRebuildNormalizedScript();
+  await adaptExtractEntities();
+}
+
+async function adaptExtractEntities() {
+  if (!adaptState.hindiScript.trim()) {
+    adaptState.error = 'Please upload a promo script file first.';
+    renderAdapt(); return;
+  }
+
+  adaptState.loading = true;
+  adaptState.error   = '';
+  renderAdapt();
+
+  const scriptBody = adaptState.normalizedScript || adaptState.hindiScript;
+  const src = adaptState.sourceLang || 'Hindi';
+
+  try {
     const system = `You are an entity extractor for audio drama promo scripts.
-Extract ALL named entities from the Hindi script provided.
+Extract ALL named entities from the ${src} script provided.
 Return ONLY valid JSON — no commentary, no markdown fences.
 Structure:
 {
@@ -5110,7 +5380,7 @@ Structure:
 }
 Include every character name, location, fantasy object, power, artifact, kingdom, creature, and relationship role mentioned.`;
 
-    const raw    = await adaptCallClaude(system, `Extract all entities from this Hindi promo script:\n\n${adaptState.hindiScript}`);
+    const raw    = await adaptCallClaude(system, `Extract all entities from this ${src} promo script:\n\n${scriptBody}`);
     const json   = raw.replace(/^```(?:json)?\n?/,'').replace(/\n?```\s*$/,'');
     const parsed = JSON.parse(json);
 
@@ -5121,7 +5391,7 @@ Include every character name, location, fantasy object, power, artifact, kingdom
       relationships: parsed.relationships || [],
     };
     adaptState.mappings = {};
-    adaptState.step     = 2;
+    adaptState.step     = 3;
   } catch(e) {
     adaptState.error = e.message;
   }
@@ -5247,7 +5517,7 @@ Mark 3–8 items per script. Only mark genuinely uncertain items, not standard p
   try {
     let output = await adaptCallClaude(
       system,
-      `Adapt this ${src} promo script to ${tgt}:\n\n${adaptState.hindiScript}`,
+      `Adapt this ${src} promo script to ${tgt}:\n\n${adaptState.normalizedScript || adaptState.hindiScript}`,
       16000
     );
     // If model restarted mid-output (outputs script twice), keep only the later copy
@@ -5260,7 +5530,7 @@ Mark 3–8 items per script. Only mark genuinely uncertain items, not standard p
       adaptState.warning = '';
     }
     adaptState.output = output;
-    adaptState.step   = 3;
+    adaptState.step   = 5;
   } catch(e) {
     adaptState.error = e.message;
   }
@@ -5317,6 +5587,167 @@ renderAdapt();
     }
   });
 })();
+
+// ═══════════════════════════════════════════════
+//   AI CONTROL CENTER — SYSTEM STATUS
+// ═══════════════════════════════════════════════
+const CC_API = (function () {
+  const origin = window.location.origin;
+  // GitHub Pages hosts static HTML only — control-center APIs live on Promo OS
+  if (origin.includes('github.io')) return 'http://localhost:3000';
+  if (origin && origin !== 'null' && !origin.startsWith('file:')) return origin;
+  return 'http://localhost:3000';
+})();
+
+let ccStatusCache = null;
+let ccLoading = false;
+
+function ccFmt(n, digits) {
+  if (n == null) return '—';
+  if (typeof n === 'number' && digits != null) return n.toFixed(digits);
+  return typeof n === 'number' ? n.toLocaleString() : n;
+}
+
+function ccHealthClass(state) {
+  return 'cc-health ' + (state || 'idle');
+}
+
+async function fetchSystemStatus() {
+  const res = await fetch(CC_API + '/api/control-center/status', { method: 'POST' });
+  if (!res.ok) throw new Error('Status refresh failed (' + res.status + ')');
+  return res.json();
+}
+
+function renderSystemStatusShell(loading, error) {
+  const app = document.getElementById('systemstatus-app');
+  if (!app) return;
+  app.innerHTML = `
+    <div class="cc-banner">
+      <strong>AI Control Center</strong> — internal pipeline monitoring only.
+      Not visible in Promo OS writer UX. Data from <code>promo-os</code> telemetry store.
+    </div>
+    <div class="cc-actions">
+      <button class="cc-btn" id="cc-btn-update" onclick="renderSystemStatus(true)">${loading ? '<span class="cc-loading"></span>Updating…' : 'Update Status'}</button>
+      <button class="cc-btn secondary" onclick="ccGenerateReport()">Generate Report</button>
+      <button class="cc-btn secondary" onclick="ccEmailReport()">Email Report</button>
+      <button class="cc-btn secondary" onclick="ccExportJson()">Export JSON</button>
+      <button class="cc-btn secondary" onclick="ccExportPdf()">Export PDF</button>
+    </div>
+    ${error ? '<div class="adapt-error">' + error + '</div>' : ''}
+    <div id="cc-content">${loading && !ccStatusCache ? '<div class="cc-status-msg"><span class="cc-loading"></span>Aggregating agent execution, model usage, and quality metrics…</div>' : ''}</div>
+  `;
+}
+
+function renderSystemStatusBody(data) {
+  const h = data.liveHealth || {};
+  const quality = data.quality || {};
+  const agents = data.agents || [];
+  const models = data.modelUsage || [];
+  const incidents = (quality.recentIncidents || []).slice(0, 8);
+  const flow = data.sessionFlow || 'No pipeline runs recorded yet';
+  const sessions = data.recentSessions || [];
+
+  document.getElementById('cc-content').innerHTML = `
+    <div class="cc-status-msg">Last refreshed: ${data.refreshedAt || '—'} · Pipeline runs: ${data.pipelineRuns || 0}</div>
+
+    <div class="section-title">1. Live System Health</div>
+    <div class="cc-grid">
+      <div class="cc-stat"><div class="label">Promos Generated</div><div class="value">${ccFmt(h.totalPromosGenerated)}</div></div>
+      <div class="cc-stat"><div class="label">Active Sessions</div><div class="value">${ccFmt(h.activeSessions)}</div><div class="sub">last 30 min</div></div>
+      <div class="cc-stat"><div class="label">Avg Latency</div><div class="value">${ccFmt(h.avgGenerationLatencyMs)}<span style="font-size:12px">ms</span></div></div>
+      <div class="cc-stat"><div class="label">Success Rate</div><div class="value">${ccFmt(h.successRate)}%</div></div>
+      <div class="cc-stat"><div class="label">Est. Cost</div><div class="value">$${ccFmt(h.totalEstimatedCostUsd, 2)}</div></div>
+      <div class="cc-stat"><div class="label">Total Tokens</div><div class="value">${ccFmt(h.totalTokenUsage)}</div></div>
+    </div>
+
+    <div class="section-title">2. Model Usage</div>
+    <table class="cc-table">
+      <tr><th>Provider</th><th>Calls</th><th>Input</th><th>Output</th><th>Tokens</th><th>Est. Spend</th></tr>
+      ${models.map(m => `<tr>
+        <td>${m.provider}</td><td>${m.calls}</td><td>${ccFmt(m.inputTokens)}</td><td>${ccFmt(m.outputTokens)}</td>
+        <td>${ccFmt(m.totalTokens)}</td><td>$${ccFmt(m.estimatedSpendUsd, 4)}</td></tr>`).join('')}
+    </table>
+
+    <div class="section-title">3. Agent Status</div>
+    <table class="cc-table">
+      <tr><th>Agent</th><th>Health</th><th>Runtime</th><th>Retries</th><th>Failures</th><th>Last Run</th></tr>
+      ${agents.map(a => `<tr>
+        <td>${a.displayName}</td>
+        <td><span class="${ccHealthClass(a.health)}">${a.health}</span></td>
+        <td>${ccFmt(a.runtimeMs)}ms</td><td>${a.retries}</td><td>${a.failures}</td>
+        <td style="font-size:10px;color:#6b7280">${a.lastRunAt ? a.lastRunAt.slice(0,19).replace('T',' ') : '—'}</td></tr>`).join('')}
+    </table>
+
+    <div class="section-title">4. Quality Monitoring</div>
+    <div class="cc-grid">
+      <div class="cc-stat"><div class="label">Hallucinations</div><div class="value">${quality.hallucinationIncidents || 0}</div></div>
+      <div class="cc-stat"><div class="label">Repeated Hooks</div><div class="value">${quality.repeatedHooks || 0}</div></div>
+      <div class="cc-stat"><div class="label">Unsupported Abstract.</div><div class="value">${quality.unsupportedAbstractions || 0}</div></div>
+      <div class="cc-stat"><div class="label">Protagonist Mismatch</div><div class="value">${quality.protagonistMismatches || 0}</div></div>
+      <div class="cc-stat"><div class="label">Duplicate Directions</div><div class="value">${quality.duplicatePromoDirections || 0}</div></div>
+      <div class="cc-stat"><div class="label">Grounding Failures</div><div class="value">${quality.groundingFailures || 0}</div></div>
+      <div class="cc-stat"><div class="label">Rewrite Loops</div><div class="value">${quality.rewriteLoops || 0}</div></div>
+    </div>
+    ${incidents.length ? '<div style="margin-top:12px">' + incidents.map(i =>
+      `<div class="cc-incident"><span class="type">${i.type}</span> · ${i.message}<div style="color:#4b5563;font-size:10px;margin-top:2px">${i.timestamp || ''}</div></div>`
+    ).join('') + '</div>' : '<div class="cc-status-msg">No quality incidents recorded.</div>'}
+
+    <div class="section-title">5. Session Trace</div>
+    <div class="cc-flow">${flow}</div>
+    ${sessions.length ? `<div style="margin-top:14px;font-size:11px;color:#6b7280">Recent sessions:</div>
+      <table class="cc-table"><tr><th>Show</th><th>Latency</th><th>Success</th><th>Incidents</th></tr>
+      ${sessions.slice(0,5).map(s => `<tr><td>${s.showName || s.showId || '—'}</td><td>${s.latencyMs}ms</td><td>${s.success ? '✓' : '✗'}</td><td>${(s.qualityIncidents||[]).length}</td></tr>`).join('')}
+      </table>` : ''}
+  `;
+}
+
+async function renderSystemStatus(forceRefresh) {
+  if (ccLoading) return;
+  ccLoading = true;
+  renderSystemStatusShell(true, null);
+  try {
+    if (forceRefresh || !ccStatusCache) {
+      ccStatusCache = await fetchSystemStatus();
+    }
+    renderSystemStatusShell(false, null);
+    renderSystemStatusBody(ccStatusCache);
+  } catch (e) {
+    const msg = e.message || 'Could not reach promo-os API. Open via <strong>/dashboard</strong> with promo-os running.';
+    renderSystemStatusShell(false, msg);
+    if (ccStatusCache) renderSystemStatusBody(ccStatusCache);
+  } finally {
+    ccLoading = false;
+  }
+}
+
+async function ccGenerateReport() {
+  try {
+    const res = await fetch(CC_API + '/api/control-center/report', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    const data = await res.json();
+    alert('Report generated at ' + (data.report?.generatedAt || 'now'));
+  } catch (e) { alert('Report failed: ' + e.message); }
+}
+
+async function ccEmailReport() {
+  try {
+    const res = await fetch(CC_API + '/api/control-center/report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'email' })
+    });
+    const data = await res.json();
+    if (data.mailto) window.location.href = data.mailto;
+    else alert('Email report prepared for r.arvind@pocketfm.com');
+  } catch (e) { alert('Email report failed: ' + e.message); }
+}
+
+function ccExportJson() {
+  window.open(CC_API + '/api/control-center/export/json', '_blank');
+}
+
+function ccExportPdf() {
+  window.open(CC_API + '/api/control-center/export/pdf', '_blank');
+}
 </script>
 </body>
 </html>
