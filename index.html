@@ -5692,9 +5692,9 @@ const powerstarts = [
 
 // ─── New-today registry (updated by scheduled task each run) ───────────────
 const newToday = {
-  date: '2026-08-02',
-  powerstartIds: [1, 2, 3, 4, 5, 6, 7],
-  microdramaTitles: ["Naagin Ka Venom", "Dehaat Ka Aag", "Corner Office Conspiracy", "The Missing Digit", "Bombay Se Bahar", "Rishtey Ki Kahaani"]
+  date: '2026-08-03',
+  powerstartIds: [],
+  microdramaTitles: []
 };
 const todayStr = new Date().toISOString().slice(0, 10);
 const isNewPS = id    => newToday.date === todayStr && newToday.powerstartIds.includes(id);
